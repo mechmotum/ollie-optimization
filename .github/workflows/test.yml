@@ -11,6 +11,7 @@ jobs:
         with:
           environment-file: environment.yml
           environment-name: ollie-optimization-paper
+          channels: conda-forge
           extra-specs: |
             python="3.10"
       - name: run tests
