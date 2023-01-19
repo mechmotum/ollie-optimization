@@ -1,0 +1,22 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    name: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: install mamba
+        uses: mamba-org/provision-with-micromamba@main
+        with:
+          environment-file: environment.yml
+          environment-name: ollie-optimization-paper
+          channels: conda-forge
+          extra-specs: |
+            python="3.10"
+      - name: run tests
+        shell: bash -l {0}
+        run: |
+          micromamba info
+          micromamba list
+          python thesis-files/MultiPhaseOllieOptimization.py
