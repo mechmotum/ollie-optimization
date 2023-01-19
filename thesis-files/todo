@@ -1,0 +1,9 @@
+File: skateboard
+includes
+- weight
+- com
+- inertia
+- add docstrings
+- type hints? what types -> me.Point:
+
+pep8 style guide

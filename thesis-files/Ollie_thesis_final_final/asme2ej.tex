@@ -1,0 +1,194 @@
+\documentclass[twocolumn,10pt,twoside]{asme2ej}
+
+\usepackage{epsfig} %% for loading postscript figures
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{subfig}
+\usepackage{float}
+%\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{stfloats}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+%\def\url#1{\expandafter\string\csname #1\endcsname}
+\usepackage{url}
+\newcounter{exno}
+\newenvironment{examples}
+{
+\begin{flushleft}
+\begin{tabular}{>{(\refstepcounter{exno}\theexno\label{row:\theexno}) }rl}
+}
+{
+\end{tabular}
+\end{flushleft}
+}
+
+\usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
+
+% \fancyhf{}% Clear header/footer
+% \fancyhead[R]{\sectionmark}
+% \fancyfoot[C]{\thepage}% \fancyfoot[R]{\thepage}
+% \renewcommand{\headrulewidth}{0.4pt}% Default \headrulewidth is 0.4pt
+
+% \renewcommand{\sectionmark}[1]{\markright{\thesection~- ~#1}}
+% \renewcommand{\chaptermark}[1]{\markboth{\chaptername~\thechapter~-~ #1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+
+%\usepackage[T1]{fontenc}
+\usepackage{bold-extra}
+
+
+% Fancyhdr setup
+\pagestyle{fancy}% Change page style to fancy
+\fancyhf{} % clear all header fields
+\fancyhead[L]{\footnotesize\scshape\leftmark}
+\fancyhead[R]{\footnotesize\scshape\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4 pt}
+\renewcommand{\footrulewidth}{0 pt}
+
+\newcounter{magicrownumbers}
+\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+%% The class has several options
+%  onecolumn/twocolumn - format for one or two columns per page
+%  10pt/11pt/12pt - use 10, 11, or 12 point font
+%  oneside/twoside - format for oneside/twosided printing
+%  final/draft - format for final/draft copy
+%  cleanfoot - take out copyright info in footer leave page number
+%  cleanhead - take out the conference banner on the title page
+%  titlepage/notitlepage - put in titlepage or leave out titlepage
+%
+%% The default is oneside, onecolumn, 10pt, final
+\title{OPTIMAL SKATEBOARD GEOMETRY FOR MAXIMIZING OLLIE HEIGHT}
+
+%%% first author
+\author{J.T. Heinen,\thanks{Special thanks to S. Brockie, the creator of Pycollo, the used python direct collocation package} \\
+    \affiliation{
+	Bicycle Laboratory\\
+	Department of Mechanical Engineering\\
+	Technical University of Delft\\
+	Delft, The Netherlands, 2611CC\\
+    Email: janheinen97@gmail.com
+    }
+}
+
+%%% second author
+%%% remove the following entry for single author papers
+%%% add more entries for additional authors
+% \author{E. van der Kruk, \\
+%         \textbf{D. Veegen} \\
+%     \affiliation{ Editor, Fellow of ASME\\
+% 	Journal of Mechanical Design\\
+%         Email: jmmccart@uci.edu
+%     }
+% }
+
+\begin{document}
+\pagenumbering{Roman} 
+%\begin{minipage}{\textwidth}
+
+\onecolumn
+\thispagestyle{plain}
+
+\tableofcontents
+% \vspace{}
+\subsubsection*{Appendix A}
+
+\subsubsection*{Appendix B - Figures and tables}
+\newpage
+
+\listoffigures
+\listoftables
+\thispagestyle{plain}
+%\end{minipage}
+%\maketitle
+\newpage
+\thispagestyle{plain}
+\section*{Preface}
+I want to thank Jason Moore for helping on a weekly basis for over a year. He has taught me a lot, and we had fun times thinking about skateboards, talking dynamics, and going down ramps. Furthermore, this thesis would not have been where it is at without the help of Sam Brockie. I emailed him randomly asking if he thought his software would be suitable for the problem. He ended up helping on a weekly basis and I will probably write the documentation after this thesis for him for the software. Also I want to give special thanks to my dad who helped me with writing again and again. Hours behind the screen, figuring out what I intended to write. If there is one thing I have learned most, it would be writing. The literature review gave me a rough start and I noticed that I still had a lot to learn on writing. At the start of my thesis I hadn't written one line of code in python, I never heard of optimization and 8 months further in time and I feel like I know the ins and outs of both. I have grown a lot, not only academically and intellectually, but also in discipline and dogged persistence. Sometimes you encounter a problem (friction) which seems unsolvable, but then the last weeks prior to the defence, it works. Not quitting and keep on trying was the key. Sometimes I recognized that I wanted to `try' too much, ending up with hundreds of scripts on my computer solving parts of the ollie problem. In the end I am happy about my final year at TU Delft, and maybe I'll sign up for another four, and see if I can push myself even harder. Also thanks to my girlfriend, the persistence was made possible. Endlessly cheering me on and letting me believe in myself helped me get over that little bump that seemed so big. I hereby present to you my final thesis, I hope you will enjoy it as much as I do.
+
+\newpage
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{plain}
+
+\section*{Abstract}
+Skateboarding involves a human controlling a four wheeled vehicle that is steered by tilting the standing surface. The riding mechanics of skateboarding have been well reported \cite{hubbard_clearing_1985,varszegi_stabilizing_2016}. The sport also includes aerial maneuvers such as jumping of stairs, flying off ramps and flipping and rotating the skateboard. The most basic aerial trick is called the ollie. The athlete jumps up while pushing down on the back end of the skateboard’s tail, causing a rotation about the back axle. The upward acceleration due to the rotation together with the tail-ground impact cause the skateboard to go airborne. Midair the athlete drags the skateboard up through frictional contact and levels it out to land the trick. The most concrete performance measure of the ollie is height according to the Olympic judging criteria\cite{world_skate_skateboarding_2021}. To reach maximum height the dynamics such as impact, dynamic response, and torque production are dependent on shape, inertia and mass, which gives reason to assume an optimal shape exists. This leads to the research question: What are the optimal geometric and inertial parameters of a skateboard for an Olympic athlete to reach
+maximal ollie height. The skateboard geometry is optimized through multiphase direct collocation with the objective of maximal ollie height. A parameterized model is created with scaling mass and inertia properties such that the geometry of the skateboard. Modelling the dynamics of the ollie including impact and friction are done with a point mass human controller that is kineticly and kinematicly mapped to a counter movement jump. A simplistic contact implicit impact scheme is made for a higher order optimization. The ollie height is improved by changing the mass and inertia properties of the skateboard. Multiple optimal board shapes are generated for example a skateboard with a smaller wheelbase can reach higher ollie height compared to an industry standard skateboard.
+\vspace{2cm}
+\section*{Mathmatical conventions}
+\large \begin{itemize}
+    %\item{$\vec x$:} Three dimensional vector $x$ (x,y,z - axis)
+    \item{$\mathbf{x}$}: Vector, any of the following conventions also apply to vectors and will be the bold variant
+    \item{$\dot x$:} First derivative of variable $x$
+    \item{$\ddot x$:} Second derivative of variable $x$
+    \item{$\mathbf{\hat n_x}$:} x-axis unit vector of frame N 
+    \item{$x_s$:} Variable $x$ related to skateboard
+    \item{$x_h$:} Variable $x$ related to human
+    \item{$\mathbf{r_{x \mathbin{/} y}}$:} Vector from y to x
+    \item{$|\mathbf{x}|$:} Magnitude of vector x
+
+    \item{$x^{(p)}$:} Variables x during phase $p$
+    \item{$x(t)$:} Variable at collocation point $t$
+    \item{$x^{(p)}(t_0)$:} Variable $x$ at initial collocation point of phase $p$
+    \item{$x^{(p)}(t_F)$:} Variable $x$ at final collocation point of phase $p$
+    \item{$u_i$:} Control variable number $i$
+    \item{$\mathcal{J}$ :} Objective function
+    \item{$J_{\mathbf{x}}(\mathbf{q})$:} Jacobian of $\mathbf{x}$ with respect to $\mathbf{q}$
+    \item{$\sigma_i$:} Parameter variable number $i$
+    \item{$\alpha_i$:} Dynamical constraint number $i$
+    \item{$\gamma_i$:} Constraint number $i$
+    \item{$\beta_i$:} Endpoint constraint number $i$
+\end{itemize}
+\normalsize
+\newpage
+\twocolumn
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{nomenclature}
+% \entry{$\mu$}{Coefficient of friction between rubber and sandpaper.}
+% \entry{$C_r$}{Coefficient of rolling friction.}
+% \entry{$\theta_s$}{Angle of skateboard relative to the ground.}
+% \entry{$\phi$}{Inclination of tail relative to flat part.}
+% %\entry{$x_s, y_s, y_h$}{Location of skateboard in x-direction and y-direction and location of human in y-direction respectively.}
+% %\entry{$y_h$}{Location of human in y-direction.}
+
+% \end{nomenclature}
+\pagenumbering{arabic} 
+
+\input{Sections/1. Introduction.tex}
+\input{Sections/2. Method.tex}
+\input{Sections/2.1 Mechanics of the ollie.tex}
+\input{Sections/2.2 Optimization introduction.tex}
+\input{Sections/2.3 Parameter.tex}
+\input{Sections/2.4 Multiphase direct collocation.tex}
+\input{Sections/2.5 Settings.tex}
+\input{Sections/2.6 Summary.tex}
+\input{Sections/3. Results.tex}
+\input{Sections/4. Discussion.tex}
+\input{Sections/5. Conclusion.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\bibliographystyle{asmems4}
+\bibliography{references}
+
+\pagestyle{plain}
+\include{Sections/Appendix_A}
+\include{Sections/Appendix_B}
+
+% \section*{Appendix B: Head of Second Appendix}
+% \subsection*{Subsection head in appendix}
+% The equation counter is not reset in an appendix and the numbers will
+% follow one continual sequence from the beginning of the article to the very end as shown in the following example.
+
+\end{document}
