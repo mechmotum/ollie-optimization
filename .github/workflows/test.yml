@@ -9,7 +9,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: ollie-optimization-paper
-          environment-file: etc/environment.yml
+          environment-file: environment.yml
           python-version: 3.10
           auto-activate-base: false
       - run: |
