@@ -15,7 +15,7 @@ import numpy as np
 import pickle
 import random
 import time
-import dill
+# import dill
 
 
 current_time = time.ctime()[8:-5]
@@ -1032,7 +1032,7 @@ plotterr(t_s, [nc.fp1,nc.fp2,fw1_sol,fw2_sol], 'Skateboard Force', 'Time [s]', [
           0, 0, 0, 0], ['F_{p1}', 'F_{p2}', 'F_{w1}', 'F_{w2}'], 'no')
 
 #%%animate
-%matplotlib qt
+# %matplotlib qt
 sol_statesT = np.transpose(sol_states)
 points = [C0_b, nose_b, C0_b, ff_b, Tr2_b, W2_b, Tr2_b, Tr1_b, W1_b, Tr1_b, B0_b, bf_b, tail_b]
 
