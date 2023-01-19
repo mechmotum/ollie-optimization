@@ -1,0 +1,13 @@
+1. Pull most recent changes to main branch from github, local version is now up to date
+2. Create new branch for new feature, branch of main
+	- be in main branch
+	- git checkout -b *branchname*
+3. Add commits
+4. Push branch to github
+5. Open pull request into main branch 
+6. Other maintainer accepts request
+7. Check functionality
+8. Delete remote branch on github
+9. Pull changes from main to local main
+10. Delete local version of branch
+
