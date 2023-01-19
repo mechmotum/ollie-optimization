@@ -12,15 +12,15 @@ import sympy as sm
 import pycollo
 import numpy as np
 #import matplotlib.pyplot as plt
-import pickle
-import random
-import time
-import dill
+#import pickle
+#import random
+#import time
+#import dill
 
 
-current_time = time.ctime()[8:-5]
+#current_time = time.ctime()[8:-5]
 
-filepath = ''
+#filepath = ''
 
 testcase = 'l_wb'
 
@@ -39,8 +39,6 @@ optimized_parameters= (#l_wb,
 def dz(symbolic, numerical):
     return dict(zip(symbolic, numerical))
 
-def fx(A,repl):
-    return float(A.xreplace(repl)) 
 def weight(width_deck, mass_bearing, mass_truck, height_truck, height_truck0, 
            width_wheel, n_ply, length_flat, length_tail, radius_wheel,
            rho_pu, rho_maple, rho_steel, m_glue, diameter_axle, d_veneer):
@@ -130,40 +128,37 @@ def inertia(mass, com_points, com, majordim, shape):
     return I_tot, I_com, I_steiner
 
 l_wb, l_t, l_f, phi, d_tr, r_w = sm.symbols('l_wb, l_t, l_f, phi, d_tr, r_w')
-g, m_h, Ih, m_l, mu, d_d, m_b, m_t, d_w, n_ply, rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer,d_tr0 = sm.symbols('g, m_h, Ih, m_l, mu, d_d, m_b, m_t, d_w, n_ply, rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer,d_tr0')
-g, m_l, mu, I_w = sm.symbols('g, m_l, mu, I_w')
-d_d, m_b, m_t, d_w, n_ply = sm.symbols('d_d,m_b,m_t,d_w,n_ply')
+g, m_h, mu, d_d, m_b, m_t, d_w, n_ply, rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer,d_tr0 = sm.symbols('g, m_h, mu, d_d, m_b, m_t, d_w, n_ply, rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer,d_tr0')
+
 s_1, s_2 = sm.symbols('s_1,s_2')
 
 d_com_, m_s_, I_s_ = sm.symbols('d_com_, m_s_, I_s_')
 
-rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer = sm.symbols(
-    'rho_pu, rho_maple, rho_steel, m_glue, d_axle,d_veneer')
 p = [l_wb, l_t, l_f, phi, d_tr, r_w,#m_s,I_s,
      g, m_h, mu, d_d, m_b, m_t, d_w, n_ply, rho_pu, rho_maple, rho_steel, m_glue, d_axle, d_veneer,d_tr0]
 p_vals_jan       = np.array([0.444, 0.13, 0.83-2*0.13, np.deg2rad(20), 0.053, 0.049/2,# 3.6, 0.16, #0.3413428,
                              9.81, 80, 0.8, 0.21, 0.012, 0.366, 0.031, 7, 1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])
-p_vals_tobi      = np.array([0.433, 0.12, 0.81-2*0.12, np.deg2rad(18.5), 0.053, 0.052/2,# 3.6, 0.16, #0.3413428,
-                             9.81, 80, 0.8, 0.205, 0.012, 0.366, 0.032, 7, 1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])
-inch = 0.0254
-p_vals_longboard = np.array([23*inch, 5.70*inch, (35.8-2*5.07)*inch, np.deg2rad(10), 0.073, 0.06/2,# 3.6, 0.16, #0.3413428,
-                             9.81, 80, 0.8, 9.6*inch, 0.012, 0.366, 0.041, 7, 1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])
-p_vals_penny     = np.array([14*inch, 5*inch, (22-5)*inch, np.deg2rad(10),0.065,0.059/2,
-                             9.81, 80, 0.2, 5.9*inch, 0.012, 0.366,0.045,7,1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])#https://www.wheelz4kids.com/nl/pennyboard-iron-man.html
-#https://skateboardelite.com/what-is-penny-board/
+#p_vals_tobi      = np.array([0.433, 0.12, 0.81-2*0.12, np.deg2rad(18.5), 0.053, 0.052/2,# 3.6, 0.16, #0.3413428,
+#                             9.81, 80, 0.8, 0.205, 0.012, 0.366, 0.032, 7, 1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])
+#inch = 0.0254
+#p_vals_longboard = np.array([23*inch, 5.70*inch, (35.8-2*5.07)*inch, np.deg2rad(10), 0.073, 0.06/2,# 3.6, 0.16, #0.3413428,
+#                             9.81, 80, 0.8, 9.6*inch, 0.012, 0.366, 0.041, 7, 1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])
+#p_vals_penny     = np.array([14*inch, 5*inch, (22-5)*inch, np.deg2rad(10),0.065,0.059/2,
+#                             9.81, 80, 0.2, 5.9*inch, 0.012, 0.366,0.045,7,1130, 705, 7700, 0.210, 0.008, 0.0016,0.053])#https://www.wheelz4kids.com/nl/pennyboard-iron-man.html
+##https://skateboardelite.com/what-is-penny-board/
 p_jan = dict(zip(p, p_vals_jan))
 #p_jan = dict(zip(p, p_vals_tobi))
 
 #p_jan = dict(zip(p, p_vals_longboard))
 #p_jan = dict(zip(p, p_vals_penny))
-def rand_guess(bounds):
-    rand_guess = []
-    for b in bounds:
-        rand_guess.append(lin_choice(b))
-    return rand_guess
-
-def lin_choice(b):
-    return [round(random.choice(np.linspace(b[0],b[1],100)),2), round(random.choice(np.linspace(b[0],b[1],100)),2)]
+#def rand_guess(bounds):
+#    rand_guess = []
+#    for b in bounds:
+#        rand_guess.append(lin_choice(b))
+#    return rand_guess
+#
+#def lin_choice(b):
+#    return [round(random.choice(np.linspace(b[0],b[1],100)),2), round(random.choice(np.linspace(b[0],b[1],100)),2)]
 
 parameter_bounds = []
 parameter_guess = []
@@ -230,7 +225,7 @@ mid_a= Tr1_a.locatenew('middle deck', l_wb/2*A.x)
 com_a = mid_a.locatenew('centre of mass', -d_com_*A.y)
 B0_a = mid_a.locatenew('back pocket', -l_f/2*A.x)
 tail_a = B0_a.locatenew('tail', -l_t*B.x)
-bf_a = tail_a.locatenew('back foot', s_1*B.x)
+bf_a = tail_a.locatenew('back foot', s_1_*B.x)
 ff_a = B0_a.locatenew('front foot', s_2_*A.x)
 
 fp1, fp2 = sm.symbols('fp1,fp2')
@@ -256,8 +251,6 @@ F1 = -fp1*B.y - fw1*B.x
 F2 = -fp2*A.y - fw2*A.x
 
 Fs= F1 + F2
-
-
 
 #%% TMT phaseA
 q_a = sm.Matrix([x_w_,th_s_])
@@ -286,6 +279,7 @@ ddq_eq_a = d2s(TMT_a.LUsolve(Fg_a))
 accSA = {ddx_w:  d2s(ddq_eq_a[0]),
          ddth_s: d2s(ddq_eq_a[1]),
          }
+         
 #%% Free floating acc
 #O = me.Point('O')
 com_b = O.locatenew('centre of mass', x_s_*N.x+y_s_*N.y)
@@ -349,17 +343,19 @@ Wl1, Wl2, Wf1, Wf2, Wgs, Wgh = sm.symbols('Wl1, Wl2, Wf1, Wf2, Wgs, Wgh')
 Pl1,Pl2,Pf1,Pf2, Pgs, Pgh = sm.symbols('Pl1,Pl2,Pf1,Pf2,Pgs,Pgh')
 powerA = {Pl1:d2s(F1.dot(Va_bf_h)),
           Pl2:d2s(F2.dot(Va_ff_h)),   # Va/b = va - vb -> Vs/h = Vs - Vh
-          Pf1:d2s(F1.dot(-ds_1*B.x)), # Va/b = Va - Vb -> Vs/f = Vs - (Vs+Vf)
-          Pf2:d2s(F2.dot(-ds_2*A.x)),
-          Pgs:d2s((-m_s_*g*N.y).dot(d2s(dx_a[1])*N.y)),
-          Pgh:d2s((-m_h*g*N.y).dot(dy_h*N.y))}
+#          Pf1:d2s(F1.dot(-ds_1*B.x)), # Va/b = Va - Vb -> Vs/f = Vs - (Vs+Vf)
+#          Pf2:d2s(F2.dot(-ds_2*A.x)),
+#          Pgs:d2s((-m_s_*g*N.y).dot(d2s(dx_a[1])*N.y)),
+#          Pgh:d2s((-m_h*g*N.y).dot(dy_h*N.y))
+          }
 
 powerB = {Pl1:d2s(F1.dot(Vb_bf_h)),
           Pl2:d2s(F2.dot(Vb_ff_h)),   # Va/b = va - vb -> Vs/h = Vs - Vh
-          Pf1:d2s(F1.dot(-ds_1*B.x)), # Va/b = Va - Vb -> Vs/f = Vs - (Vs+Vf)
-          Pf2:d2s(F2.dot(-ds_2*A.x)),
-          Pgs:d2s((-m_s_*g*N.y).dot(dy_s*N.y)),
-          Pgh:d2s((-m_h*g*N.y).dot(dy_h*N.y))}
+#          Pf1:d2s(F1.dot(-ds_1*B.x)), # Va/b = Va - Vb -> Vs/f = Vs - (Vs+Vf)
+#          Pf2:d2s(F2.dot(-ds_2*A.x)),
+#          Pgs:d2s((-m_s_*g*N.y).dot(dy_s*N.y)),
+#          Pgh:d2s((-m_h*g*N.y).dot(dy_h*N.y))
+            }
 
 #%%
 skatemass = weight(d_d, m_b, m_t,d_tr,d_tr0, d_w, n_ply, l_f, l_t, r_w,
@@ -812,511 +808,511 @@ problem.settings.max_nlp_iterations = 10000
 problem.initialise()
 problem.solve()
     
-#%%
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 22 23:51:44 2022
-
-@author: j.t.heinen
-"""
-from collections import namedtuple
-from matplotlib.animation import FuncAnimation
-import matplotlib.pyplot as plt
-import pickle
-
-def plotterr(x, y, title, xlabel, ylabel, doubley, legend, save):
-    #plt.rcParams['text.usetex'] = True
-    fig, ax = plt.subplots()
-    data1 = []
-    data2 = []
-    lol = 0
-    colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple',
-              'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
-
-    for idx, data in enumerate(y):
-        if doubley[idx] == 0:
-            data1.append(data)
-            ax.plot(x, data, label=r'$'+legend[idx]+'$', color=colors[idx])
-        if doubley[idx] == 1:
-            if lol == 0:
-                ax2 = ax.twinx()
-            data2.append(data)
-            ax2.plot(x, data, label=r'$'+legend[idx]+'$', color=colors[idx])
-            lol = lol+1
-
-
-    ax.set_title(title)
-    ax.set_ylabel(ylabel[0])
-    ax.set_xlabel(xlabel)
-
-    ax.set_ylim(auto=True)
-    if bool(data2) == True:
-        #ax2.set_ylim(auto=True)
-        ax2.set_ylabel(ylabel[1])
-        align_yaxis(ax, ax2)
-
-    for i in problem.solution._time:
-        ax.axvline(x=i[-1], linestyle='--', linewidth=1, c='grey')
-
-    legendd = []
-    for i in legend:
-        legendd.append(r'$'+i+'$')
-
-    fig.legend()
-
-    if save == 'yes':
-        plt.savefig('/Users/j.t.heinen/Documents/Master Thesis/Results/rw/{}.png'.format(title))
-    return plt.show
-
-
-def align_yaxis(ax1, ax2):
-    """Align zeros of the two axes, zooming them out by same ratio"""
-    axes = (ax1, ax2)
-    extrema = [ax.get_ylim() for ax in axes]
-    tops = [extr[1] / (extr[1] - extr[0]) for extr in extrema]
-    # Ensure that plots (intervals) are ordered bottom to top:
-    if tops[0] > tops[1]:
-        axes, extrema, tops = [list(reversed(l))
-                               for l in (axes, extrema, tops)]
-
-    # How much would the plot overflow if we kept current zoom levels?
-    tot_span = tops[1] + 1 - tops[0]
-
-    b_new_t = extrema[0][0] + tot_span * (extrema[0][1] - extrema[0][0])
-    t_new_b = extrema[1][1] - tot_span * (extrema[1][1] - extrema[1][0])
-    axes[0].set_ylim(extrema[0][0], b_new_t)
-    axes[1].set_ylim(t_new_b, extrema[1][1])
-
-# Combine arrays of seperate phase_As to one array per state, x phase_A b is found from previous section
-sol = problem.solution
-
-if bool(problem.parameter_variables) == True:
-    p = np.append(p, problem.parameter_variables)
-    p_opt = p_jan | dz(problem.parameter_variables, problem.solution.parameter)
-    p_vals_opt = p_opt.values()  # np.append(p_vals_jan,sol.parameter)
-if bool(problem.parameter_variables) == False:
-    p_opt = p_jan
-    p_vals_opt = p_vals_jan
-
-for i in range(len(sol._time_)):
-    if i == 0:
-        t_s = (sol._time_[i],)
-        z1  = np.zeros([1,len(t_s[0])])
-        o1 = np.ones([1,len(t_s[0])])
-        x_a_sol = sm.lambdify([phase_A.state_variables],d2s(pos_a[0].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
-        y_a_sol = sm.lambdify([phase_A.state_variables],d2s(pos_a[1].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
-        dx_a_sol = sm.lambdify([phase_A.state_variables],d2s(dx_a[0].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
-        dy_a_sol = sm.lambdify([phase_A.state_variables],d2s(dx_a[1].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
-        
-        sol_states = np.vstack((sol.state[i][0].T,
-                                np.array([x_a_sol,y_a_sol]),
-                                sol.state[i][1:5],
-                                np.array([dx_a_sol,dy_a_sol]),
-                                sol.state[i][5:],
-                                ))
-        sol_control= (sol.control[i],)
-    else:
-        t_s = t_s + (sol._time_[i],)
-        z2  = np.zeros([1,len(sol._time_[i])])
-        o2 = np.ones([1,len(sol._time_[i])])
-        
-        addstate = np.vstack((z2,
-                              sol.state[i][:5],
-                              z2,
-                              sol.state[i][5:],
-                                ))
-        sol_states = np.hstack((sol_states, addstate))
-        
-        sol_control= sol_control + (sol.control[i],)
-        
-t_s = np.hstack(t_s)
-#sol_states = np.hstack(sol_states)
-sol_control = np.hstack(sol_control)
-
-all_vars = (x_w,) + phase_B.state_variables[:5] + (dx_w,) + phase_B.state_variables[5:]
-all_cont = phase_A.control_variables
-ns = namedtuple('states', all_vars)
-nc = namedtuple('control', all_cont)
-
-for idx, i in enumerate(all_vars):
-    setattr(ns, '%s' % i, sol_states[idx])
-for idx, i in enumerate(all_cont):
-    setattr(nc, '%s' % i, sol_control[idx])
-
-
-
-# %%Energy
-def Energy_plot():    
-    #y_bf = d2s(bf.pos_from(O).dot(N.y))
-    #v_bf = d2s(bf.vel(N).magnitude())
-    #y_ff = d2s(ff.pos_from(O).dot(N.y))
-    #v_ff = d2s(ff.vel(N).magnitude())
-    
-    P = y_s * m_s * g + y_h * m_h * g #+ (y_bf+y_ff)*m_l*g
-    V = (1/2)*m_s*sm.sqrt(dx_s**2 + dy_s**2)**2 + (1/2) * I_s* dth_s**2 + \
-        (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2 
-#(1/2)*m_l*(v_bf**2 + v_ff**2)
-    return V+P
-
-
-def KEs_A():
-    V = (1/2)*m_s*x_w**2 + (1/2)* (I_s+m_s*W1_a.pos_from(com_a).magnitude()**2)*dth_s**2 + (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2 
-    return V.xreplace(quicksolve)
-def KEs_B(): 
-    V = (1/2)*m_s*sm.sqrt(dx_s**2 + dy_s**2)**2 + (1/2) * I_s* dth_s**2 + (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2 
-    return V
-def KEh_AB():
-    V = (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2 
-    return V
-# %%plot
-
-    
-p_opt= p_opt
-p = p_opt.keys()
-p_vals_opt = p_opt.values()
-q = all_vars
-u = all_cont
-
-Pl_eval = sm.lambdify([q,u,p], d2s(powerA[Pl1]+powerA[Pl2]))
-Pl_sol  = Pl_eval(sol_states, sol_control, p_vals_opt)
-fw1_eval  = sm.lambdify([q, u, p], d2s(-fw1))
-fw2_eval  = sm.lambdify([q, u, p], d2s(-fw2))
-
-fhx1_eval = sm.lambdify([q, u, p], d2s(-F1.dot(N.x)))
-fhy1_eval = sm.lambdify([q, u, p], d2s(-F1.dot(N.y)))
-fhx2_eval = sm.lambdify([q, u, p], d2s(-F2.dot(N.x)))
-fhy2_eval = sm.lambdify([q, u, p], d2s(-F2.dot(N.y)))
-
-KE_evalA = sm.lambdify([phase_A.state_variables,phase_A.control_variables,p], KEs_A())
-KE_evalB = sm.lambdify([phase_B.state_variables,phase_B.control_variables,p], KEs_B())
-
-KE_solA = KE_evalA(sol.state[0],sol.control[0],p_vals_opt)
-KE_solB = KE_evalB(sol.state[1],sol.control[1],p_vals_opt)
-KE_solC = KE_evalB(sol.state[2],sol.control[2],p_vals_opt)
-
-KE_sol = np.hstack((KE_solA,KE_solB,KE_solC))
-
-fw1_sol   = fw1_eval(sol_states, sol_control, p_vals_opt)
-fw2_sol   = fw2_eval(sol_states, sol_control, p_vals_opt)
-
-fhx1_sol  = fhx1_eval(sol_states, sol_control, p_vals_opt)
-fhy1_sol  = fhy1_eval(sol_states, sol_control, p_vals_opt)
-fhx2_sol  = fhx2_eval(sol_states, sol_control, p_vals_opt)
-fhy2_sol  = fhy2_eval(sol_states, sol_control, p_vals_opt)
-
-
-#plotterr(t_s, [ns.Wl1,ns.Wl2,KE_sol],'Work', 'Time [s]', ['Joule [J]', '[rad]'], [
-#           0, 0, 0, 0, 0, 0, 0, 0], ['W_{legL}', ' W_{legR}', 'E_{kinetic}'], 'no')
-# plotterr(t_s, [ns.Wl1,ns.Wl2,ns.Wf1,ns.Wf2,ns.Wgs,ns.Wgh, ns.Wl1+ns.Wl2+ns.Wf1+ns.Wf2+ns.Wgs+ns.Wgh,KE_sol],'Work', 'Time [s]', ['Joule [J]', '[rad]'], [
-#            0, 0, 0, 0, 0, 0, 0, 0], ['W_{legL}', ' W_{legR}', 'W_{frictionL}', 'W_{frictionR}', 'W_{gravity S}', 'W_{gravity H}', '\sum W','E_{kinetic}'], 'no')
-
-#%%
-positions = []
-for i in ['x_s', 'y_s', 'th_s', 's_1', 's_2', 'x_h', 'y_h']:
-    positions.append(getattr(ns, i))
-speeds = []
-for i in ['dx_s','dy_s','dth_s', 'ds_1', 'ds_2', 'dx_h', 'dy_h']:
-    speeds.append(getattr(ns, i))
-    
-plotterr(t_s, positions, 'Positions', 'Time [s]', ['Distance [m]', 'Angle [rad]'], [
-          0, 0, 1, 0, 0, 0, 0], ['x_s', 'y_s', '\\theta_s', 's_1', 's_2', 'x_h', 'y_h'], 'no')
-#%%
-plotterr(t_s, speeds, 'Speeds', 'Time [s]', ['Velocity [m/s]', 'Angular velocity [rad/s]'], [0, 0, 1, 0, 0, 0, 0], [
-          '\dot x_s', '\dot y_s','\dot \\theta_s', '\dot s_1', '\dot s_2','\dot x_h', '\dot y_h'], 'no')
-#%%
-plotterr(t_s, [fhy1_sol,fhy2_sol,fhx1_sol,fhx2_sol,ns.Fn], 'Human Forces', 'Time [s]', [['Force [N]']], [
-        0, 0, 0, 0, 0], ['F_{leg L}', 'F_{leg R}', 'F_{abduction L}', 'F_{abduction R}','sum'], 'no')
-#%%
-plotterr(t_s, [nc.fp1,nc.fp2,fw1_sol,fw2_sol], 'Skateboard Force', 'Time [s]', ['Force [N]'], [
-          0, 0, 0, 0], ['F_{p1}', 'F_{p2}', 'F_{w1}', 'F_{w2}'], 'no')
-
-#%%animate
-%matplotlib qt
-sol_statesT = np.transpose(sol_states)
-points = [C0_b, nose_b, C0_b, ff_b, Tr2_b, W2_b, Tr2_b, Tr1_b, W1_b, Tr1_b, B0_b, bf_b, tail_b]
-
-# Evaluate coordinates
-
-
-coordinates = points[0].pos_from(O).to_matrix(N)
-for point in points[1:]:
-    coordinates = d2s(coordinates.row_join(point.pos_from(O).to_matrix(N)).xreplace(quicksolve))
-
-#coordinates= coordinates.xreplace(p_opt)
-eval_skate_coords = sm.lambdify((q, p), coordinates)
-
-coords = []
-for xi in sol_statesT:
-    coords.append(eval_skate_coords(xi[:len(q)], p_vals_opt))
-coords = np.array(coords)
-
-# Animation figure
-fig, ax = plt.subplots()
-ax.set_aspect('equal')
-title_template = 'Time = {:1.2f} s'
-title_text = ax.set_title(title_template.format(t_s[0]))
-ax.set_xlim(-2, 2)
-ax.set_ylim(-1, 3)
-ax.set_xlabel('$x$ [m]')
-ax.set_ylabel('$y$ [m]')
-
-
-coors = coords.transpose()
-
-fp1_eval = sm.lambdify([q, u, p], d2s(-fp1))
-fp2_eval = sm.lambdify([q, u, p], d2s(-fp2))
-fp1_sol = fp1_eval(sol_states, sol_control, p_vals_opt)
-fp2_sol = fp2_eval(sol_states, sol_control, p_vals_opt)
-
-Fscale = 100
-
-nFp2a = np.array([-fp2_sol*np.sin(ns.th_s),
-                  fp2_sol*np.cos(ns.th_s)])/Fscale
-nFw2a = np.array([fw2_sol*np.cos(ns.th_s),
-                  fw2_sol*np.sin(ns.th_s)])/Fscale
-nFp1a = np.array([fp1_sol*np.sin(p_opt[phi] - ns.th_s),
-                  fp1_sol*np.cos(p_opt[phi] - ns.th_s)])/Fscale
-nFw1a = np.array([fw1_sol*np.cos(p_opt[phi] - ns.th_s), 
-                  -fw1_sol*np.sin(p_opt[phi] - ns.th_s)])/Fscale
-# ff y
-arrow1 = plt.Arrow(coors[3][0][0], coors[3][1][0],
-                    nFp2a[0][0], nFp2a[1][0], width=0.1)
-# ff x
-arrow2 = plt.Arrow(coors[3][0][0], coors[3][1][0],
-                    nFw2a[0][0], nFw2a[1][0], width=0.1)
-# bf y
-arrow3 = plt.Arrow(coors[11][0][0], coors[11][1][0],
-                    nFp1a[0][0], nFp1a[1][0], width=0.1)
-# bf x
-arrow4 = plt.Arrow(coors[11][0][0], coors[11][1][0],
-                    nFw1a[0][0], nFw1a[1][0], width=0.1)
-# Fh1
-arrow5 = plt.Arrow(ns.x_h[0]-0.1, ns.y_h[0],
-                    fhx1_sol[0]/Fscale            , fhy1_sol[0]/Fscale        , width=0.1)
-# Fh2
-arrow6 = plt.Arrow(ns.x_h[0]+0.1, ns.y_h[0],
-                    fhx2_sol[0]/Fscale            ,fhy2_sol[0]/Fscale         , width=0.1)
-  
-wheel_back = plt.Circle((coords[0, 0, 5], coords[0, 1, 5]), p_opt[r_w])
-wheel_front = plt.Circle((coords[0, 0, 8], coords[0, 1, 8]), p_opt[r_w])
-
-
-def init():
-    wheel_back.center = (coords[0, 0, 5], coords[0, 1, 5])
-    wheel_front.center = (coords[0, 0, 8], coords[0, 1, 8])
-    ax.add_patch(wheel_back)
-    ax.add_patch(wheel_front)
-    ax.add_patch(arrow1)
-    ax.add_patch(arrow2)
-    ax.add_patch(arrow3)
-    ax.add_patch(arrow4)
-    ax.add_patch(arrow5)
-    ax.add_patch(arrow6)
-
-#points1, = ax.plot(sol_states[0][0],sol_states[1][0],marker='o', markerfacecolor='blue', markersize=5)
-
-# Lines
-
-
-lines, = ax.plot(coords[0, 0, :], coords[0, 1, :], color='black',
-                 marker='o', markerfacecolor='blue', markersize=1)
-lines1 = ax.plot([-10, 10], [0, 0])
-points1, = ax.plot(coors[3][0][0], coors[3][1][0],
-                   marker='o', markerfacecolor='blue', markersize=5)
-points2, = ax.plot(coors[11][0][0], coors[11][1][0],
-                   marker='o', markerfacecolor='blue', markersize=5)
-points3, = ax.plot(ns.x_h[0], ns.y_h[0],
-                   marker='o', markerfacecolor='blue', markersize=5)
-
-
-def animate(i):
-    global arrow1, arrow2, arrow3, arrow4, arrow5, arrow6
-    title_text.set_text(title_template.format(t_s[i]))
-    lines.set_data(coords[i, 0, :], coords[i, 1, :])
-
-    wheel_back.center = (coords[i, 0, 5], coords[i, 1, 5])
-    wheel_front.center = (coords[i, 0, 8], coords[i, 1, 8])
-
-    points1.set_data(coors[3][0][i], coors[3][1][i])
-    points2.set_data(coors[11][0][i], coors[11][1][i])
-    points3.set_data(ns.x_h[i], ns.y_h[i])
-    ax.patches.remove(arrow1)
-    ax.patches.remove(arrow2)
-    ax.patches.remove(arrow3)
-    ax.patches.remove(arrow4)
-    ax.patches.remove(arrow5)
-    ax.patches.remove(arrow6)
-    #points1.set_data(sol_states[0][i], sol_states[1][i])
-
-    # ff y
-    arrow1 = plt.Arrow(coors[3][0][i], coors[3][1][i],
-                       nFp2a[0][i]   , nFp2a[1][i]   , width=0.1)
-    # ff x
-    arrow2 = plt.Arrow(coors[3][0][i], coors[3][1][i],
-                       nFw2a[0][i]   , nFw2a[1][i]   , width=0.1)
-    # bf y
-    arrow3 = plt.Arrow(coors[11][0][i], coors[11][1][i],
-                       nFp1a[0][i]    , nFp1a[1][i]    , width=0.1)
-    # bf x
-    arrow4 = plt.Arrow(coors[11][0][i], coors[11][1][i],
-                       nFw1a[0][i]    , nFw1a[1][i]    , width=0.1)
-    # Fh1
-    arrow5 = plt.Arrow(ns.x_h[i]-0.1, ns.y_h[i],
-                       fhx1_sol[i]/Fscale            , fhy1_sol[i]/Fscale, width=0.1)
-    # Fh2
-    arrow6 = plt.Arrow(ns.x_h[i]+0.1, ns.y_h[i],
-                       fhx2_sol[i]/Fscale            , fhy2_sol[i]/Fscale, width=0.1)
-    ax.add_patch(arrow1)
-    ax.add_patch(arrow2)
-    ax.add_patch(arrow3)
-    ax.add_patch(arrow4)
-    ax.add_patch(arrow5)
-    ax.add_patch(arrow6)
-
-
-ani = FuncAnimation(fig, animate, len(t_s), init_func=init())
-# #%%
-# f = '/Users/j.t.heinen/Documents/Master Thesis/Results/'
-# ani.save(f+'animation.gif',writer='Pillow')
-# #%%
-# filename = 'state_cont_time_obj_par_mesh.p'
-# outfile = open(f+filename,'wb')
-# pickle.dump([sol_states,sol_control,sol._time_,sol.objective,sol.parameter,[problem.solution.mesh_refinement.ph_mesh.tau, problem.solution.mesh_refinement.relative_mesh_errors]],outfile)
-# #%%
-# for i in [0,1,12]:
-#     sol_states[i] = sol_states[i] + np.arange(0,5*len(t_s),5)/len(t_s)
-# #%%
-# a= 0.2
-# count = 0
-# fig, ax = plt.subplots()
-# time = sol._time_
-# step = t_s[-1]/9
-# normalize = len(t_s)/t_s[-1]
-# first = (np.arange(0,time[0][-1],step*1.4) * normalize).astype(int)
-# second= (np.arange(time[0][-1],time[1][-1], step) *normalize).astype(int)
-# third = (np.arange(time[1][-1],time[2][-1], step/2) * normalize).astype(int)
-
-# for i in np.hstack((first,len(time[0]),second[1:],len(time[0])+len(time[1]),third,len(t_s)-1)):
-#     #global arrow1, arrow2, arrow3, arrow4, arrow5, arrow6
-#     # Animation figure
-#     a += 0.6/(len(np.append(np.arange(0,len(t_s),round(len(t_s)/9)-1),len(t_s))))
-#     ax.set_aspect('equal')
-#     text = 't = %s s'%round(t_s[i],3)
-#     #ax.set_title("Objective={} [m],   no parameter optimization".format(round(-sol.objective,3)))
-#     ax.set_title("Objective={} [m],   {} = {} [m] ".format(round(-sol.objective,3),optimized_parameters[0],round(sol.parameter[0],3)))
-#     ax.set_xlim(-0.5, 5.7)
-#     ax.set_ylim(-0.1, 1.75)
-#     ax.set_xlabel('$x$ [m]')
-#     ax.set_ylabel('$y$ [m]')
-
-#     sol_statesT = np.transpose(sol_states)
-#     if  count in [0, 2, 6, 11]:
-#         plt.text(ns.x_h[i],1.6,text)
-#     count += 1
-
-#     coords = []
-#     for xi in sol_statesT:
-#         coords.append(eval_skate_coords(xi[:len(q)], p_vals_opt))
-#     coords = np.array(coords)
-
-
-#     coors = coords.transpose()
-
-#     coors = coords.transpose()
-
-     
-#     wheel_back = plt.Circle((coords[0, 0, 5], coords[0, 1, 5]), p_opt[r_w],alpha = a, color='orange')
-#     wheel_front = plt.Circle((coords[0, 0, 8], coords[0, 1, 8]), p_opt[r_w],alpha = a, color='orange')
-
-
-#     lines, = ax.plot(coords[0, 0, :], coords[0, 1, :], color='black',
-#                      marker='o', markerfacecolor='blue', markersize=1,alpha = a)
-#     lines1 = ax.plot([-10, 10], [0, 0])
-#     points1, = ax.plot(coors[3][0][0], coors[3][1][0], color='black',
-#                        marker='o', markerfacecolor='cyan', markersize=5,alpha = a)
-#     points2, = ax.plot(coors[11][0][0], coors[11][1][0], color='black',
-#                        marker='o', markerfacecolor='blue', markersize=5,alpha = a)
-#     points3, = ax.plot(ns.x_h[0], ns.y_h[0], color='black',
-#                        marker='o', markerfacecolor='maroon', markersize=5,alpha = a)
-
-    
-#     title_text.set_text(title_template.format(t_s[i]))
-#     lines.set_data(coords[i, 0, :], coords[i, 1, :])
-
-#     wheel_back.center = (coords[i, 0, 5], coords[i, 1, 5])
-#     wheel_front.center = (coords[i, 0, 8], coords[i, 1, 8])
-    
-#     ax.add_patch(wheel_back)
-#     ax.add_patch(wheel_front)
-    
-#     points1.set_data(coors[3][0][i], coors[3][1][i])
-#     points2.set_data(coors[11][0][i], coors[11][1][i])
-#     points3.set_data(ns.x_h[i], ns.y_h[i])
-
-#     arrow1 = plt.Arrow(coors[3][0][i], coors[3][1][i],
-#                        nFp2a[0][i]   , nFp2a[1][i]   , width=0.1, alpha=a)
-#     # ff x
-#     arrow2 = plt.Arrow(coors[3][0][i], coors[3][1][i],
-#                        nFw2a[0][i]   , nFw2a[1][i]   , width=0.1, alpha=a)
-#     # bf y
-#     arrow3 = plt.Arrow(coors[11][0][i], coors[11][1][i],
-#                        nFp1a[0][i]    , nFp1a[1][i]    , width=0.1, alpha=a)
-#     # bf x
-#     arrow4 = plt.Arrow(coors[11][0][i], coors[11][1][i],
-#                        nFw1a[0][i]    , nFw1a[1][i]    , width=0.1, alpha=a)
-#     # Fh1
-#     arrow5 = plt.Arrow(ns.x_h[i]-0.1, ns.y_h[i],
-#                        fhx1_sol[i]/Fscale            , fhy1_sol[i]/Fscale, width=0.1, alpha=a)
-#     # Fh2
-#     arrow6 = plt.Arrow(ns.x_h[i]+0.1, ns.y_h[i],
-#                        fhx2_sol[i]/Fscale            , fhy2_sol[i]/Fscale, width=0.1, alpha=a)
-
-
-# #%%
-# fig,ax = plt.subplots()
-# ax.plot(t_s,nc.g_k2)
-# ax.plot(t_s,ns.ds_2)
-# #ax.plot(t_s,nc.g_k1)
-# #ax.plot(t_s,ns.ds_1)
-# #%%
-
-# def extract_sol(problem):
-#     sol = problem.solution
-#     mesh = sol.mesh_refinement.__dict__.copy()
-#     ph_mesh = sol.mesh_refinement.ph_mesh.__dict__.copy()
-#     for i in ['backend','dy_ph_callables','next_iter_mesh','ph_mesh','it','sol','ocp']:
-#         mesh.pop(i)
-#     for i in ['backend','settings','quadrature','sI_matrix','sA_matrix','p']:
-#         ph_mesh.pop(i)
-        
-        
-#     dumpdict = {'state':sol.state,
-#                 'control':sol.control,
-#                 'integral':sol.integral,
-#                 'parameter':sol.parameter,
-#                 'time':sol._time_,
-#                 'mesh':mesh,
-#                 'ph_mesh':ph_mesh,
-#                 'objective':sol.objective,
-#                 'guess':problem.guess.parameter_variables,
-#                 'p_opt':p_opt,
-#                 'sol_states':sol_states,
-#                 'sol_control':sol_control,
-#                 't_s':t_s,
-#                 'ns':ns,
-#                 'nc':nc,
-#                 'all_vars':all_vars,
-#                 'all_cont':all_cont._asdict().values(),
-#                 'coordinates':coordinates,
-#                 'Astate':phase_A.state_variables._asdict().values(),
-#                 'Bstate':phase_B.state_variables._asdict().values(),
-#                 }
-#     return dumpdict
-#                 #%%
-
-# dill.dump(extract_sol(problem),open('/Users/j.t.heinen/Documents/Master Thesis/Results3/prescribed/data_penny_02.p','wb'))
-
-# #%%
-# dill.load(open('/Users/j.t.heinen/Documents/Master Thesis/Results/dill/tryout.p','rb'))
-
+##%%
+##!/usr/bin/env python3
+## -*- coding: utf-8 -*-
+#"""
+#Created on Sat Oct 22 23:51:44 2022
+#
+#@author: j.t.heinen
+#"""
+#from collections import namedtuple
+#from matplotlib.animation import FuncAnimation
+#import matplotlib.pyplot as plt
+#import pickle
+#
+#def plotterr(x, y, title, xlabel, ylabel, doubley, legend, save):
+#    #plt.rcParams['text.usetex'] = True
+#    fig, ax = plt.subplots()
+#    data1 = []
+#    data2 = []
+#    lol = 0
+#    colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple',
+#              'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
+#
+#    for idx, data in enumerate(y):
+#        if doubley[idx] == 0:
+#            data1.append(data)
+#            ax.plot(x, data, label=r'$'+legend[idx]+'$', color=colors[idx])
+#        if doubley[idx] == 1:
+#            if lol == 0:
+#                ax2 = ax.twinx()
+#            data2.append(data)
+#            ax2.plot(x, data, label=r'$'+legend[idx]+'$', color=colors[idx])
+#            lol = lol+1
+#
+#
+#    ax.set_title(title)
+#    ax.set_ylabel(ylabel[0])
+#    ax.set_xlabel(xlabel)
+#
+#    ax.set_ylim(auto=True)
+#    if bool(data2) == True:
+#        #ax2.set_ylim(auto=True)
+#        ax2.set_ylabel(ylabel[1])
+#        align_yaxis(ax, ax2)
+#
+#    for i in problem.solution._time:
+#        ax.axvline(x=i[-1], linestyle='--', linewidth=1, c='grey')
+#
+#    legendd = []
+#    for i in legend:
+#        legendd.append(r'$'+i+'$')
+#
+#    fig.legend()
+#
+#    if save == 'yes':
+#        plt.savefig('/Users/j.t.heinen/Documents/Master Thesis/Results/rw/{}.png'.format(title))
+#    return plt.show
+#
+#
+#def align_yaxis(ax1, ax2):
+#    """Align zeros of the two axes, zooming them out by same ratio"""
+#    axes = (ax1, ax2)
+#    extrema = [ax.get_ylim() for ax in axes]
+#    tops = [extr[1] / (extr[1] - extr[0]) for extr in extrema]
+#    # Ensure that plots (intervals) are ordered bottom to top:
+#    if tops[0] > tops[1]:
+#        axes, extrema, tops = [list(reversed(l))
+#                               for l in (axes, extrema, tops)]
+#
+#    # How much would the plot overflow if we kept current zoom levels?
+#    tot_span = tops[1] + 1 - tops[0]
+#
+#    b_new_t = extrema[0][0] + tot_span * (extrema[0][1] - extrema[0][0])
+#    t_new_b = extrema[1][1] - tot_span * (extrema[1][1] - extrema[1][0])
+#    axes[0].set_ylim(extrema[0][0], b_new_t)
+#    axes[1].set_ylim(t_new_b, extrema[1][1])
+#
+## Combine arrays of seperate phase_As to one array per state, x phase_A b is found from previous section
+#sol = problem.solution
+#
+#if bool(problem.parameter_variables) == True:
+#    p = np.append(p, problem.parameter_variables)
+#    p_opt = p_jan | dz(problem.parameter_variables, problem.solution.parameter)
+#    p_vals_opt = p_opt.values()  # np.append(p_vals_jan,sol.parameter)
+#if bool(problem.parameter_variables) == False:
+#    p_opt = p_jan
+#    p_vals_opt = p_vals_jan
+#
+#for i in range(len(sol._time_)):
+#    if i == 0:
+#        t_s = (sol._time_[i],)
+#        z1  = np.zeros([1,len(t_s[0])])
+#        o1 = np.ones([1,len(t_s[0])])
+#        x_a_sol = sm.lambdify([phase_A.state_variables],d2s(pos_a[0].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
+#        y_a_sol = sm.lambdify([phase_A.state_variables],d2s(pos_a[1].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
+#        dx_a_sol = sm.lambdify([phase_A.state_variables],d2s(dx_a[0].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
+#        dy_a_sol = sm.lambdify([phase_A.state_variables],d2s(dx_a[1].xreplace(quicksolve)).xreplace(p_opt))(sol.state[i])
+#
+#        sol_states = np.vstack((sol.state[i][0].T,
+#                                np.array([x_a_sol,y_a_sol]),
+#                                sol.state[i][1:5],
+#                                np.array([dx_a_sol,dy_a_sol]),
+#                                sol.state[i][5:],
+#                                ))
+#        sol_control= (sol.control[i],)
+#    else:
+#        t_s = t_s + (sol._time_[i],)
+#        z2  = np.zeros([1,len(sol._time_[i])])
+#        o2 = np.ones([1,len(sol._time_[i])])
+#
+#        addstate = np.vstack((z2,
+#                              sol.state[i][:5],
+#                              z2,
+#                              sol.state[i][5:],
+#                                ))
+#        sol_states = np.hstack((sol_states, addstate))
+#
+#        sol_control= sol_control + (sol.control[i],)
+#
+#t_s = np.hstack(t_s)
+##sol_states = np.hstack(sol_states)
+#sol_control = np.hstack(sol_control)
+#
+#all_vars = (x_w,) + phase_B.state_variables[:5] + (dx_w,) + phase_B.state_variables[5:]
+#all_cont = phase_A.control_variables
+#ns = namedtuple('states', all_vars)
+#nc = namedtuple('control', all_cont)
+#
+#for idx, i in enumerate(all_vars):
+#    setattr(ns, '%s' % i, sol_states[idx])
+#for idx, i in enumerate(all_cont):
+#    setattr(nc, '%s' % i, sol_control[idx])
+#
+#
+#
+## %%Energy
+#def Energy_plot():
+#    #y_bf = d2s(bf.pos_from(O).dot(N.y))
+#    #v_bf = d2s(bf.vel(N).magnitude())
+#    #y_ff = d2s(ff.pos_from(O).dot(N.y))
+#    #v_ff = d2s(ff.vel(N).magnitude())
+#
+#    P = y_s * m_s * g + y_h * m_h * g #+ (y_bf+y_ff)*m_l*g
+#    V = (1/2)*m_s*sm.sqrt(dx_s**2 + dy_s**2)**2 + (1/2) * I_s* dth_s**2 + \
+#        (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2
+##(1/2)*m_l*(v_bf**2 + v_ff**2)
+#    return V+P
+#
+#
+#def KEs_A():
+#    V = (1/2)*m_s*x_w**2 + (1/2)* (I_s+m_s*W1_a.pos_from(com_a).magnitude()**2)*dth_s**2 + (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2
+#    return V.xreplace(quicksolve)
+#def KEs_B():
+#    V = (1/2)*m_s*sm.sqrt(dx_s**2 + dy_s**2)**2 + (1/2) * I_s* dth_s**2 + (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2
+#    return V
+#def KEh_AB():
+#    V = (1/2)*m_h*sm.sqrt(dy_h**2+  dx_h**2)**2
+#    return V
+## %%plot
+#
+#
+#p_opt= p_opt
+#p = p_opt.keys()
+#p_vals_opt = p_opt.values()
+#q = all_vars
+#u = all_cont
+#
+#Pl_eval = sm.lambdify([q,u,p], d2s(powerA[Pl1]+powerA[Pl2]))
+#Pl_sol  = Pl_eval(sol_states, sol_control, p_vals_opt)
+#fw1_eval  = sm.lambdify([q, u, p], d2s(-fw1))
+#fw2_eval  = sm.lambdify([q, u, p], d2s(-fw2))
+#
+#fhx1_eval = sm.lambdify([q, u, p], d2s(-F1.dot(N.x)))
+#fhy1_eval = sm.lambdify([q, u, p], d2s(-F1.dot(N.y)))
+#fhx2_eval = sm.lambdify([q, u, p], d2s(-F2.dot(N.x)))
+#fhy2_eval = sm.lambdify([q, u, p], d2s(-F2.dot(N.y)))
+#
+#KE_evalA = sm.lambdify([phase_A.state_variables,phase_A.control_variables,p], KEs_A())
+#KE_evalB = sm.lambdify([phase_B.state_variables,phase_B.control_variables,p], KEs_B())
+#
+#KE_solA = KE_evalA(sol.state[0],sol.control[0],p_vals_opt)
+#KE_solB = KE_evalB(sol.state[1],sol.control[1],p_vals_opt)
+#KE_solC = KE_evalB(sol.state[2],sol.control[2],p_vals_opt)
+#
+#KE_sol = np.hstack((KE_solA,KE_solB,KE_solC))
+#
+#fw1_sol   = fw1_eval(sol_states, sol_control, p_vals_opt)
+#fw2_sol   = fw2_eval(sol_states, sol_control, p_vals_opt)
+#
+#fhx1_sol  = fhx1_eval(sol_states, sol_control, p_vals_opt)
+#fhy1_sol  = fhy1_eval(sol_states, sol_control, p_vals_opt)
+#fhx2_sol  = fhx2_eval(sol_states, sol_control, p_vals_opt)
+#fhy2_sol  = fhy2_eval(sol_states, sol_control, p_vals_opt)
+#
+#
+##plotterr(t_s, [ns.Wl1,ns.Wl2,KE_sol],'Work', 'Time [s]', ['Joule [J]', '[rad]'], [
+##           0, 0, 0, 0, 0, 0, 0, 0], ['W_{legL}', ' W_{legR}', 'E_{kinetic}'], 'no')
+## plotterr(t_s, [ns.Wl1,ns.Wl2,ns.Wf1,ns.Wf2,ns.Wgs,ns.Wgh, ns.Wl1+ns.Wl2+ns.Wf1+ns.Wf2+ns.Wgs+ns.Wgh,KE_sol],'Work', 'Time [s]', ['Joule [J]', '[rad]'], [
+##            0, 0, 0, 0, 0, 0, 0, 0], ['W_{legL}', ' W_{legR}', 'W_{frictionL}', 'W_{frictionR}', 'W_{gravity S}', 'W_{gravity H}', '\sum W','E_{kinetic}'], 'no')
+#
+##%%
+#positions = []
+#for i in ['x_s', 'y_s', 'th_s', 's_1', 's_2', 'x_h', 'y_h']:
+#    positions.append(getattr(ns, i))
+#speeds = []
+#for i in ['dx_s','dy_s','dth_s', 'ds_1', 'ds_2', 'dx_h', 'dy_h']:
+#    speeds.append(getattr(ns, i))
+#
+#plotterr(t_s, positions, 'Positions', 'Time [s]', ['Distance [m]', 'Angle [rad]'], [
+#          0, 0, 1, 0, 0, 0, 0], ['x_s', 'y_s', '\\theta_s', 's_1', 's_2', 'x_h', 'y_h'], 'no')
+##%%
+#plotterr(t_s, speeds, 'Speeds', 'Time [s]', ['Velocity [m/s]', 'Angular velocity [rad/s]'], [0, 0, 1, 0, 0, 0, 0], [
+#          '\dot x_s', '\dot y_s','\dot \\theta_s', '\dot s_1', '\dot s_2','\dot x_h', '\dot y_h'], 'no')
+##%%
+#plotterr(t_s, [fhy1_sol,fhy2_sol,fhx1_sol,fhx2_sol,ns.Fn], 'Human Forces', 'Time [s]', [['Force [N]']], [
+#        0, 0, 0, 0, 0], ['F_{leg L}', 'F_{leg R}', 'F_{abduction L}', 'F_{abduction R}','sum'], 'no')
+##%%
+#plotterr(t_s, [nc.fp1,nc.fp2,fw1_sol,fw2_sol], 'Skateboard Force', 'Time [s]', ['Force [N]'], [
+#          0, 0, 0, 0], ['F_{p1}', 'F_{p2}', 'F_{w1}', 'F_{w2}'], 'no')
+#
+##%%animate
+##%matplotlib qt
+#sol_statesT = np.transpose(sol_states)
+#points = [C0_b, nose_b, C0_b, ff_b, Tr2_b, W2_b, Tr2_b, Tr1_b, W1_b, Tr1_b, B0_b, bf_b, tail_b]
+#
+## Evaluate coordinates
+#
+#
+#coordinates = points[0].pos_from(O).to_matrix(N)
+#for point in points[1:]:
+#    coordinates = d2s(coordinates.row_join(point.pos_from(O).to_matrix(N)).xreplace(quicksolve))
+#
+##coordinates= coordinates.xreplace(p_opt)
+#eval_skate_coords = sm.lambdify((q, p), coordinates)
+#
+#coords = []
+#for xi in sol_statesT:
+#    coords.append(eval_skate_coords(xi[:len(q)], p_vals_opt))
+#coords = np.array(coords)
+#
+## Animation figure
+#fig, ax = plt.subplots()
+#ax.set_aspect('equal')
+#title_template = 'Time = {:1.2f} s'
+#title_text = ax.set_title(title_template.format(t_s[0]))
+#ax.set_xlim(-2, 2)
+#ax.set_ylim(-1, 3)
+#ax.set_xlabel('$x$ [m]')
+#ax.set_ylabel('$y$ [m]')
+#
+#
+#coors = coords.transpose()
+#
+#fp1_eval = sm.lambdify([q, u, p], d2s(-fp1))
+#fp2_eval = sm.lambdify([q, u, p], d2s(-fp2))
+#fp1_sol = fp1_eval(sol_states, sol_control, p_vals_opt)
+#fp2_sol = fp2_eval(sol_states, sol_control, p_vals_opt)
+#
+#Fscale = 100
+#
+#nFp2a = np.array([-fp2_sol*np.sin(ns.th_s),
+#                  fp2_sol*np.cos(ns.th_s)])/Fscale
+#nFw2a = np.array([fw2_sol*np.cos(ns.th_s),
+#                  fw2_sol*np.sin(ns.th_s)])/Fscale
+#nFp1a = np.array([fp1_sol*np.sin(p_opt[phi] - ns.th_s),
+#                  fp1_sol*np.cos(p_opt[phi] - ns.th_s)])/Fscale
+#nFw1a = np.array([fw1_sol*np.cos(p_opt[phi] - ns.th_s),
+#                  -fw1_sol*np.sin(p_opt[phi] - ns.th_s)])/Fscale
+## ff y
+#arrow1 = plt.Arrow(coors[3][0][0], coors[3][1][0],
+#                    nFp2a[0][0], nFp2a[1][0], width=0.1)
+## ff x
+#arrow2 = plt.Arrow(coors[3][0][0], coors[3][1][0],
+#                    nFw2a[0][0], nFw2a[1][0], width=0.1)
+## bf y
+#arrow3 = plt.Arrow(coors[11][0][0], coors[11][1][0],
+#                    nFp1a[0][0], nFp1a[1][0], width=0.1)
+## bf x
+#arrow4 = plt.Arrow(coors[11][0][0], coors[11][1][0],
+#                    nFw1a[0][0], nFw1a[1][0], width=0.1)
+## Fh1
+#arrow5 = plt.Arrow(ns.x_h[0]-0.1, ns.y_h[0],
+#                    fhx1_sol[0]/Fscale            , fhy1_sol[0]/Fscale        , width=0.1)
+## Fh2
+#arrow6 = plt.Arrow(ns.x_h[0]+0.1, ns.y_h[0],
+#                    fhx2_sol[0]/Fscale            ,fhy2_sol[0]/Fscale         , width=0.1)
+#
+#wheel_back = plt.Circle((coords[0, 0, 5], coords[0, 1, 5]), p_opt[r_w])
+#wheel_front = plt.Circle((coords[0, 0, 8], coords[0, 1, 8]), p_opt[r_w])
+#
+#
+#def init():
+#    wheel_back.center = (coords[0, 0, 5], coords[0, 1, 5])
+#    wheel_front.center = (coords[0, 0, 8], coords[0, 1, 8])
+#    ax.add_patch(wheel_back)
+#    ax.add_patch(wheel_front)
+#    ax.add_patch(arrow1)
+#    ax.add_patch(arrow2)
+#    ax.add_patch(arrow3)
+#    ax.add_patch(arrow4)
+#    ax.add_patch(arrow5)
+#    ax.add_patch(arrow6)
+#
+##points1, = ax.plot(sol_states[0][0],sol_states[1][0],marker='o', markerfacecolor='blue', markersize=5)
+#
+## Lines
+#
+#
+#lines, = ax.plot(coords[0, 0, :], coords[0, 1, :], color='black',
+#                 marker='o', markerfacecolor='blue', markersize=1)
+#lines1 = ax.plot([-10, 10], [0, 0])
+#points1, = ax.plot(coors[3][0][0], coors[3][1][0],
+#                   marker='o', markerfacecolor='blue', markersize=5)
+#points2, = ax.plot(coors[11][0][0], coors[11][1][0],
+#                   marker='o', markerfacecolor='blue', markersize=5)
+#points3, = ax.plot(ns.x_h[0], ns.y_h[0],
+#                   marker='o', markerfacecolor='blue', markersize=5)
+#
+#
+#def animate(i):
+#    global arrow1, arrow2, arrow3, arrow4, arrow5, arrow6
+#    title_text.set_text(title_template.format(t_s[i]))
+#    lines.set_data(coords[i, 0, :], coords[i, 1, :])
+#
+#    wheel_back.center = (coords[i, 0, 5], coords[i, 1, 5])
+#    wheel_front.center = (coords[i, 0, 8], coords[i, 1, 8])
+#
+#    points1.set_data(coors[3][0][i], coors[3][1][i])
+#    points2.set_data(coors[11][0][i], coors[11][1][i])
+#    points3.set_data(ns.x_h[i], ns.y_h[i])
+#    ax.patches.remove(arrow1)
+#    ax.patches.remove(arrow2)
+#    ax.patches.remove(arrow3)
+#    ax.patches.remove(arrow4)
+#    ax.patches.remove(arrow5)
+#    ax.patches.remove(arrow6)
+#    #points1.set_data(sol_states[0][i], sol_states[1][i])
+#
+#    # ff y
+#    arrow1 = plt.Arrow(coors[3][0][i], coors[3][1][i],
+#                       nFp2a[0][i]   , nFp2a[1][i]   , width=0.1)
+#    # ff x
+#    arrow2 = plt.Arrow(coors[3][0][i], coors[3][1][i],
+#                       nFw2a[0][i]   , nFw2a[1][i]   , width=0.1)
+#    # bf y
+#    arrow3 = plt.Arrow(coors[11][0][i], coors[11][1][i],
+#                       nFp1a[0][i]    , nFp1a[1][i]    , width=0.1)
+#    # bf x
+#    arrow4 = plt.Arrow(coors[11][0][i], coors[11][1][i],
+#                       nFw1a[0][i]    , nFw1a[1][i]    , width=0.1)
+#    # Fh1
+#    arrow5 = plt.Arrow(ns.x_h[i]-0.1, ns.y_h[i],
+#                       fhx1_sol[i]/Fscale            , fhy1_sol[i]/Fscale, width=0.1)
+#    # Fh2
+#    arrow6 = plt.Arrow(ns.x_h[i]+0.1, ns.y_h[i],
+#                       fhx2_sol[i]/Fscale            , fhy2_sol[i]/Fscale, width=0.1)
+#    ax.add_patch(arrow1)
+#    ax.add_patch(arrow2)
+#    ax.add_patch(arrow3)
+#    ax.add_patch(arrow4)
+#    ax.add_patch(arrow5)
+#    ax.add_patch(arrow6)
+#
+#
+#ani = FuncAnimation(fig, animate, len(t_s), init_func=init())
+## #%%
+## f = '/Users/j.t.heinen/Documents/Master Thesis/Results/'
+## ani.save(f+'animation.gif',writer='Pillow')
+## #%%
+## filename = 'state_cont_time_obj_par_mesh.p'
+## outfile = open(f+filename,'wb')
+## pickle.dump([sol_states,sol_control,sol._time_,sol.objective,sol.parameter,[problem.solution.mesh_refinement.ph_mesh.tau, problem.solution.mesh_refinement.relative_mesh_errors]],outfile)
+## #%%
+## for i in [0,1,12]:
+##     sol_states[i] = sol_states[i] + np.arange(0,5*len(t_s),5)/len(t_s)
+## #%%
+## a= 0.2
+## count = 0
+## fig, ax = plt.subplots()
+## time = sol._time_
+## step = t_s[-1]/9
+## normalize = len(t_s)/t_s[-1]
+## first = (np.arange(0,time[0][-1],step*1.4) * normalize).astype(int)
+## second= (np.arange(time[0][-1],time[1][-1], step) *normalize).astype(int)
+## third = (np.arange(time[1][-1],time[2][-1], step/2) * normalize).astype(int)
+#
+## for i in np.hstack((first,len(time[0]),second[1:],len(time[0])+len(time[1]),third,len(t_s)-1)):
+##     #global arrow1, arrow2, arrow3, arrow4, arrow5, arrow6
+##     # Animation figure
+##     a += 0.6/(len(np.append(np.arange(0,len(t_s),round(len(t_s)/9)-1),len(t_s))))
+##     ax.set_aspect('equal')
+##     text = 't = %s s'%round(t_s[i],3)
+##     #ax.set_title("Objective={} [m],   no parameter optimization".format(round(-sol.objective,3)))
+##     ax.set_title("Objective={} [m],   {} = {} [m] ".format(round(-sol.objective,3),optimized_parameters[0],round(sol.parameter[0],3)))
+##     ax.set_xlim(-0.5, 5.7)
+##     ax.set_ylim(-0.1, 1.75)
+##     ax.set_xlabel('$x$ [m]')
+##     ax.set_ylabel('$y$ [m]')
+#
+##     sol_statesT = np.transpose(sol_states)
+##     if  count in [0, 2, 6, 11]:
+##         plt.text(ns.x_h[i],1.6,text)
+##     count += 1
+#
+##     coords = []
+##     for xi in sol_statesT:
+##         coords.append(eval_skate_coords(xi[:len(q)], p_vals_opt))
+##     coords = np.array(coords)
+#
+#
+##     coors = coords.transpose()
+#
+##     coors = coords.transpose()
+#
+#
+##     wheel_back = plt.Circle((coords[0, 0, 5], coords[0, 1, 5]), p_opt[r_w],alpha = a, color='orange')
+##     wheel_front = plt.Circle((coords[0, 0, 8], coords[0, 1, 8]), p_opt[r_w],alpha = a, color='orange')
+#
+#
+##     lines, = ax.plot(coords[0, 0, :], coords[0, 1, :], color='black',
+##                      marker='o', markerfacecolor='blue', markersize=1,alpha = a)
+##     lines1 = ax.plot([-10, 10], [0, 0])
+##     points1, = ax.plot(coors[3][0][0], coors[3][1][0], color='black',
+##                        marker='o', markerfacecolor='cyan', markersize=5,alpha = a)
+##     points2, = ax.plot(coors[11][0][0], coors[11][1][0], color='black',
+##                        marker='o', markerfacecolor='blue', markersize=5,alpha = a)
+##     points3, = ax.plot(ns.x_h[0], ns.y_h[0], color='black',
+##                        marker='o', markerfacecolor='maroon', markersize=5,alpha = a)
+#
+#
+##     title_text.set_text(title_template.format(t_s[i]))
+##     lines.set_data(coords[i, 0, :], coords[i, 1, :])
+#
+##     wheel_back.center = (coords[i, 0, 5], coords[i, 1, 5])
+##     wheel_front.center = (coords[i, 0, 8], coords[i, 1, 8])
+#
+##     ax.add_patch(wheel_back)
+##     ax.add_patch(wheel_front)
+#
+##     points1.set_data(coors[3][0][i], coors[3][1][i])
+##     points2.set_data(coors[11][0][i], coors[11][1][i])
+##     points3.set_data(ns.x_h[i], ns.y_h[i])
+#
+##     arrow1 = plt.Arrow(coors[3][0][i], coors[3][1][i],
+##                        nFp2a[0][i]   , nFp2a[1][i]   , width=0.1, alpha=a)
+##     # ff x
+##     arrow2 = plt.Arrow(coors[3][0][i], coors[3][1][i],
+##                        nFw2a[0][i]   , nFw2a[1][i]   , width=0.1, alpha=a)
+##     # bf y
+##     arrow3 = plt.Arrow(coors[11][0][i], coors[11][1][i],
+##                        nFp1a[0][i]    , nFp1a[1][i]    , width=0.1, alpha=a)
+##     # bf x
+##     arrow4 = plt.Arrow(coors[11][0][i], coors[11][1][i],
+##                        nFw1a[0][i]    , nFw1a[1][i]    , width=0.1, alpha=a)
+##     # Fh1
+##     arrow5 = plt.Arrow(ns.x_h[i]-0.1, ns.y_h[i],
+##                        fhx1_sol[i]/Fscale            , fhy1_sol[i]/Fscale, width=0.1, alpha=a)
+##     # Fh2
+##     arrow6 = plt.Arrow(ns.x_h[i]+0.1, ns.y_h[i],
+##                        fhx2_sol[i]/Fscale            , fhy2_sol[i]/Fscale, width=0.1, alpha=a)
+#
+#
+## #%%
+## fig,ax = plt.subplots()
+## ax.plot(t_s,nc.g_k2)
+## ax.plot(t_s,ns.ds_2)
+## #ax.plot(t_s,nc.g_k1)
+## #ax.plot(t_s,ns.ds_1)
+## #%%
+#
+## def extract_sol(problem):
+##     sol = problem.solution
+##     mesh = sol.mesh_refinement.__dict__.copy()
+##     ph_mesh = sol.mesh_refinement.ph_mesh.__dict__.copy()
+##     for i in ['backend','dy_ph_callables','next_iter_mesh','ph_mesh','it','sol','ocp']:
+##         mesh.pop(i)
+##     for i in ['backend','settings','quadrature','sI_matrix','sA_matrix','p']:
+##         ph_mesh.pop(i)
+#
+#
+##     dumpdict = {'state':sol.state,
+##                 'control':sol.control,
+##                 'integral':sol.integral,
+##                 'parameter':sol.parameter,
+##                 'time':sol._time_,
+##                 'mesh':mesh,
+##                 'ph_mesh':ph_mesh,
+##                 'objective':sol.objective,
+##                 'guess':problem.guess.parameter_variables,
+##                 'p_opt':p_opt,
+##                 'sol_states':sol_states,
+##                 'sol_control':sol_control,
+##                 't_s':t_s,
+##                 'ns':ns,
+##                 'nc':nc,
+##                 'all_vars':all_vars,
+##                 'all_cont':all_cont._asdict().values(),
+##                 'coordinates':coordinates,
+##                 'Astate':phase_A.state_variables._asdict().values(),
+##                 'Bstate':phase_B.state_variables._asdict().values(),
+##                 }
+##     return dumpdict
+##                 #%%
+#
+## dill.dump(extract_sol(problem),open('/Users/j.t.heinen/Documents/Master Thesis/Results3/prescribed/data_penny_02.p','wb'))
+#
+## #%%
+## dill.load(open('/Users/j.t.heinen/Documents/Master Thesis/Results/dill/tryout.p','rb'))
+#
