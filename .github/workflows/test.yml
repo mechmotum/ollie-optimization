@@ -1,20 +1,24 @@
 name: test
-on: [push, pull_request]
+on:
+  push:
+    branches: master
+  pull_request:
+    branches: master
 jobs:
   test:
-    name: Test
     runs-on: "ubuntu-latest"
-    defaults:
-      run:
-        shell: bash -el {0}
+    name: test
     steps:
-      - uses: actions/checkout@v3
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/checkout@v2
+      - name: install mamba
+        uses: mamba-org/provision-with-micromamba@main
         with:
-          activate-environment: ollie-optimization-paper
-          environment-file: environment.yml
-          python-version: 3.10
-          channels: conda-forge
-      - run: |
-          conda info
-          conda list
+          environment-file: bicycle-steer-control-paper.yml
+          environment-name: bicycle-steer-control-paper
+          extra-specs: |
+            python="3.10"
+      - name: run tests
+          shell: bash -l {0}
+          run: |
+            micromamba info
+            micromamba list
