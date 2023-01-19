@@ -13,8 +13,8 @@ jobs:
       - name: install mamba
         uses: mamba-org/provision-with-micromamba@main
         with:
-          environment-file: bicycle-steer-control-paper.yml
-          environment-name: bicycle-steer-control-paper
+          environment-file: environment.yml
+          environment-name: ollie-optimization-paper
           extra-specs: |
             python="3.10"
       - name: run tests
