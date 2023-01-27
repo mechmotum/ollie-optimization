@@ -7,3 +7,6 @@ includes
 - type hints? what types -> me.Point:
 
 pep8 style guide
+
+
+Pycollo class/def to change all dynamic symbols to symbolic variables
