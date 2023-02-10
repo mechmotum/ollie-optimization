@@ -10,4 +10,3 @@
 8. Delete remote branch on github
 9. Pull changes from main to local main
 10. Delete local version of branch
-
