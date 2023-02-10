@@ -47,7 +47,8 @@ class SegmentSkateboard(SkateboardBase):
         steel_density: float = 7700.0,
         glue_specific_mass: float = 0.210,
         axle_diameter: float = 0.008,
-        veneer_thickness: float = 0.0016
+        veneer_thickness: float = 0.0016,
+        global_frame: me.ReferenceFrame = me.ReferenceFrame('N'),
     ):
         """Initialize immutable skateboard properties."""
 
@@ -70,9 +71,22 @@ class SegmentSkateboard(SkateboardBase):
         self.truck_height = sm.Symbol('h_tr')
         self.wheel_radius = sm.Symbol('r_w')
 
+        # State variables 
+        self.backfoot_position = me.dynamicsymbols('s1')
+        self.frontfoot_position = me.dynamicsymbol('s2')
+        
+        self.x_position = me.dynamicsymbols('x_s')
+        self.y_position = me.dynamicsymbols('y_s')
+        self.angle = me.dynamicsymbols('th_s')
+
         # Calculate values
         self.masses = self._calculate_masses
         self.inertias = self._calculate_inertias
+
+        # Frames
+        self.global_frame = global_frame
+        self.frame = me.ReferenceFrame('A')
+        self.frame.orient_axis(self.global_frame, self.global_frame.z, self.angle)
 
         # Unpack calculate values
         (
@@ -210,9 +224,74 @@ class SegmentSkateboard(SkateboardBase):
         I_tot = sum(I_com)+sum(I_steiner)
         return I_tot, I_com, I_steiner
 
-    def _calculate_center_of_mass(self) -> me.Point:
-        """"""
-        return None
+    # def _calculate_center_of_mass(self) -> me.Point:
+    #     """"""
+
+    #    mass, com_points, reference_point):
+    # # Function gets vector position from reference_point
+    # # Then assigns COM location to point COM
+    # # Returns position vector of COM points relative to COM
+    # r_m = []
+    # for i, x in enumerate(com_points):
+    #     r_m.append(x.pos_from(reference_point)*mass[i])
+    # COM_skateboard = me.Point('COM_skateboard')
+    # COM_skateboard.set_pos(reference_point, (sum(r_m)/sum(mass)))
+
+    # return COM_skateboard
+    #     return None
+
+    def _construct_skateboard(self):
+        """
+        Constructs a skateboard with horizontal position x, vertical position y, and angle with respect to the inertial frame.
+        """
+        #%% Free floating acc
+        origin              = me.Point('O')
+        com                 = origin.locatenew('centre of mass', self.x_position * self.global_frame.x+self.y_position*self.global_frame.y)
+        middle_deck         = com.locatenew('middle deck', d_com_ * self.frame.y)
+        back_truck          = middle_deck.locatenew('back trucks at deck', -self.wheelbase/2 * self.frame.x)
+        front_truck         = back_truck.locatenew('front trucks at deck', self.wheelbase * self.frame.x)
+        back_wheel          = back_truck.locatenew('back wheels', -self.truck_height * self.frame.y)
+        back_wheel_contact  = back_wheel.locatenew('contact back wheels', -self.wheel_radius * self.global_frame.y)
+        front_wheel         = front_truck.locatenew('front wheels', -self.truck_height * self.frame.y)
+        front_wheel_contact = front_wheel.locatenew('contact back wheels', -self.wheel_radius * self.global_frame.y)
+        back_pocket         = middle_deck.locatenew('back pocket', -self.deck_length/2 * self.frame.x)
+        tail                = back_pocket.locatenew('tail', -self.tail_length * B.x)
+        back_foot           = tail.locatenew('back foot', self.backfoot_position * B.x)
+        front_foot          = back_pocket.locatenew('front foot', self.frontfoot_position * self.frame.x)
+        front_pocket        = back_pocket.locatenew('front pocket', self.deck_length * self.frame.x)
+        nose                = front_pocket.locatenew('nose', self.tail_length * C.x)
+        objective           = back_wheel_contact.locatenew('objective', self.wheelbase/2 * self.frame.x)
+
+
+    def TMT_method(self, com_coordinates, mass_matrix, generalized_coordinates, com_applied_loads):
+        """
+        ROUGH, NOT DONE YET
+        """
+        #Freefloating EOM
+        q = generalized_coordinates
+        dq = q.diff(me.dynamicsymbols(_t))
+        ddq= dq_b.diff(me.dynamicsymbols(_t))
+
+        positions = com_coordinates
+
+        dx = positions.diff(me.dynamicsymbols(_t))
+        Tij = dx.jacobian(dq)
+        Tji = Tij.transpose()
+        ddx = dx.diff(me.dynamicsymbols(_t))
+        gk  = dx.jacobian(q)*dq
+
+        TMT = Tji*mass_matrix*Tij
+        Fi = sm.Matrix([com_applied_loads.dot(self.global_frame.x), com_applied_loads.dot(self.global_frame.y)-m_s_*g,(bf_b.pos_from(com_b).cross(F1)+ff_b.pos_from(com_b).cross(F2)).dot(N.z)])
+        Fg = Tji*(Fi-Mij*gk)
+
+        #(Fi_b == Fg_b)
+
+        ddq_eq_b = d2s(TMT_b.LUsolve(Fg_b))
+
+        accSB = {ddx_s: ddq_eq_b[0],
+                ddy_s: ddq_eq_b[1],
+                ddth_s:ddq_eq_b[2],
+                }
 
 
 class SoftplusSkateboard(SkateboardBase):
