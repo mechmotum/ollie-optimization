@@ -1,0 +1,8 @@
+[project]
+name = "skateboard"
+description = "Ollie optimization"
+version = "0.1.0"
+authors = [
+    { name = "Jan Heinen", email = "jan.heinen@hotmail.com" },
+    { name = "Sam Brockie", email = "sambrockie@icloud.com" },
+]
