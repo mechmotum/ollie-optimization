@@ -13,7 +13,7 @@ jobs:
           environment-name: ollie-optimization-paper
           channels: conda-forge
           extra-specs: |
-            python="3.10"
+            python="3.9"
       - name: run tests
         shell: bash -l {0}
         run: |
