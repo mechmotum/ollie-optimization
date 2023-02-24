@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=46.1.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "skateboard"
 description = "Ollie optimization"
@@ -6,3 +10,12 @@ authors = [
     { name = "Jan Heinen", email = "jan.heinen@hotmail.com" },
     { name = "Sam Brockie", email = "sambrockie@icloud.com" },
 ]
+
+[tool.ruff]
+line-length = 88
+
+[[tool.mypy.overrides]]
+module = [
+    "pycollo",
+]
+ignore_missing_imports = true
