@@ -20,33 +20,14 @@ class Container:
         guess: float | None = None,
     ):
         """"""
+
+        # Symbol
         self._symbol = symbol
+
+        # Value
         self._value = value
-        self._bounds = bounds
-        self._guess = guess
 
-    @property
-    def symbol(self) -> Symbol | DynamicSymbol | Point | None:
-        """``Symbol`` representing an attribute."""
-        return self._symbol
-
-    @property
-    def value(self) -> Expr | float | None:
-        """The value of an attribute.
-
-        Can either be a numeric value or an expression representing a
-        replacement.
-
-        """
-        return self._value
-
-    @property
-    def bounds(self) -> tuple[float, float] | None:
-        """The lower and upper bounds on a static parameter variable."""
-        return self._bounds
-
-    @bounds.setter
-    def bounds(self, bounds) -> None:
+        # Bounds
         if hasattr(self, "_bounds"):
             msg = f"Cannot reset bounds {self.bounds} to {bounds} once set"
             raise AttributeError(msg)
@@ -69,13 +50,7 @@ class Container:
             raise ValueError(msg)
         self._bounds = (float(bounds[0]), float(bounds[1]))
 
-    @property
-    def guess(self) -> float | None:
-        """The initial guess for a static parameter variable."""
-        return self._guess
-
-    @guess.setter
-    def guess(self, guess) -> None:
+        # Guess
         if hasattr(self, "_guess"):
             msg = f"Cannot reset guess {self.guess} to {guess} once set"
             raise AttributeError(msg)
@@ -88,6 +63,31 @@ class Container:
         if guess < self.bounds[0] or guess > self.bounds[1]:
             msg = f"Guess {guess} must be between bounds {self.bounds}"
         self._guess = guess
+
+    @property
+    def symbol(self) -> Symbol | DynamicSymbol | Point | None:
+        """``Symbol`` representing an attribute."""
+        return self._symbol
+
+    @property
+    def value(self) -> Expr | float | None:
+        """The value of an attribute.
+
+        Can either be a numeric value or an expression representing a
+        replacement.
+
+        """
+        return self._value
+
+    @property
+    def bounds(self) -> tuple[float, float] | None:
+        """The lower and upper bounds on a static parameter variable."""
+        return self._bounds
+
+    @property
+    def guess(self) -> float | None:
+        """The initial guess for a static parameter variable."""
+        return self._guess
 
     def __neg__(self):
         return -self.symbol
