@@ -163,10 +163,10 @@ class SegmentDeck(DeckBase):
             length=length,
         )
 
-        self.back_pocket = me.Point(r"P_{bp}")
+        self.back_pocket = me.Point(r"P_{back_pocket}")
         self.back_pocket.set_pos(self.origin, -0.5 * self.length * self.frame.x)
 
-        self.tail_frame = me.ReferenceFrame(r"A_{t}")
+        self.tail_frame = me.ReferenceFrame(r"A_{tail}")
         self.tail_frame.orient_axis(
             self.frame,
             self.frame.z,
@@ -180,11 +180,11 @@ class SegmentDeck(DeckBase):
             * self.area_density
         )
         self.mass_tail_semicircle = Container(
-            symbol=sm.Symbol(r"m_{t_semi}"),
+            symbol=sm.Symbol(r"m_{tail_semi}"),
             value=mass_tail_nose_semicircle,
         )
         self.mass_nose_semicircle = Container(
-            symbol=sm.Symbol(r"m_{n_semi}"),
+            symbol=sm.Symbol(r"m_{nose_semi}"),
             value=mass_tail_nose_semicircle,
         )
 
@@ -193,20 +193,20 @@ class SegmentDeck(DeckBase):
             * self.area_density
         )
         self.mass_tail_rectangle = Container(
-            symbol=sm.Symbol(r"m_{t_rec}"),
+            symbol=sm.Symbol(r"m_{tail_rect}"),
             value=mass_tail_nose_rectangle,
         )
         self.mass_nose_rectangle = Container(
-            symbol=sm.Symbol(r"m_{n_rec}"),
+            symbol=sm.Symbol(r"m_{nose_rect}"),
             value=mass_tail_nose_rectangle,
         )
 
         self.mass_deck_rectangle = Container(
-            symbol=sm.Symbol(r"m_{d_rec}"),
+            symbol=sm.Symbol(r"m_{deck_rec}"),
             value=self.wheelbase * self.width * self.area_density,
         )
         self.mass = Container(
-            symbol=sm.Symbol(r"m_{d}"),
+            symbol=sm.Symbol(r"m_{deck}"),
             value=(
                 self.mass_tail_semicircle + self.mass_tail_rectangle
                 + self.mass_deck_rectangle + self.mass_nose_rectangle
@@ -216,7 +216,9 @@ class SegmentDeck(DeckBase):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the deck's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{deck}")
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the segment deck."""
