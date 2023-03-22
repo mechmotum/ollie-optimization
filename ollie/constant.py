@@ -5,4 +5,4 @@ import sympy as sm
 from ollie.container import Container
 
 
-gravity = Container(symbol=sm.Symbol(r"g"), value=sm.Float(9.81))
+GRAVITY = Container(symbol=sm.Symbol(r"g"), value=sm.Float(9.81))
