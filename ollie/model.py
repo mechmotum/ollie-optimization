@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from typing import Any
 
 import sympy as sm
@@ -87,3 +88,8 @@ class ModelObject:
             if isinstance(attribute, ModelObject):
                 guess += attribute.static_parameter_guesses
         return guess
+
+    @abstractmethod
+    def __repr__(self) -> str:
+        """Formatted representation of the model object."""
+        pass
