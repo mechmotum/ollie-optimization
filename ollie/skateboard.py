@@ -10,6 +10,7 @@ import sympy as sm
 import sympy.physics.mechanics as me
 
 from ollie.container import Container
+from ollie.inertia import inertia_of_cuboid
 from ollie.material import Glue, Polyurethane, Maple, Steel
 from ollie.model import ModelObject
 
@@ -93,6 +94,7 @@ class DeckBase(ABC, ModelObject):
         # Mechanics
         self.origin = me.Point(r"O_{deck}")
         self.frame = me.ReferenceFrame(r"A_{deck}")
+        self.mass_center = me.Point(r"C_{deck}")
 
         self._calculate_mass()
         self._calculate_inertia()
@@ -147,10 +149,20 @@ class FlatDeck(DeckBase):
             symbol=sm.Symbol(r"m_{deck}"),
             value=self.wheelbase * self.width * self.area_density,
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the deck's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol('I_{deck}'),
+            value=inertia_of_cuboid(
+                self.frame,
+                self.mass,
+                x_dim=self.length,
+                y_dim=self.thickness,
+                z_dim=self.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the flat deck."""
