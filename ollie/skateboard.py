@@ -296,8 +296,10 @@ class Axle(ModelObject):
         self.diameter = Container(symbol=sm.Symbol(r"d_{axle}"), value=diameter)
         self.width = Container(symbol=sm.Symbol(r"w_{axle}"), value=width)
 
+        # Mechanics
         self.origin = me.Point(r"O_{axle}")
-        self.frame = me.ReferenceFrame(r"N_{axle}")
+        self.frame = me.ReferenceFrame(r"A_{axle}")
+        self.mass_center = me.Point(r"C_{axle}")
 
         self._calculate_mass()
         self._calculate_inertia()
@@ -313,6 +315,7 @@ class Axle(ModelObject):
                 * Steel.density
             ),
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the axle's inertia-related attributes."""
