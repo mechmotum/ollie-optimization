@@ -1,5 +1,6 @@
 """Utilies for calculating inertias."""
 
+import sympy as sm
 import sympy.physics.mechanics as me
 
 from ollie.container import Container
@@ -14,7 +15,7 @@ def inertia_of_cuboid(
     z_dim: Container,
 ) -> :
     """Calculate the inertia of a cuboid."""
-    two = Integer(2)
+    two = sm.Integer(2)
     twelfth = sm.Rational(1, 12)
     return me.inertia(
         frame,
