@@ -7,6 +7,7 @@ from ollie.skateboard import (
     Axle,
     Wheel,
     Truck,
+    FlatDeck,
     SegmentDeck,
     Skateboard,
 )
@@ -21,6 +22,7 @@ __all__ = [
     Axle,
     Wheel,
     Truck,
+    FlatDeck,
     SegmentDeck,
     Skateboard,
 ]
