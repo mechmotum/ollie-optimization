@@ -13,7 +13,7 @@ def inertia_of_cuboid(
     x_dim: Container,
     y_dim: Container,
     z_dim: Container,
-) -> :
+) -> me.Dyadic:
     """Calculate the inertia of a cuboid."""
     two = sm.Integer(2)
     twelfth = sm.Rational(1, 12)
