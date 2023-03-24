@@ -8,6 +8,7 @@ from ollie.container import Container
 def inertia_of_cuboid(
     frame: me.ReferenceFrame,
     mass: Container,
+    *,
     x_dim: Container,
     y_dim: Container,
     z_dim: Container,
