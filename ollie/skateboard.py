@@ -118,6 +118,49 @@ class DeckBase(ABC, ModelObject):
         )
 
 
+class FlatDeck(DeckBase):
+    """A flat rectangular skateboard deck without a traditional nose and tail."""
+
+    def __init__(
+        self,
+        *,
+        width: float = 0.21,
+        ply: int = 7,
+        veneer_thickness: float = 0.0016,
+        wheelbase: float | None = None,
+        length: float | None = None,
+        tail_length: float | None = None,
+        tail_inclination: float | None = None,
+    ) -> None:
+        """Initializer the segment deck instance."""
+        super().__init__(
+            width=width,
+            ply=ply,
+            veneer_thickness=veneer_thickness,
+            wheelbase=wheelbase,
+            length=length,
+        )
+
+    def _calculate_mass(self):
+        """Calculate and instantiate the deck's mass-related attributes."""
+        self.mass = Container(
+            symbol=sm.Symbol(r"m_{deck}"),
+            value=self.wheelbase * self.width * self.area_density,
+        )
+
+    def _calculate_inertia(self):
+        """Calculate and instantiate the deck's inertia-related attributes."""
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        """Formatted representation of the flat deck."""
+        return (
+            f"{self.__class__.__name__}(width={self.width}), ply={self.ply}, "
+            f"veneer_thickness={self.veneer_thickness}, "
+            f"wheelbase={self.wheelbase}, length={self.length})"
+        )
+
+
 class SegmentDeck(DeckBase):
     """A segmented skateboard deck with inclined semicircular node and tail."""
 
