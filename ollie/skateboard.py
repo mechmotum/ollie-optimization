@@ -162,7 +162,7 @@ class FlatDeck(DeckBase):
 
 
 class SegmentDeck(DeckBase):
-    """A segmented skateboard deck with inclined semicircular node and tail."""
+    """A segmented skateboard deck with inclined semicircular nose and tail."""
 
     def __init__(
         self,
