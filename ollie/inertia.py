@@ -42,7 +42,7 @@ def inertia_of_cylinder(
     half = sm.Rational(1, 2)
     twelfth = sm.Rational(1, 12)
     parallel = half * mass * radius**two
-    perpendicular = twelfth * mass * (height**two + three*radius**two)
+    perpendicular = twelfth * mass * (length**two + three*radius**two)
     return me.inertia(
         frame,
         parallel if axis is frame.x else perpendicular,
