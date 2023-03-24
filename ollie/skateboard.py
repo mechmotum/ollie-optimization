@@ -269,7 +269,8 @@ class SegmentDeck(DeckBase):
             f"{self.__class__.__name__}(width={self.width}), ply={self.ply}, "
             f"veneer_thickness={self.veneer_thickness}, "
             f"wheelbase={self.wheelbase}, length={self.length}, "
-            f"tail_length={self.tail_length}, tail_inclination={self.tail_inclination})"
+            f"tail_length={self.tail_length}, "
+            f"tail_inclination={self.tail_inclination})"
         )
 
 
