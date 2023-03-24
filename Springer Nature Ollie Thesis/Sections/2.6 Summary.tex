@@ -1,0 +1,59 @@
+\subsection{Summary}\label{s_summary}
+\noindent To summarize all the findings, the general formula for the multi-phase ollie OCP is implemented in one overview. The objective function for the ollie OCP is 
+\begin{equation}
+     maximize\ (y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w)
+\end{equation} 
+Subject to the dynamical constraints in phase 1:
+\begin{equation}
+\begin{array}{c}
+        \alpha_{1} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_x}}{m_h}\\
+        \alpha_{2} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_y}}{m_h}\\
+        \alpha_{3,4}^{(1)} =   \left(\mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot  \mathbf{T}^T\right)^{-1} (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
+\end{array}
+\end{equation}
+And for phase 2 and 3:
+\begin{equation}
+    \begin{array}{c}
+        \alpha_{1} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_x}}{m_h}\\
+        \alpha_{2} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_y}}{m_h}\\ 
+        \alpha_{5,6} = (\mathbf{M_s})^{-1}\mathbf{F_a}
+    \end{array}
+\end{equation}
+With path constraints during phase 1:
+\begin{equation}
+    \begin{array}{c}
+         \gamma_{3-6},  \\
+         \gamma_{9-30},
+    \end{array}
+\end{equation}
+And during phase 2 and 3:
+\begin{equation}
+    \begin{array}{c}
+         \gamma_{1-11}  \\
+         \gamma_{16-30}
+    \end{array}
+\end{equation}
+With endpoint constraints $\beta_{1-9}$.
+In the first phase the state variables $q^{(1)}$, control variables $u_c^{(1)}$, slack control variables $u_s^{(1)}$ are:
+\begin{equation}
+\begin{array}{rl}
+   \mathbf{q^{(1)}} =& [x_w , th_s, x_h, y_h, \dot x_w, \dot th_s,\dot x_h, \dot y_h]    \\
+   \mathbf{u_c^{(1)}} =& [fp1, fp2, dds_1, dds_2]  \\
+   \mathbf{u_s^{(1)}}=&  [F_{f1}^+, F_{f1}^-, \psi_1,F_{f2}^+, F_{f2}^-, \psi_2] 
+\end{array}
+\end{equation}
+During the second and third phase the state variables $q^{(2,3)}$, control variables $u_c^{(2,3)}$, slack control variables $u_s^{(2,3)}$ are:
+\begin{equation}
+\begin{array}{rl}
+   \mathbf{q^{(2,3)}} =& [x_s, y_s, \theta_s, x_h, y_h, \dot x_s, \dot y_s, \dot \theta_s,\dot x_h, \dot y_h]    \\
+   \mathbf{u_c^{(2,3)}} =& [F_{p1}, F_{p2}, \ddot s_1, \ddot s_2]  \\
+   \mathbf{u_s^{(2,3)}}=&  [F_{f1}^+, F_{f1}^-, \psi_1,F_{f2}^+, F_{f2}^-, \psi_2] 
+\end{array}
+\end{equation}
+With the global parameters variables $\sigma$ as any combination of the optimized geometric parameters: 
+\begin{equation}
+    \sigma_i \in [l_{wb}, l_d, l_t, \phi, h_{tr}, r_w]
+\end{equation}
+
+The results will show several optimizations with different combinations of parameter optimizations to search the solution space for optimal shapes. The first set of optimizations will be without optimized parameter variables to show proper functioning of the model. The second set of optimizations will be single variable optimizations where only one variable from the optimized parameter variables is chosen to be optimized. The third set of optimization will be variations to multiple optimized parameter variables. The results will show the optimal trajectories and geometries of these optimizations together with detailed trajectories over time a video posted on youtube created by the model.
+
