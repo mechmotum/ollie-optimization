@@ -10,7 +10,7 @@ import sympy as sm
 import sympy.physics.mechanics as me
 
 from ollie.container import Container
-from ollie.inertia import inertia_of_cuboid
+from ollie.inertia import inertia_of_cuboid, inertia_of_cylinder
 from ollie.material import Glue, Polyurethane, Maple, Steel
 from ollie.model import ModelObject
 
@@ -316,7 +316,16 @@ class Axle(ModelObject):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the axle's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{axle}"),
+            value=inertia_of_cylinder(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                radius=sm.Rational(1, 2) * self.diameter,
+                length=self.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the axle."""
