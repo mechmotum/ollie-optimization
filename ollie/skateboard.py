@@ -393,7 +393,16 @@ class Wheel(ModelObject):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the wheel's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{wheel}"),
+            value=inertia_of_cylinder(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                radius=self.radius,
+                length=self.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the wheel."""
