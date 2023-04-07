@@ -366,6 +366,11 @@ class Wheel(ModelObject):
                 guess=0.0245,
             )
 
+        # Mechanics
+        self.origin = me.Point(r"O_{wheel}")
+        self.frame = me.ReferenceFrame(r"A_{wheel}")
+        self.mass_center = me.Point(r"C_{wheel}")
+
         self._calculate_mass()
         self._calculate_inertia()
 
@@ -384,6 +389,7 @@ class Wheel(ModelObject):
                 )
             ),  # V=pi*h*(D^2-d^2)/4
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the wheel's inertia-related attributes."""
