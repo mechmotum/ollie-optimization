@@ -438,6 +438,11 @@ class Truck(ModelObject):
                 symbol=sm.Symbol(r"h_{truck}"), bounds=[0.045, 0.3], guess=0.053,
             )
 
+        # Mechanics
+        self.origin = me.Point(r"O_{truck}")
+        self.frame = me.ReferenceFrame(r"A_{truck}")
+        self.mass_center = me.Point(r"C_{truck}")
+
         self._calculate_mass()
         self._calculate_inertia()
 
@@ -449,6 +454,7 @@ class Truck(ModelObject):
                 (sm.Float(0.366) - self.axle.mass) * self.height / sm.Float(0.053)
             ),  # truck mass scales linear with height compared to measured truck
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the truck's inertia-related attributes."""
