@@ -458,7 +458,9 @@ class Truck(ModelObject):
                 (sm.Float(0.366) - self.axle.mass) * self.height / sm.Float(0.053)
             ),  # truck mass scales linear with height compared to measured truck
         )
-        self.mass_center.set_pos(self.origin, 0)
+
+        mass_center_offset = -sm.Rational(1, 3) * self.height * self.frame.y
+        self.mass_center.set_pos(self.origin, mass_center_offset)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the truck's inertia-related attributes."""
