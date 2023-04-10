@@ -10,7 +10,11 @@ import sympy as sm
 import sympy.physics.mechanics as me
 
 from ollie.container import Container
-from ollie.inertia import inertia_of_cuboid, inertia_of_cylinder
+from ollie.inertia import (
+    inertia_of_cuboid,
+    inertia_of_cylinder,
+    inertia_of_isosceles_triangular_prism,
+)
 from ollie.material import Glue, Polyurethane, Maple, Steel
 from ollie.model import ModelObject
 
@@ -458,7 +462,17 @@ class Truck(ModelObject):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the truck's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{truck}"),
+            value=inertia_of_isosceles_triangular_prism(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                base=sm.Float(0.053),
+                height=self.height,
+                length=self.axle.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the truck."""
