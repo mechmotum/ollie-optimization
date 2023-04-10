@@ -504,6 +504,7 @@ class Skateboard(ModelObject):
 
         self.origin = me.Point(r"O_{skateboard}")
         self.frame = me.ReferenceFrame(r"A_{skateboard}")
+        self.mass_center = me.Point(r"C_{skateboard}")
 
         self._set_kinematics()
         self._calculate_mass()
@@ -549,6 +550,23 @@ class Skateboard(ModelObject):
                 + 4*self.wheels.mass
             ),
         )
+
+        two = sm.Integer(2)
+        four = sm.Integer(4)
+        mass_center_offset_x = sm.S.Zero
+        mass_center_offset_y = (
+            self.deck.mass * self.deck.mass_center.pos_from(self.origin)
+            + two * self.trucks.mass * self.trucks.mass_center.pos_from(self.origin)
+            + two * self.axles.mass * self.axles.mass_center.pos_from(self.origin)
+            + four * self.wheels.mass * self.wheels.mass_center.pos_from(self.origin)
+        ).dot(self.frame.y) / self.mass
+        mass_center_offset_z = sm.S.Zero
+        mass_center_offset = (
+            mass_center_offset_x * self.frame.x
+            + mass_center_offset_y * self.frame.y
+            + mass_center_offset_z * self.frame.z
+        )
+        self.mass_center.set_pos(self.origin, mass_center_offset)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the skateboard's inertia-related attributes."""
