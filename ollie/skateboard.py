@@ -503,14 +503,15 @@ class Skateboard(ModelObject):
         self.trucks = trucks
 
         self.origin = me.Point(r"O_{skateboard}")
+        self.frame = me.ReferenceFrame(r"A_{skateboard}")
 
         # self._set_point_positions()
         self._calculate_mass()
         # self._calculate_inertia()
 
     @property
-    def axle(self):
-        """Utility accessor to get the skateboard's truck's axle."""
+    def axles(self):
+        """Utility accessor to get the skateboard's truck's axles."""
         return self.trucks.axle
 
     @property
@@ -526,7 +527,7 @@ class Skateboard(ModelObject):
         self.mass = Container(
             symbol=sm.Symbol(r"m_{skateboard}"),
             value=(
-                self.deck.mass + 2*self.trucks.mass + 2*self.axle.mass
+                self.deck.mass + 2*self.trucks.mass + 2*self.axles.mass
                 + 4*self.wheels.mass
             ),
         )
