@@ -49,3 +49,30 @@ def inertia_of_cylinder(
         parallel if axis is frame.y else perpendicular,
         parallel if axis is frame.z else perpendicular,
     )
+
+
+def inertia_of_isosceles_triangular_prism(
+    frame: me.ReferenceFrame,
+    mass: Container,
+    *,
+    axis: me.Vector,
+    base: Container,
+    height: Container,
+    length: Container,
+) -> me.Dyadic:
+    """Calculate the inertia of an isosceles triangular prism."""
+    if axis not in frame:
+        msg = f"Axis {axis} must be a unit vector of frame {frame}."
+        raise ValueError(msg)
+
+    two = sm.Integer(2)
+    thirty_sixth = sm.Rational(1, 36)
+    parallel = thirty_sixth * mass * (base**two + height**two)
+    perpendicular = 0  # Assume zero as not important for ollie calculations
+    return me.inertia(
+        frame,
+        parallel if axis is frame.x else perpendicular,
+        parallel if axis is frame.y else perpendicular,
+        parallel if axis is frame.z else perpendicular,
+    )
+
