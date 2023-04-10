@@ -523,19 +523,13 @@ class Skateboard(ModelObject):
     def _set_kinematics(self):
         """Set the skateboard's point positions and velocities."""
         self.deck.origin.set_pos(self.origin, 0)
-
         half = sm.Rational(1, 2)
         truck_mass_center_offset = -half * self.deck.wheelbase * self.deck.frame.x
         self.trucks.origin.set_pos(self.origin, truck_mass_center_offset)
-
-        # Axle
         axle_mass_center_offset = -self.trucks.height * self.trucks.frame.y
         self.axles.origin.set_pos(self.trucks.origin, axle_mass_center_offset)
-
-        # Wheel
         self.wheels.origin.set_pos(self.axles.origin, 0)
 
-        # Frames
         self.deck.frame.orient_axis(self.frame, self.frame.x, 0)
         self.trucks.frame.orient_axis(self.frame, self.frame.x, 0)
         self.axles.frame.orient_axis(self.frame, self.frame.x, 0)
