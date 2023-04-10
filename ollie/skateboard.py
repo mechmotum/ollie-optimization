@@ -505,7 +505,7 @@ class Skateboard(ModelObject):
         self.origin = me.Point(r"O_{skateboard}")
         self.frame = me.ReferenceFrame(r"A_{skateboard}")
 
-        self._set_point_kinematics()
+        self._set_kinematics()
         self._calculate_mass()
         # self._calculate_inertia()
 
@@ -519,7 +519,7 @@ class Skateboard(ModelObject):
         """Utility accessor to get the skateboard's wheels."""
         return self.trucks.wheels
 
-    def _set_point_kinematics(self):
+    def _set_kinematics(self):
         """Set the skateboard's point positions and velocities."""
         self.deck.origin.set_pos(self.origin, 0)
 
