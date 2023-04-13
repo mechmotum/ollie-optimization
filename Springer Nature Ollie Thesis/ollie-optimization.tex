@@ -250,34 +250,43 @@ The chosen method to solve the optimal control problem is direct collocation. Di
 
 The ollie problem is a hybrid problem, meaning that there will be discontinuities in the states. During impact the velocity states change sign instantly causing discontinuities. Discontinuities are per definition not differentiable, this means that in a higher order optimization the discontinuity need to be solved differently. To merge higher order optimization and discontinuities, multi-phase optimization is used. Multi-phase optimization concerns a sequence of continuous-state phases separated by discrete jumps in the states. Multi-phase optimization requires pre-modeled phases which leaves no opportunity for unsought solutions. Though, they are easier to compute and tend to be more accurate \cite{kelly_introduction_2017}. 
 
-\subsection{Parameter optimization}\label{s_paropt}
-The skateboards' parameters can be optimized as decision variables which increases the dimensionality, but with direct methods this is not be a problem. To optimize the geometry of the skateboard, a parameterized model of the skateboard that scales it's mass and inertia values when changing the geometry is made, such that the dynamical response is scaled accordingly. I used the SymPy symbolic toolbox to create the parameterized models \cite{meurer_sympy_2017}. 
+\subsection{Parameterization}\label{s_paropt}
+Since we want to optimize the input trajectories simulatenously with the
+skateboard's physical parameters, we parameterize the dynamics model so that it
+it's mass and inertia scale when geometry changes are made.
 
-%%%%%%%%%%%%%
-%Part about why in 2D
-%%%%%%%%%%%%%
-
-\subsubsection{Parameterized model}\label{ss_model}
+The most widely used modern skateboard is the Popsicle stick skateboard. We
+simplify the Popsicle stick skateboard design for our 2D model and describe it
+with ten variables, see Table~\ref{t_variables}. We enforce symmetry, whereas
+in reality nose and tail lengths and inclinations vary. We ignore the concavity
+present in the deck. The variables colored blue in Figure~\ref{f_11segments}
+are optimized and the green variables are set to an industrial standard because
+they influence the mass and inertia properties but play little role in the
+ollie dynamics.
+%
 \begin{table}
-    \centering
-    \begin{tabular}{=l +l +c}
-        \rowstyle{\textbf}& Variable & Description \\
-        \hline
-        \rowstyle{\color{blue}} & $l_{wb}$ & Wheelbase \\
-        \rowstyle{\color{blue}} & $l_{d}$ & Deck length \\
-        \rowstyle{\color{blue}} & $l_{t}$ & Tail/nose length \\
-        \rowstyle{\color{blue}} & $\phi$ & Tail/nose inclination \\
-        \rowstyle{\color{blue}} & $h_{tr}$ & Truck height \\
-        \rowstyle{\color{blue}} & $r_{w}$ & Wheel radius \\
-        \rowstyle{\color{ao}} & $h_d$ & Deck thickness \\
-        \rowstyle{\color{ao}} & $d_{tr}$ & Truck width \\
-        \rowstyle{\color{ao}} & $d_{d}$ & Deck width \\
-        \rowstyle{\color{ao}} & $d_w$ & Wheel width \\
-        \rowstyle{\color{orange}} & $d_{com}$ & COM distance from deck \\
-    \end{tabular}
-    \caption{Variables used to describe skateboard shape (see fig. \ref{f_11segments}). Blue parameters are optimized, green parameters are set to industrial standard. Orange is a dependent on other variables.}
-    \label{t_variables}
+  \centering
+  \begin{tabular}{=l +l +c}
+    \rowstyle{\textbf}& Variable & Description \\
+    \hline
+    \rowstyle{\color{blue}} & $l_{wb}$ & Wheelbase \\
+    \rowstyle{\color{blue}} & $l_{d}$ & Deck length \\
+    \rowstyle{\color{blue}} & $l_{t}$ & Tail/nose length \\
+    \rowstyle{\color{blue}} & $\phi$ & Tail/nose inclination \\
+    \rowstyle{\color{blue}} & $h_{tr}$ & Truck height \\
+    \rowstyle{\color{blue}} & $r_{w}$ & Wheel radius \\
+    \rowstyle{\color{ao}} & $h_d$ & Deck thickness \\
+    \rowstyle{\color{ao}} & $d_{tr}$ & Truck width \\
+    \rowstyle{\color{ao}} & $d_{d}$ & Deck width \\
+    \rowstyle{\color{ao}} & $d_w$ & Wheel width \\
+    \rowstyle{\color{orange}} & $d_{com}$ & COM distance from deck \\
+  \end{tabular}
+  \caption{Variables used to describe skateboard shape (see fig.
+    \ref{f_11segments}). Blue parameters are optimized, green parameters are
+    set to industrial standard. Orange is a dependent on other variables.}
+  \label{t_variables}
 \end{table}
+
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
   \centerline{
@@ -290,13 +299,7 @@ The skateboards' parameters can be optimized as decision variables which increas
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-The most widely accepted skateboard is the Popsicle stick skateboard (see section \ref{s_intro}). A simplification of the Popsicle stick skateboard with straight lines only is minimally described with ten variables (see table \ref{t_variables}. A symmetrical shape is assumed, whereas in reality nose and tail length and inclination often vary. The simplified skateboard is made up of straight lines only and concavity is not taken into account. Blue variables are optimized because the ollie movement can be described minimally by a 2D movement in the xy-plane (see fig. \ref{f_11segments}). Green variables influence the mass and inertia properties and are set to an industrial standard. These are usually chosen by preference.
 
-%\begin{equation}
-%    [l_{wb},\ l_d,\ l_t,\ \phi,\ h_{tr},\ r_w ]
-%\end{equation}
-
-\subsubsection{Mass and Inertia}\label{ss_mass}
 We developed a mass and inertial model which is a function of the skateboard's
 essential geometry, see Figure~\ref{f_11segments}), and material densities
 (wood, steel, urethane). The model is made up of eleven basic constant density
