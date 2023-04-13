@@ -635,49 +635,100 @@ The horizontal ($\mathbf{\hat n_x}$) direction forces are now unconstrained. The
 Only the maximum force constraints $\gamma_{11-13}$ and $\gamma_{18-19}$ apply to all phases. The CMJ constraints are only applied to the first phase, since phase 1 concerns the CMJ movement. 
 
 \textbf{Friction}\\
-According to section \ref{ss_mechanics} the feet are sliding along the griptape to level the skateboard out and drag the skateboard up during the preparation phase 1, and upward motion phase 2. Static and dynamic friction is are used to describe this phenomena. The method to implement these in the optimization is a simplification to the frictional contact implicit optimization called the relaxed formulation by Patel et al. \cite{patel_contact-implicit_2019}. This method is able to have unplanned discontinuous frictional contact with direct collocation without a hybrid method. Usually this would be considered impossible since direct collocation enforces the dynamics and constraints over a continuous domain, where discontinuities in the system dynamics usually lead to infeasibility \cite{kelly_transcription_2017}. The downside is that with this method it is difficult to converge to a feasible solution without a proper initial guess and the computation time is rather high \cite{shield_contact-implicit_2022,patel_contact-implicit_2019}. I have found a way to simplify this method, which represents a contact implicit frictional contact that solves optimally under 2 minutes without initial guess. To explain the simplifications and for the sake of clarity, I will first explain the impact method of Patel et al..
+According to section \ref{ss_mechanics} the feet are sliding along the griptape
+to level the skateboard out and drag the skateboard up during the preparation
+phase 1, and upward motion phase 2. Static and dynamic friction is are used to
+describe this phenomena. The method to implement these in the optimization is a
+simplification to the frictional contact implicit optimization called the
+relaxed formulation by Patel et al. \cite{patel_contact-implicit_2019}. This
+method is able to have unplanned discontinuous frictional contact with direct
+collocation without a hybrid method. Usually this would be considered
+impossible since direct collocation enforces the dynamics and constraints over
+a continuous domain, where discontinuities in the system dynamics usually lead
+to infeasibility \cite{kelly_transcription_2017}. The downside is that with
+this method it is difficult to converge to a feasible solution without a proper
+initial guess and the computation time is rather high
+\cite{shield_contact-implicit_2022,patel_contact-implicit_2019}. I have found a
+way to simplify this method, which represents a contact implicit frictional
+contact that solves optimally under 2 minutes without initial guess. To explain
+the simplifications and for the sake of clarity, I will first explain the
+impact method of Patel et al..
 
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centerline{\includegraphics[width=0.4\textwidth]{figure/relaxed_method.png}}
-\caption[Relaxed impact method]{Relaxed impact formulation. Contact mode is changed at each mesh point, the contact force $\lambda$ is selected by solver at each collocation point. Source: \cite{patel_contact-implicit_2019}}
-\label{f_relaxed}
-\end{figure}
-%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
-
-The relaxed formulation is shown in figure \ref{f_relaxed}. It implements a contact constraint that will look one time-step ahead to be able to initiate a contact force before impact. Let $C_c(\mathbf{q})$ be the relative distance between the two bodies that impact, and let the normal force $F_n$ be a control variable. The following constraints will ensure that only when the next time step is in contact ($C_c(\mathbf{q}(t+1)$) the normal force $F_n > 0$ when there is no contact at the next time step, $F_n$ must be zero:
+The relaxed formulation is shown in figure \ref{f_relaxed}. It implements a
+contact constraint that will look one time-step ahead to be able to initiate a
+contact force before impact. Let $C_c(\mathbf{q})$ be the relative distance
+between the two bodies that impact, and let the normal force $F_n$ be a control
+variable. The following constraints will ensure that only when the next time
+step is in contact ($C_c(\mathbf{q}(t+1)$) the normal force $F_n > 0$ when
+there is no contact at the next time step, $F_n$ must be zero:
+%
 \begin{equation}\label{e_patelimpact}
     F_n\ C_c(\mathbf{q}(t+1) = 0,\quad C_c(\mathbf{q}) \geq 0,\quad F_n \geq 0
 \end{equation}
-This result of this formulation is shown graphically in figure \ref{f_discontinuities}. When constraining an optimization problem likewise, the solver will find the normal forces needed to comply to the non penetration constraint $C_c(\mathbf{q}) \geq 0$. This method has been used in the optimization of an ollie. Though the initial guess needed to be similar to the solution to find feasible solutions. The model with a full body human operator took 43 minutes to solve \cite{shield_contact-implicit_2022}. 
-To simplify the model I excluded this impact formulation, because I assume that the feet are always located on the skateboard, but can be out of contact by exerting zero force. In this case, where the human is not modeled with multiple segments but as a point mass, it is possible to exclude equation \ref{e_patelimpact}. By setting the normal forces of the feet $F_{p1},F_{p2}$ as control variables. The foot location is also regulated by a control variables. The acceleration is controlled instead of the foot location itself to still have smooth realistic foot trajectories. Resulting in the control variables:
+
+This result of this formulation is shown graphically in figure
+\ref{f_discontinuities}. When constraining an optimization problem likewise,
+the solver will find the normal forces needed to comply to the non penetration
+constraint $C_c(\mathbf{q}) \geq 0$. This method has been used in the
+optimization of an ollie. Though the initial guess needed to be similar to the
+solution to find feasible solutions. The model with a full body human operator
+took 43 minutes to solve \cite{shield_contact-implicit_2022}.
+
+To simplify the model I excluded this impact formulation, because I assume that
+the feet are always located on the skateboard, but can be out of contact by
+exerting zero force. In this case, where the human is not modeled with multiple
+segments but as a point mass, it is possible to exclude equation
+\ref{e_patelimpact}. By setting the normal forces of the feet $F_{p1},F_{p2}$
+as control variables. The foot location is also regulated by a control
+variables. The acceleration is controlled instead of the foot location itself
+to still have smooth realistic foot trajectories. Resulting in the control
+variables:
+%
 \begin{equation}
     \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]    
 \end{equation}
 
-Now that the difficult to solve contact formulation by Patel in equation \ref{e_patelimpact} is replaced by a simplified formulation, I will continue with the friction model that is used in this optimization.
-Friction is present during the ollie when sliding the foot along grip-tape, when rolling, and when the tail hits the ground if the tail has a relative velocity tangential to the impact surface. Friction is a highly non-linear and discontinuous phenomenon. In general the dominant friction components that have been modeled include static friction (A force that opposes the input force at zero velocity), Coulomb friction (constant motion opposing force at non-zero velocity), viscous friction (when fluid exists between the contact surfaces), and the Stribeck effect (a speed dependent friction) \cite{makkar_new_2005}. 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.4\textwidth]{figure/friction_.png}
-    \caption[Friction effects]{Friction model as a composition of different effects including a) Stribeck effect, b) viscous dissipation, c) coulomb effect, d) combined model}
-    \label{f_friction}
-\end{figure}
+Now that the difficult to solve contact formulation by Patel in equation
+\ref{e_patelimpact} is replaced by a simplified formulation, I will continue
+with the friction model that is used in this optimization.  Friction is present
+during the ollie when sliding the foot along grip-tape, when rolling, and when
+the tail hits the ground if the tail has a relative velocity tangential to the
+impact surface. Friction is a highly non-linear and discontinuous phenomenon.
+In general the dominant friction components that have been modeled include
+static friction (A force that opposes the input force at zero velocity),
+Coulomb friction (constant motion opposing force at non-zero velocity), viscous
+friction (when fluid exists between the contact surfaces), and the Stribeck
+effect (a speed dependent friction) \cite{makkar_new_2005}. 
 
 %When modeling friction continuously, pure static friction does not exist since at zero velocity the friction function will be zero as well due to symmetry. 
-Friction can only exist during contact. The friction is solved with a set of constraints. The first step to implement this friction is to create slack variables that divide the friction forces as described in the system dynamics $F_{f1},F_{f2}$ into a positive and negative components. For simplicity reasons I will only derive the friction of the back foot along the skateboard. The front foot friction is obtained by exactly the same process. By replacing $_1$ to $_2$ in the following equations, the front foot friction is also realized
+Friction can only exist during contact. The friction is solved with a set of
+constraints. The first step to implement this friction is to create slack
+variables that divide the friction forces as described in the system dynamics
+$F_{f1},F_{f2}$ into a positive and negative components. For simplicity reasons
+I will only derive the friction of the back foot along the skateboard. The
+front foot friction is obtained by exactly the same process. By replacing $_1$
+to $_2$ in the following equations, the front foot friction is also realized
 
 \begin{equation} \label{e_plusminfric}
-   F_{f1} = F_{f1}^+ - F_{f1}^- 
+   F_{f1} = F_{f1}^+ - F_{f1}^-
 \end{equation}
 
-As described in section \ref{s_systemdynamics}, the forces perpendicular to the skateboard are positive definite such that the force can never pull on the skateboard. Now the created slack variables also need to be positive definite:
+As described in section \ref{s_systemdynamics}, the forces perpendicular to the
+skateboard are positive definite such that the force can never pull on the
+skateboard. Now the created slack variables also need to be positive definite:
 
 \begin{equation}
-    F_{p1} \geq 0,\quad F_{f1}^+ \geq 0,\quad F_{f1}^- \geq 0  
+    F_{p1} \geq 0,\quad F_{f1}^+ \geq 0,\quad F_{f1}^- \geq 0
 \end{equation}
 
-Static and dynamic friction is bound by the friction cone shown in figure \ref{f_frictioncone}. The magnitude of dynamic friction is $F_{p1}\ \mu$ with a direction opposed to the relative sliding velocity (see figure \ref{f_frictioncone}. The static friction is bound by the yellow surface of the friction cone in fig. \ref{f_frictioncone} and is only possible when the feet are not sliding. To realize this, another slack variable $\psi$ is introduced which represents the magnitude of the relative velocity $\dot s_1$ between the foot and the skateboard. 
+Static and dynamic friction is bound by the friction cone shown in figure
+\ref{f_frictioncone}. The magnitude of dynamic friction is $F_{p1}\ \mu$ with a
+direction opposed to the relative sliding velocity (see figure
+\ref{f_frictioncone}. The static friction is bound by the yellow surface of the
+friction cone in fig. \ref{f_frictioncone} and is only possible when the feet
+are not sliding. To realize this, another slack variable $\psi$ is introduced
+which represents the magnitude of the relative velocity $\dot s_1$ between the
+foot and the skateboard.
 
 \begin{equation}
 \begin{split}
@@ -695,7 +746,13 @@ Now static friction can be implemented with a set of constraints:
 \end{split}
 \end{equation}
 
-The first constraint assures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$. The second constraint ensures that when the foot slides ($\psi_1 \not = 0$),  the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in positive direction, the negative friction component $F_{f1}^-$ should equal $\mu F_{p1}$ and $F_{f1}^+=0$ and vice versa. This is realized with the following constraints:
+The first constraint assures that the positive or negative component of the
+friction is always smaller than $\mu F_{p1}$. The second constraint ensures
+that when the foot slides ($\psi_1 \not = 0$),  the sum of the positive and
+negative friction components equal $\mu F_{p1}$. It is important that when
+sliding in positive direction, the negative friction component $F_{f1}^-$
+should equal $\mu F_{p1}$ and $F_{f1}^+=0$ and vice versa. This is realized
+with the following constraints:
 
 \begin{equation}
 \begin{split}
@@ -704,16 +761,16 @@ The first constraint assures that the positive or negative component of the fric
 \end{split}
 \end{equation}
 
-This type of constraint ($A\cdot B = 0$) has three possible solutions $A= 0,\ B=0,\ or\ A,B = 0$. By filling in a numerical example, the desired behaviour is shown. For example looking at the first constraint, when $\dot s_1 = -1$, then $\psi_1 + \dot s =  0$ and $F_{f1}^+$ can be a positive number. Then looking at the second constraint, when $\dot s = -1$, then $\psi - \dot s = 2$ and $F_{f1}^- = 0$. Combining this with the second equation in equation \ref{e_frictioncontrol} gives: $(\mu F_{p1} - F_{f1}^+ - 0) \cdot 0 = 0$, which results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a negative relative sliding velocity. 
-The friction for the front foot will be another six constraints: $\gamma_{24-30}^{(1,2,3)}$ 
-
-\begin{figure}
-    \centering
-    \includegraphics{figure/Frictioncone.png}
-    \caption[friction cone]{$f_c$ is the reaction force exerted by the ground on the box, which is composed of a normal force $f_n$ equal and opposite to $mg$ and friction $f_w$ equal and opposite to $f_{ext}$. The box is stationary if $f_{ext} < f_n\ \mu$. Static friction is bound by $-f_n\ \mu < f_w < f_n\ \mu$. But when $f_{ext}\ >\ f_n\ \mu$, the box will start to slide with velocity $v$ and $f_w = f_n\ \mu$. Dynamic friction is described by $f_w = -sign(v) f_n\ \mu$. The top of the cone is unbound, because when a vertical external load would be applied, the normal force would change in magnitude.} 
-    \footnotesize Source:\url{https://scaron.info/robot-locomotion/}
-    \label{f_frictioncone}
-\end{figure}
+This type of constraint ($A\cdot B = 0$) has three possible solutions $A= 0,\
+B=0,\ or\ A,B = 0$. By filling in a numerical example, the desired behaviour is
+shown. For example looking at the first constraint, when $\dot s_1 = -1$, then
+$\psi_1 + \dot s =  0$ and $F_{f1}^+$ can be a positive number. Then looking at
+the second constraint, when $\dot s = -1$, then $\psi - \dot s = 2$ and
+$F_{f1}^- = 0$. Combining this with the second equation in equation
+\ref{e_frictioncontrol} gives: $(\mu F_{p1} - F_{f1}^+ - 0) \cdot 0 = 0$, which
+results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a
+negative relative sliding velocity. The friction for the front foot will be
+another six constraints: $\gamma_{24-30}^{(1,2,3)}$
 
 \subsubsection{Endpoint constraints} \label{p_endpoints}
 To fully describe the ollie optimization problem, all phases need to be glued together. In the multi-phase optimization scheme all initial and final time variables are treated as separate variables. By constraining the corresponding variables between the phases, the variables can be treated as one variable over all three phases.
