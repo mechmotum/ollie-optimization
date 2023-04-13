@@ -280,8 +280,12 @@ The skateboards' parameters can be optimized as decision variables which increas
 \end{table}
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centerline{\includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}}
-\caption[11-Segment skateboard model]{Parameterized skateboard. Red lines split the skateboard into 11 basic shaped segments for inertia calculation (see figure \ref{f_basicshapes})}
+  \centerline{
+    \includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}
+  }
+  \caption[11-Segment skateboard model]{Parameterized skateboard. Red lines
+    split the skateboard into 11 basic shaped segments for inertia calculation
+    (see figure \ref{f_basicshapes})}
 \label{f_11segments}
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
@@ -293,35 +297,20 @@ The most widely accepted skateboard is the Popsicle stick skateboard (see sectio
 %\end{equation}
 
 \subsubsection{Mass and Inertia}\label{ss_mass}
-The mass and it's distribution influence the dynamic response of the skateboard \cite{moore_force_nodate}. A mass model is made to be able to scale the mass and it's distribution when the optimized parameters are changed. The skateboards' COM is calculated as a composite of 11 basic constant density shapes shown in figure \ref{f_basicshapes} to easily calculate the mass and inertia of each segment. The shapes consist of semi-cylinders, cuboids, cylinders and triangular prisms. A series of measurements is performed to validate the inertia model. See appendix A for mass, inertia, and geometry calculations. 
-
+We developed a mass and inertial model which is a function of the skateboard's
+essential geometry, see Figure~\ref{f_11segments}), and material densities
+(wood, steel, urethane). The model is made up of eleven basic constant density
+shapes shown in Figure~\ref{f_basicshapes}: semi-cylinders, cuboids, cylinders
+and triangular prisms.
+%
 \begin{figure}
-    \centering
-    \includegraphics[width = 0.5 \textwidth]{figure/Basicshapes.png}
-    \caption[Exploded 11 segment model]{Clarification on the 11 segment model. 13 shapes are visible, but the wheels are taken as one wider cylinder in 2D}
-    \label{f_basicshapes}
+  \centering
+  \includegraphics[width = 0.5 \textwidth]{figure/Basicshapes.png}
+  \caption[Exploded 11 segment model]{Clarification on the 11 segment model.
+    13 shapes are visible, but the wheels are taken as one wider cylinder in
+    2D. Sections 1-5 are wood, 6, 7, 8, 10 are steel, and 9, 11 are urethane.}
+  \label{f_basicshapes}
 \end{figure}
-
-%%%%%%%%%%%%%%% begin table   %%%%%%%%%%%%%%%%
-\begin{table}
-\begin{center}
-\caption[Inertia]{Formulas of volume and inertia of each basic shape to calculate skateboards inertia. $l=$ length, $d=$ width, $r=$ radius L = length of isosceles, $\beta$ = top angle of isosceles}
-\label{t_volume_inert}
-\begin{tabular}{c l p{1.06in}}
-& & \\ % put some space after the caption
-\hline
-Shape & Volume & Inertia \\
-\hline
-Cuboid           & $l\cdot d\cdot h$              & $\frac{m}{12} (l_x^2+l_y^2)$ \\
-Triangular prism & $\frac{1}{2} l\cdot d\cdot h$  &  $\frac{1}{2} m L^2\left(1-\frac{2}{3} \sin ^2 \beta\right)$ \cite{morin_introduction_2008}\\
-Cylinder         & $\pi h (R^2-r^2)$                        &  $I_{x},I_{y} = \frac{m}{12} (3 r^2 + l^2)$ $I_{z} = \frac{r^2}{2 m} $ \\
-Semi-cylinder    & $\frac{1}{2}\pi h (R^2-r^2)$             &  $(\frac{1}{4}-\frac{16}{9 \pi^2}) m r^2)$ \\
-\hline
-\end{tabular}
-
-\end{center}
-\end{table}
-%%%%%%%%%%%%%%%% end table %%%%%%%%%%%%%%%%%%%
 
 \subsection{Multi-phase Direct Collocation}\label{s_multiphase}
 Provided the framework to perform a parameter optimization that scales mass and inertial values accordingly, the ollie optimal control problem is set up next. 
