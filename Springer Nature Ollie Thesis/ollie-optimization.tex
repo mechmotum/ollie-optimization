@@ -108,10 +108,16 @@
 
 \author*[1,2]{\fnm{Jan T.} \sur{Heinen}}\email{janheinen97@gmail.com}
 
-\author[2,3]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.com}
+\author[1,2]{\fnm{Samuel} \sur{Brockie}}\email{@tudelft.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[1,2]{\fnm{Raymund} \sur{ten Broek}}\email{}
 \equalcont{These authors contributed equally to this work.}
 
 \author[1,2]{\fnm{Eline} \sur{van der Kruk}}\email{e.vanderkruk@tudelft.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[2,3]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.com}
 \equalcont{These authors contributed equally to this work.}
 
 \affil*[1]{\orgdiv{Department of Biomechanical Engineering}, \orgname{TU Delft}, \orgaddress{\street{Street}, \city{City}, \postcode{100190}, \state{State}, \country{Country}}}
@@ -134,13 +140,6 @@ movements is needed to keep the skater and skateboard together
 \cite{frederick_biomechanics_2006}. The maneuver can be described in six
 distinct phases which are shown in figure \ref{fig:ollie_steps}.
 
-The ollie phases are (A)`Preparation': athlete lowers their centre of mass(COM)
-prepares muscles for upward acceleration. (B) `Pre-pop': skateboard rotates
-about it's wheels due to force of back foot. (C) `Pop': tail of the skateboard
-hits the ground. Skater takes advantage of the collision between the skateboard
-and ground to bring the skateboard up. (D) `Upward motion': the skater and
-skateboard are both airborne. (E) `Downward motion': the legs are extended to
-ensure a firm landing. (F) `Landing': the skater absorbs the impact.
 
 \begin{figure*}[t]
 \captionsetup[subfigure]{labelformat=empty}
@@ -158,10 +157,10 @@ ensure a firm landing. (F) `Landing': the skater absorbs the impact.
   \subfloat[$t_{10}$=0.904]{{\includegraphics[width=0.13\textwidth]{figure/10.png} }}%
   \subfloat[$t_{11}$=1.097]{{\includegraphics[width=0.13\textwidth]{figure/11.png} }}%
   \captionsetup{singlelinecheck=off}
-  \vspace{-0.2cm}\caption[Ollie motion cues]{Green arrow: resultant force
-    without friction, red arrows: force components with friction, blue arrow:
-    resultant force with friction. Blue-, green- and red line are trajectory of
-    back wheel, middle and front wheel respectively
+  \vspace{-0.2cm}\caption[Ollie motion cues]{
+    Green arrow: resultant force without friction, red arrows: force components
+    with friction, blue arrow: resultant force with friction. Blue-, green- and
+    red line are trajectory of back wheel, middle and front wheel respectively
     \footnotesize
     \begin{itemize}
       \item[$t_1$] The skater is pushing firmly from his back leg and is starting
@@ -185,6 +184,14 @@ ensure a firm landing. (F) `Landing': the skater absorbs the impact.
       \item[$^2$] \url{https://www.youtube.com/watch?v=339k4XEvbxY}
     \end{itemize}
   }
+  The ollie phases are (A)`Preparation': athlete lowers their centre of
+  mass(COM) prepares muscles for upward acceleration. (B) `Pre-pop': skateboard
+  rotates about it's wheels due to force of back foot. (C) `Pop': tail of the
+  skateboard hits the ground. Skater takes advantage of the collision between
+  the skateboard and ground to bring the skateboard up. (D) `Upward motion':
+  the skater and skateboard are both airborne. (E) `Downward motion': the legs
+  are extended to ensure a firm landing. (F) `Landing': the skater absorbs the
+  impact.
   \label{fig:olliesteps}
 \end{figure*}
 
@@ -637,15 +644,17 @@ Only the maximum force constraints $\gamma_{11-13}$ and $\gamma_{18-19}$ apply t
 \textbf{Friction}\\
 According to section \ref{ss_mechanics} the feet are sliding along the griptape
 to level the skateboard out and drag the skateboard up during the preparation
-phase 1, and upward motion phase 2. Static and dynamic friction is are used to
-describe this phenomena. The method to implement these in the optimization is a
-simplification to the frictional contact implicit optimization called the
-relaxed formulation by Patel et al. \cite{patel_contact-implicit_2019}. This
-method is able to have unplanned discontinuous frictional contact with direct
-collocation without a hybrid method. Usually this would be considered
-impossible since direct collocation enforces the dynamics and constraints over
-a continuous domain, where discontinuities in the system dynamics usually lead
-to infeasibility \cite{kelly_transcription_2017}. The downside is that with
+phase 1, and upward motion phase 2. We use both static and dynamic friction to
+model the foot draggin across the deck's surface.
+We implement the relaxed formulation presented by Patel et al.
+\cite{patel_contact-implicit_2019}.
+This method is able to have unplanned discontinuous frictional contact with
+direct collocation without a hybrid method.
+Usually this would be considered impossible since direct collocation enforces
+the dynamics and constraints over a continuous domain, where discontinuities in
+the system dynamics usually lead to infeasibility
+\cite{kelly_transcription_2017}.
+The downside is that with
 this method it is difficult to converge to a feasible solution without a proper
 initial guess and the computation time is rather high
 \cite{shield_contact-implicit_2022,patel_contact-implicit_2019}. I have found a
