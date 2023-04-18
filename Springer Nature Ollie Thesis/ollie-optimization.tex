@@ -641,65 +641,43 @@ The horizontal ($\mathbf{\hat n_x}$) direction forces are now unconstrained. The
 
 Only the maximum force constraints $\gamma_{11-13}$ and $\gamma_{18-19}$ apply to all phases. The CMJ constraints are only applied to the first phase, since phase 1 concerns the CMJ movement. 
 
-\textbf{Friction}\\
-According to section \ref{ss_mechanics} the feet are sliding along the griptape
-to level the skateboard out and drag the skateboard up during the preparation
-phase 1, and upward motion phase 2. We use both static and dynamic friction to
-model the foot draggin across the deck's surface.
-We implement the relaxed formulation presented by Patel et al.
-\cite{patel_contact-implicit_2019}.
-This method is able to have unplanned discontinuous frictional contact with
-direct collocation without a hybrid method.
+\subsubsection{Friction}
+In section \ref{ss_mechanics}, we show that the feet slide along the deck's
+griptape to level the skateboard out during the preparation phase 1 and drag
+the skateboard up during the upward motion phase 2.
+We use both static and dynamic friction to model the foot sliding across the
+deck's surface and make use of the relaxed friction formulation presented by
+Patel et al.~\cite{patel_contact-implicit_2019} to do so.
+This method allows for unplanned discontinuous frictional contact with direct
+collocation without needing a hybrid method.
 Usually this would be considered impossible since direct collocation enforces
 the dynamics and constraints over a continuous domain, where discontinuities in
 the system dynamics usually lead to infeasibility
 \cite{kelly_transcription_2017}.
-The downside is that with
-this method it is difficult to converge to a feasible solution without a proper
-initial guess and the computation time is rather high
-\cite{shield_contact-implicit_2022,patel_contact-implicit_2019}. I have found a
-way to simplify this method, which represents a contact implicit frictional
-contact that solves optimally under 2 minutes without initial guess. To explain
-the simplifications and for the sake of clarity, I will first explain the
-impact method of Patel et al..
+The downside is that it is difficult to converge to a feasible solution without
+a close initial guess and the computation time can be higher
+\cite{shield_contact-implicit_2022,patel_contact-implicit_2019}.
+We simplified Patel et al.'s method by removing the impact condition between
+the human and the board.
+We assume that the feet never impact the skateboard and simply exert zero
+normal force when out of contact.
+We can do this because, unlike Patel et al., we do not model the human as
+multiple body segments but as a point mass.
+Patel et al. requires the initial guess to be similar to the solution, and the
+model 43 minutes to solve \cite{shield_contact-implicit_2022}. Our model solves
+optimally under two minutes with an initial guess of zero.
 
-The relaxed formulation is shown in figure \ref{f_relaxed}. It implements a
-contact constraint that will look one time-step ahead to be able to initiate a
-contact force before impact. Let $C_c(\mathbf{q})$ be the relative distance
-between the two bodies that impact, and let the normal force $F_n$ be a control
-variable. The following constraints will ensure that only when the next time
-step is in contact ($C_c(\mathbf{q}(t+1)$) the normal force $F_n > 0$ when
-there is no contact at the next time step, $F_n$ must be zero:
-%
-\begin{equation}\label{e_patelimpact}
-    F_n\ C_c(\mathbf{q}(t+1) = 0,\quad C_c(\mathbf{q}) \geq 0,\quad F_n \geq 0
-\end{equation}
-
-This result of this formulation is shown graphically in figure
-\ref{f_discontinuities}. When constraining an optimization problem likewise,
-the solver will find the normal forces needed to comply to the non penetration
-constraint $C_c(\mathbf{q}) \geq 0$. This method has been used in the
-optimization of an ollie. Though the initial guess needed to be similar to the
-solution to find feasible solutions. The model with a full body human operator
-took 43 minutes to solve \cite{shield_contact-implicit_2022}.
-
-To simplify the model I excluded this impact formulation, because I assume that
-the feet are always located on the skateboard, but can be out of contact by
-exerting zero force. In this case, where the human is not modeled with multiple
-segments but as a point mass, it is possible to exclude equation
-\ref{e_patelimpact}. By setting the normal forces of the feet $F_{p1},F_{p2}$
-as control variables. The foot location is also regulated by a control
-variables. The acceleration is controlled instead of the foot location itself
-to still have smooth realistic foot trajectories. Resulting in the control
-variables:
+We start by setting the normal forces of the feet $F_{p1},F_{p2}$ and the feet
+accerelations as control variables.
+The acceleration is controlled instead of the foot location itself to ensure
+have smooth realistic foot trajectories.
+Our control variables are:
 %
 \begin{equation}
-    \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]    
+    \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]
 \end{equation}
 
-Now that the difficult to solve contact formulation by Patel in equation
-\ref{e_patelimpact} is replaced by a simplified formulation, I will continue
-with the friction model that is used in this optimization.  Friction is present
+We utilize the remainder of Patel's friction approach. Friction is present
 during the ollie when sliding the foot along grip-tape, when rolling, and when
 the tail hits the ground if the tail has a relative velocity tangential to the
 impact surface. Friction is a highly non-linear and discontinuous phenomenon.
