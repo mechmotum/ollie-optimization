@@ -14,6 +14,7 @@ from ollie.inertia import (
     inertia_of_cuboid,
     inertia_of_cylinder,
     inertia_of_isosceles_triangular_prism,
+    parallel_axis_theorem,
 )
 from ollie.material import Glue, Polyurethane, Maple, Steel
 from ollie.model import ModelObject
@@ -508,7 +509,7 @@ class Skateboard(ModelObject):
 
         self._set_kinematics()
         self._calculate_mass()
-        # self._calculate_inertia()
+        self._calculate_inertia()
 
     @property
     def axles(self):
@@ -564,7 +565,34 @@ class Skateboard(ModelObject):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the skateboard's inertia-related attributes."""
-        raise NotImplementedError
+        two = sm.Integer(2)
+        four = sm.Integer(4)
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{skateboard}"),
+            value=(
+                parallel_axis_theorem(
+                    self.deck.inertia.value,
+                    self.deck.mass,
+                    self.frame,
+                    self.deck.mass_center.pos_from(self.mass_center),
+                ) + two * parallel_axis_theorem(
+                    self.trucks.inertia.value,
+                    self.trucks.mass,
+                    self.frame,
+                    self.trucks.mass_center.pos_from(self.mass_center),
+                ) + two * parallel_axis_theorem(
+                    self.axles.inertia.value,
+                    self.axles.mass,
+                    self.frame,
+                    self.axles.mass_center.pos_from(self.mass_center),
+                ) + four * parallel_axis_theorem(
+                    self.wheels.inertia.value,
+                    self.wheels.mass,
+                    self.frame,
+                    self.wheels.mass_center.pos_from(self.mass_center),
+                )
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the skateboard."""
