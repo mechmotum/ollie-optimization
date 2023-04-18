@@ -6,6 +6,26 @@ import sympy.physics.mechanics as me
 from ollie.container import Container
 
 
+def parallel_axis_theorem(
+    dyadic: me.Dyadic,
+    mass: Container,
+    frame: me.ReferenceFrame,
+    vector: me.Vector,
+) -> me.Dyadic:
+    """Calculate a new moment of inertia using the parallel axis theorem."""
+    dyadic = dyadic.express(frame).to_matrix(frame)
+    Ixx = dyadic[0, 0]
+    Iyy = dyadic[1, 1]
+    Izz = dyadic[2, 2]
+    two = sm.Integer(2)
+    return me.inertia(
+        frame,
+        Ixx + mass * vector.dot(frame.x)**two,
+        Iyy + mass * vector.dot(frame.y)**two,
+        Izz + mass * vector.dot(frame.z)**two,
+    )
+
+
 def inertia_of_cuboid(
     frame: me.ReferenceFrame,
     mass: Container,
