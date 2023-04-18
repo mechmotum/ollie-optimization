@@ -479,7 +479,7 @@ class Truck(ModelObject):
     def __repr__(self) -> str:
         """Formatted representation of the truck."""
         return (
-            f"{self.__class__.__name__}({self.axle}, {self.wheel}"
+            f"{self.__class__.__name__}({self.axle}, {self.wheels}"
             f"height={self.height})"
         )
 
