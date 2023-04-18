@@ -677,25 +677,15 @@ Our control variables are:
     \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]
 \end{equation}
 
-We utilize the remainder of Patel's friction approach. Friction is present
-during the ollie when sliding the foot along grip-tape, when rolling, and when
-the tail hits the ground if the tail has a relative velocity tangential to the
-impact surface. Friction is a highly non-linear and discontinuous phenomenon.
-In general the dominant friction components that have been modeled include
-static friction (A force that opposes the input force at zero velocity),
-Coulomb friction (constant motion opposing force at non-zero velocity), viscous
-friction (when fluid exists between the contact surfaces), and the Stribeck
-effect (a speed dependent friction) \cite{makkar_new_2005}. 
-
-%When modeling friction continuously, pure static friction does not exist since at zero velocity the friction function will be zero as well due to symmetry. 
-Friction can only exist during contact. The friction is solved with a set of
-constraints. The first step to implement this friction is to create slack
-variables that divide the friction forces as described in the system dynamics
-$F_{f1},F_{f2}$ into a positive and negative components. For simplicity reasons
-I will only derive the friction of the back foot along the skateboard. The
-front foot friction is obtained by exactly the same process. By replacing $_1$
-to $_2$ in the following equations, the front foot friction is also realized
-
+We utilize the remainder of Patel's friction approach for the foot sliding and
+the tail hitting the ground. We consider both static and Coulomb friction when
+in motion.
+The friction is solved with a set of constraints.
+Here we derive the friction of the back foot along the skateboard; the front
+foot friction is obtained by exactly the same process.
+The first step to implement friction is to create slack variables that divide
+the friction forces $F_{f1},F_{f2}$ into a positive and negative components:
+%
 \begin{equation} \label{e_plusminfric}
    F_{f1} = F_{f1}^+ - F_{f1}^-
 \end{equation}
@@ -708,15 +698,14 @@ skateboard. Now the created slack variables also need to be positive definite:
     F_{p1} \geq 0,\quad F_{f1}^+ \geq 0,\quad F_{f1}^- \geq 0
 \end{equation}
 
-Static and dynamic friction is bound by the friction cone shown in figure
-\ref{f_frictioncone}. The magnitude of dynamic friction is $F_{p1}\ \mu$ with a
-direction opposed to the relative sliding velocity (see figure
-\ref{f_frictioncone}. The static friction is bound by the yellow surface of the
-friction cone in fig. \ref{f_frictioncone} and is only possible when the feet
-are not sliding. To realize this, another slack variable $\psi$ is introduced
-which represents the magnitude of the relative velocity $\dot s_1$ between the
-foot and the skateboard.
-
+The magnitude of dynamic friction is $F_{p1}\ \mu$ with a direction opposed to
+the relative sliding velocity.
+The static friction is bound by the yellow surface of the friction cone in fig.
+\ref{f_frictioncone} and is only possible when the feet are not sliding.
+To realize this, another slack variable $\psi$ is introduced which represents
+the magnitude of the relative velocity $\dot s_1$ between the foot and the
+skateboard.
+%
 \begin{equation}
 \begin{split}
     \gamma_{18}^{(1,2,3)}: \quad & \psi_1 + \dot s_1  \geq 0 \\
@@ -756,7 +745,7 @@ the second constraint, when $\dot s = -1$, then $\psi - \dot s = 2$ and
 $F_{f1}^- = 0$. Combining this with the second equation in equation
 \ref{e_frictioncontrol} gives: $(\mu F_{p1} - F_{f1}^+ - 0) \cdot 0 = 0$, which
 results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a
-negative relative sliding velocity. The friction for the front foot will be
+negative relative sliding velocity. The friction for the front foot adds
 another six constraints: $\gamma_{24-30}^{(1,2,3)}$
 
 \subsubsection{Endpoint constraints} \label{p_endpoints}
