@@ -148,6 +148,17 @@ class FlatDeck(DeckBase):
             length=length,
         )
 
+        self.tail_length = Container(
+            symbol=sm.Symbol(r"l_{tail}"),
+            value=(sm.Rational(1, 2) * (self.length - self.wheelbase)),
+        )
+
+        self.back_pocket = me.Point(r"P_{back\_pocket}")
+        self.back_pocket.set_pos(
+            self.origin,
+            -sm.Rational(1, 2) * self.wheelbase * self.frame.x,
+        )
+
     def _calculate_mass(self):
         """Calculate and instantiate the deck's mass-related attributes."""
         self.mass = Container(
