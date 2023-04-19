@@ -253,9 +253,36 @@ Furthermore the video shows that the bio mechanical obstruction of the feet caus
 A skateboard bends and flexes during the ollie. This study assumes a rigid body model of the skateboard to reduce mathematical complexity.
 
 \subsection{Optimal Control Problem}
-The chosen method to solve the optimal control problem is direct collocation. Direct methods are generally best for problems where dynamics and control must be computed to a similar accuracy, and the structure of the control trajectory is not known a priori \cite{kelly_introduction_2017}. Also, the ollie is highly non-linear and complex movement with high dimensionality . With this method it is possible to increase the dimensionality without increasing the difficulty to converge to the solution. The direct method transcribes a continuous problem into a non-linear programming problem (NLP). The software used is PyCollo for , which is direct orthogonal collocation transcription tool for Python \cite{brockie_predictive_nodate}. The dynamics and constraints are enforced over a discretization. The discretization exists of $N$ collocation points. The collocation points are either mesh points or polynomial points, but all collocation points are enforced to the constraints and dynamics. After transcription the problem is passed to the solver IPOPT (Interior Point OPTimizer). When the found IPOPT solution does not meet the error-tolerance set in PyCollo, the discretization is refined and a new iteration is solved in IPOPT. The solution is interpolated using the Legendre-Gauss-Lobatto (LGL) method. The integration scheme is an implicit Runge-Kutta Kth method \cite{brockie_predictive_nodate}. This high order method will have a high accuracy with the disadvantage that all states and constraints need to be differentiable.
+We use direct collocation to formulate an optimal control problem that
+simultaneously optimizes the input control trajectories and the board geometry
+parameters.
+Direct methods are generally best for problems where dynamics and control must
+be computed to a similar accuracy and the structure of the control trajectory
+is not known a priori \cite{kelly_introduction_2017}.
+We make use of PyCollo~\cite{brockie_predictive_nodate} to transcribe the
+continous optimal control problem into a non-linear programming (NLP) problem.
+PyCollo uses direct orthogonal collocation transcription which enforces the 
+dynamics and constraints a variable discretization.
+The discretization exists of $N$ collocation points.
+The collocation points are either mesh points or polynomial points, but all
+collocation points are enforced to the constraints and dynamics.
+After transcription the problem is passed to IPOPT~\cite{ipopt}, an Interior
+Point Optimizer for large sparse NLP problems.
+PyCollo iteratively improves the discretation based on prior IPOPT solutions to
+meet the specified error tolerances.
+The solution are interpolated using the Legendre-Gauss-Lobatto (LGL) method and
+the integration scheme is an implicit Runge-Kutta Kth method.
 
-The ollie problem is a hybrid problem, meaning that there will be discontinuities in the states. During impact the velocity states change sign instantly causing discontinuities. Discontinuities are per definition not differentiable, this means that in a higher order optimization the discontinuity need to be solved differently. To merge higher order optimization and discontinuities, multi-phase optimization is used. Multi-phase optimization concerns a sequence of continuous-state phases separated by discrete jumps in the states. Multi-phase optimization requires pre-modeled phases which leaves no opportunity for unsought solutions. Though, they are easier to compute and tend to be more accurate \cite{kelly_introduction_2017}. 
+The ollie problem is a hybrid problem due to the necessary discontinuities in
+the state trajectories.
+For example, during impact the velocity states change sign instantly causing
+discontinuities.
+We use multiple phases to break the problem into several continous
+differentiable phases.
+A disadvantage of phases is that the phase state transition is prescribed,
+leaving no room for the optimizer to discover these transitions.  The advantage
+is that they are easier to compute and tend to be more accurate
+\cite{kelly_introduction_2017}.
 
 \subsection{Parameterization}\label{s_paropt}
 Since we want to optimize the input trajectories simulatenously with the
