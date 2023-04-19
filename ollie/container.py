@@ -36,7 +36,6 @@ class Container:
             )
             raise AttributeError(msg)
         if state_equation is not None:
-            print(state_equation)
             if not isinstance(state_equation, Container):
                 msg = f"State equation {state_equation} must be a Container."
             if not isinstance(state_equation.symbol, DynamicSymbol):
