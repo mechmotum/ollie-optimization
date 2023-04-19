@@ -16,7 +16,7 @@ class Container:
         *,
         symbol: Symbol | DynamicSymbol | Point | None = None,
         value: Expr | float | None = None,
-        state_equation: Expr | None = None,
+        state_equation: Container | None = None,
         bounds: tuple[float, float] | None = None,
         guess: float | None = None,
     ):
@@ -36,7 +36,10 @@ class Container:
             )
             raise AttributeError(msg)
         if state_equation is not None:
-            if not isinstance(state_equation, Expr):
+            print(state_equation)
+            if not isinstance(state_equation, Container):
+                msg = f"State equation {state_equation} must be a Container."
+            if not isinstance(state_equation.symbol, DynamicSymbol):
                 msg = f"State equation {state_equation} must be an expression."
                 raise TypeError(msg)
             if not isinstance(self._symbol, DynamicSymbol):
@@ -99,7 +102,7 @@ class Container:
         return self._value
 
     @property
-    def state_equation(self) -> Expr | None:
+    def state_equation(self) -> Container | None:
         """Differential equation describing the rate of change of a state."""
         return self._state_equation
 
