@@ -16,6 +16,7 @@ class Container:
         *,
         symbol: Symbol | DynamicSymbol | Point | None = None,
         value: Expr | float | None = None,
+        state_equation: Expr | None = None,
         bounds: tuple[float, float] | None = None,
         guess: float | None = None,
     ):
@@ -26,6 +27,25 @@ class Container:
 
         # Value
         self._value = value
+
+        # State Equations
+        if hasattr(self, "_state_equation"):
+            msg = (
+                f"Cannot reset state equation {self.state_equation} to "
+                f"{state_equation} once set"
+            )
+            raise AttributeError(msg)
+        if state_equation is not None:
+            if not isinstance(state_equation, Expr):
+                msg = f"State equation {state_equation} must be an expression."
+                raise TypeError(msg)
+            if not isinstance(self._symbol, DynamicSymbol):
+                msg = (
+                    f"Symbol {self._symbol} must be a dynamic symbol for it to "
+                    f"be possible to set a state equation {state_equation}."
+                )
+                raise ValueError(msg)
+        self._state_equation = state_equation
 
         # Bounds
         if hasattr(self, "_bounds"):
@@ -43,7 +63,8 @@ class Container:
                 raise TypeError(msg)
             if bounds[0] > bounds[1]:
                 msg = (
-                    f"Lower bound {bounds[0]} must be less than upper bound " f"{bounds[1]}"
+                    f"Lower bound {bounds[0]} must be less than upper bound "
+                    f"{bounds[1]}"
                 )
                 raise ValueError(msg)
             self._bounds = (float(bounds[0]), float(bounds[1]))
@@ -76,6 +97,11 @@ class Container:
 
         """
         return self._value
+
+    @property
+    def state_equation(self) -> Expr | None:
+        """Differential equation describing the rate of change of a state."""
+        return self._state_equation
 
     @property
     def bounds(self) -> tuple[float, float] | None:
@@ -124,5 +150,6 @@ class Container:
         """Formatted representation of the container."""
         return (
             f"{self.__class__.__name__}(symbol={self.symbol}, "
-            f"value={self.value}, bounds={self.bounds}, guess={self.guess})"
+            f"value={self.value}, state_equation={self.state_equation}, "
+            f"bounds={self.bounds}, guess={self.guess})"
         )
