@@ -23,6 +23,8 @@ def is_static_parameter(attribute: Any) -> bool:
     """Utility function to tell if an attribute is a static parameter."""
     return (
         isinstance(attribute, Container)
+        and isinstance(attribute.Symbol, sm.Symbol)
+        and attribute.state_equation is None
         and attribute.bounds is not None
         and attribute.bounds[0] < attribute.bounds[1]
         and attribute.guess is not None
