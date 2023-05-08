@@ -411,29 +411,42 @@ and triangular prisms.
   \label{f_basicshapes}
 \end{figure}
 
-\subsection{Multi-phase Direct Collocation}\label{s_multiphase}
-Provided the framework to perform a parameter optimization that scales mass and inertial values accordingly, the ollie optimal control problem is set up next. 
-
 \subsection{General formulation}
-The multi-phase OCP with phases $p \in [1,2,3]$ involves determining the states $\mathbf{q^{(p)}}$, control $u^{(p)}$, phase initial times $t_0^{(p)}$, phase final times $t_F^{(p)}$, global parameter variables $\sigma$, while maximizing the objective function:
+The multi-phase OCP with phases $p \in [1,2,3]$ involves determining the states
+$\mathbf{q^{(p)}}$, control $u^{(p)}$, phase initial times $t_0^{(p)}$, phase
+final times $t_F^{(p)}$, global parameter variables $\sigma$, while maximizing
+the objective function:
 \begin{equation}
-    maximize\ \mathcal{J}
-\end{equation} 
+  maximize\ \mathcal{J}
+  \label{eq:obj}
+\end{equation}
 Subject to the dynamical constraints:
 \begin{equation}
-\ddot{\mathbf{q}}^{(p)}=\alpha^{(p)}
+  \ddot{\mathbf{q}}^{(p)}=\alpha^{(p)}
 \end{equation}
 with path constraints,
 \begin{equation}
-        \gamma^{(p)}:\quad \gamma_{min} < ... < \gamma_{max}\\
+  \gamma^{(p)}:\quad \gamma_{min} < ... < \gamma_{max}\\
 \end{equation}
 and with endpoint constraints:
 \begin{equation}
     \beta:\quad \beta_{min} < ... < \beta_{max}
+    \label{eq:endpoint}
 \end{equation}
-The ollie OCP will be explained in the order of equations (2-5). Starting with the choice of phases ($^{(p)}$) and objective ($\mathcal{J}$). Then describing the dynamic constraints $\alpha$, consisting of the equations of motion (EOM) for the different phases for the human and the skateboard. Followed by the constraints $\gamma$, where the kinetics and kinematics of the human, and friction are implemented. Then endpoint constraints $\beta$, which contain modeling of impact and the bounding of time. The initial and final state and control values are found in Appendix A and are set to a wide margin. If the margin is not set widely, it will be discussed during these paragraphs. All together, this gives all information necessary to solve the ollie OCP. %Section \ref{s_summary} gives a summary of the implementations before starting the results section.
+In the following sections we explain the specific implementation of equations
+\ref{eq:obj} through \ref{eq:endpoint}.
+We define the phases ($^{(p)}$) based on the mechanics of the ollie and maximal
+height objective ($\mathcal{J}$).
+The constraints are made up of the the dynamic constraints $\alpha$, consisting
+of the equations of motion (EOM) for the different phases for the human and the
+skateboard, followed by the constraints $\gamma$, where the kinetics and
+kinematics of the human, and friction are implemented.
+Then endpoint constraints $\beta$ model impact and the time bounds.
+The initial and final state and control values are found in Appendix A and are
+set to a wide margin.
 
-In section \ref{ss_model} are the geometrical variables described that are optimized. Leading to global optimization parameter variables:
+In section \ref{ss_model} are the geometrical variables described that are
+optimized. Leading to global optimization parameter variables:
 \begin{equation}
 \begin{array}{rlrl}
     \sigma_{1} &= l_{wb},\ \sigma_{2} &= l_d,\ \sigma_{3} &= l_t,   \\ 
@@ -442,21 +455,43 @@ In section \ref{ss_model} are the geometrical variables described that are optim
 \end{equation}
 
 \subsection{Phases and Objective} \label{s_phases}
-For the purpose of the optimization this has been simplified to three phases:
+We define these three dynamically distinct phases base on the mechanics of the
+ollie:
 \begin{enumerate} \label{n_phases}
-    \item Preparation phase 
-    \item Upward motion 
-    \item Downward motion 
+  \item Preparation phase
+  \item Upward motion
+  \item Downward motion
 \end{enumerate}
-\noindent During the preparation phase the back wheels are in contact with the ground. Between the preparation and upward motion phases, the tail impacts the ground and states will have discontinuities. The dynamics change between the preparation and upward motion phases due to the loss of contact of the back wheels. The dynamics between the Upward and downward motion stay the same. The Upward motion and downward motion are split into two phases because the objective function of the multi-phase optimization needs to be a function of initial or final state variables \cite{brockie_predictive_nodate}. The objective is to ollie as high as possible, now the final state variables of phase two can be used to describe the objective. 
+During the preparation phase the back wheels are in contact with the
+ground.
+The tail impact with the ground defines the transition from preparation to the
+upward motion.
+During upward and downward motion nothing is in contact with the ground and
+they both are governed by the same equations of motion.
+We split the upward motion and downward motion into two phases because PyCollo
+requires that the objective function be a function of initial or final state
+variables \cite{brockie_predictive_nodate} of a phase. In case the transition
+from upward to downward motion defines the highest ollie.
 
-Because a parameter optimization will occur simultaneously with finding the optimal trajectory, the parameters should not be able to influence the objective. To make sure the objective function is independent of the parameter variables, the skateboard is constrained to be level at the highest point and the objective is the middle of a fictional tangent touching lowest point of both wheels. This result in the objective function:
-
+% TODO : If the parameters can't influence the objective, then how can you
+% possible find a maximum as a function of the parameters? I'm guessing you
+% aren't actually doing what you write here. -- JKM
+Because a parameter optimization will occur simultaneously with finding the
+optimal trajectory, the parameters should not be able to influence the
+objective.
+To make sure the objective function is independent of the parameter
+variables, the skateboard is constrained to be level at the highest point and
+the objective is the middle of a fictional tangent touching lowest point of
+both wheels.
+This result in the objective function:
+%
 \begin{equation}
-    \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w 
+  \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w
 \end{equation}
 
-\noindent Where $y_s^{(2)}(t_F)$ is the final state COM location of the skateboard, $d_{com}$ the skateboards' COM to the deck, $h_{tr}$ the truck height, and $r_w$ is the wheel radius.
+\noindent Where $y_s^{(2)}(t_F)$ is the final state COM location of the
+skateboard, $d_{com}$ the skateboards' COM to the deck, $h_{tr}$ the truck
+height, and $r_w$ is the wheel radius.
 
 \subsection{System Dynamics}\label{s_systemdynamics}
 \begin{figure}
@@ -471,21 +506,31 @@ Because a parameter optimization will occur simultaneously with finding the opti
     \label{f_FBDphas1}
 \end{figure}
 
-\noindent \; \textbf{Skateboard Equations of Motion - phase 1}\\
-The EOMs are derived using SymPy mechanics and symbolic toolbox \cite{meurer_sympy_2017}. The EOM of the skateboard are derived with the TMT method \cite{vallery_heike_advanced_2018}. As stated in section \ref{s_phases}, the dynamics of phase 1 and 2 are different. During phase 1 the EOM are derived with a sliding joint at the back wheel. This is done to eliminate the ground reaction forces from the EOM. The COM coordinates are
+We derive the equations of motion using SymPy~\cite{meurer_sympy_2017} using
+the TMT method~\cite{vallery_heike_advanced_2018}.
 
+\subsubsection{Skateboard Equations of Motion - phase 1}
+During phase 1 we use a sliding joint for the rear wheel to ground constraint.
+This is done to eliminate the ground reaction forces from the equations of
+motion.
+The skateboard center of mass coordinates are
+%
 \begin{equation}
     \mathbf{x} = [x_s, y_s, \theta_s]^T
 \end{equation}
 
-The skateboard when considering the back wheel as a joint can be described by two generalized coordinates $x_w$ (x-location back wheels), and $\theta_s$ (angle w.r.t. ground) as shown in figure \ref{f_FBDphas1}. This is done to eliminate the ground reaction forces. The skateboard has 2 degrees of freedom (DOF), leading to the generalized coordinates:
-
+With the sliding joint, we use two generalized coordinates $x_w$ (x-location
+back wheels) and $\theta_s$ (angle w.r.t. ground) as shown in figure
+\ref{f_FBDphas1}.
+The skateboard then has 2 degrees of freedom (DOF) with the the generalized
+coordinates:
+%
 \begin{equation}
     \mathbf{q} = [x_w, \theta_s]^T
 \end{equation}
 
-And the CoM coordinates expressed in the generalized coordinates are:
-
+The center of mass in terms of the generalized coordinates is:
+%
 \begin{equation}
 \mathbf{x}=\left[\begin{array}{c}
 \frac{l_{w b} \cos \left(\theta_s\right)}{2}+x_w+\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right) \\
@@ -494,8 +539,9 @@ And the CoM coordinates expressed in the generalized coordinates are:
 \end{array}\right]
 \end{equation}
 
-Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the velocities gives transformation matrix T:
-
+Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the
+velocities gives transformation matrix $\mathbf{T}$:
+%
 \begin{equation}
     J_{\dot{\mathbf{x}}}(\mathbf{q}) = \textbf{T} = \left[\begin{array}{c c}
 1 & -\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right) \\
@@ -1014,6 +1060,8 @@ With the global parameters variables $\sigma$ as any combination of the optimize
 The results will show several optimizations with different combinations of parameter optimizations to search the solution space for optimal shapes. The first set of optimizations will be without optimized parameter variables to show proper functioning of the model. The second set of optimizations will be single variable optimizations where only one variable from the optimized parameter variables is chosen to be optimized. The third set of optimization will be variations to multiple optimized parameter variables. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Appendix: Equation of Motion Derivation}
 
 \bibliographystyle{asmems4}
 \bibliography{references}
