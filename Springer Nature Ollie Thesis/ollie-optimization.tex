@@ -108,10 +108,16 @@
 
 \author*[1,2]{\fnm{Jan T.} \sur{Heinen}}\email{janheinen97@gmail.com}
 
-\author[2,3]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.com}
+\author[1,2]{\fnm{Samuel} \sur{Brockie}}\email{@tudelft.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[1,2]{\fnm{Raymund} \sur{ten Broek}}\email{}
 \equalcont{These authors contributed equally to this work.}
 
 \author[1,2]{\fnm{Eline} \sur{van der Kruk}}\email{e.vanderkruk@tudelft.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[2,3]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.com}
 \equalcont{These authors contributed equally to this work.}
 
 \affil*[1]{\orgdiv{Department of Biomechanical Engineering}, \orgname{TU Delft}, \orgaddress{\street{Street}, \city{City}, \postcode{100190}, \state{State}, \country{Country}}}
@@ -125,36 +131,118 @@
 
 \section{Introduction}\label{s_intro}
 
-In 1978 Alan `Ollie' Gelfand invented the `no-hand aerial', by riding of an inclined surface and jumping in the air with a skateboard. Later Rodney Mullen was known for inventing the ollie from flat ground. The ollie, is a skateboard trick that intends to bring the skater with skateboard up. Because the skateboard is not tethered to the skater in any way, a precise sequence of movements is needed to keep the skater and skateboard together \cite{frederick_biomechanics_2006}. The maneuver can be described in six distinct phases which are shown in figure \ref{fig:ollie}. 
+In 1978 Alan `Ollie' Gelfand invented the `no-hand aerial', by riding of an
+inclined surface and jumping in the air with a skateboard. Later Rodney Mullen
+was known for inventing the ollie from flat ground. The ollie, is a skateboard
+trick that intends to bring the skater with skateboard up. Because the
+skateboard is not tethered to the skater in any way, a precise sequence of
+movements is needed to keep the skater and skateboard together
+\cite{frederick_biomechanics_2006}. The maneuver can be described in six
+distinct phases which are shown in figure \ref{fig:ollie_steps}.
 
-The skateboard evolved from the early 1960s with different motives. New pursuits demanded different shapes for performance motives. For example slalom needed a short board for quick turns, downhill preferred longboards for stability, and pool skating resulted in wide, concave boards for maximum foothold. Artistic motives shaped the skateboard to absurd coffin- and fish-like boards with no practical implication \cite{prentiss_get_2011}. Now the most widely accepted board shape is the Popsicle stick. All Olympic athletes use a variation to this shape. The shape is focused on free-styling, where the ollie is the most basic freestyle trick. 
 
-The evolution resulted in many skateboards shapes. The industry does not have standardized dimensions. Every brand uses their own measures\cite{berger_handmade_2021}. The dimensions of the skateboard are usually presented to the buyer with non specific descriptions such as mellow, steep, and wide. Deck dimensions are measured differently per brand \cite{johnny_skateboarding_2013}. This makes it difficult for skaters to find the optimal board shape.
+\begin{figure*}[t]
+\captionsetup[subfigure]{labelformat=empty}
+  \subfloat[$t_1$=0.013]{{\includegraphics[width=0.13\textwidth]{figure/1.png} }}%
+  \subfloat[$t_2$=0.129]{{\includegraphics[width=0.13\textwidth]{figure/2.png} }}%
+  \subfloat[$t_3$=0.181]{{\includegraphics[width=0.13\textwidth]{figure/3.png} }}%
+  \subfloat[$t_4$=0.187]{{\includegraphics[width=0.13\textwidth]{figure/4.png} }}%
+  \subfloat[$t_5$=0.303]{{\includegraphics[width=0.13\textwidth]{figure/5.png} }}%
+  \subfloat[$t_6$=0.431]{{\includegraphics[width=0.13\textwidth]{figure/6.png} }}%
+  \subfloat[$t_7$=0.543]{{\includegraphics[width=0.13\textwidth]{figure/7.png} }}%
+  \protect\newline
+  \centering
+  \subfloat[$t_8$=0.676$^1$]{{\includegraphics[width=0.336\textwidth]{figure/ollie_tracking_mid.png} }}
+  \subfloat[$t_9$=0.722]{{\includegraphics[width=0.13\textwidth]{figure/9.png} }}%
+  \subfloat[$t_{10}$=0.904]{{\includegraphics[width=0.13\textwidth]{figure/10.png} }}%
+  \subfloat[$t_{11}$=1.097]{{\includegraphics[width=0.13\textwidth]{figure/11.png} }}%
+  \captionsetup{singlelinecheck=off}
+  \vspace{-0.2cm}\caption[Ollie motion cues]{
+    Green arrow: resultant force without friction, red arrows: force components
+    with friction, blue arrow: resultant force with friction. Blue-, green- and
+    red line are trajectory of back wheel, middle and front wheel respectively
+    \footnotesize
+    \begin{itemize}
+      \item[$t_1$] The skater is pushing firmly from his back leg and is starting
+        to have less force on the front foot which results in the wheel just
+        leaving the ground.
+      \item[$t_2$] The front foot starts sliding relative to the board for the
+        first time.
+      \item[$t_3$] Tail collides with the ground, the front foot is still sliding
+        and the back foot is barely in contact with the skateboard.
+      \item[$t_4$] Back foot is no longer in contact with the skateboard, the
+        back wheels are not in contact with the ground anymore.
+      \item[$t_5$] The front foot reached the nose of the skateboard.
+      \item[$t_6$] Back foot contacts the board again.
+      \item[$t_7$] Board is leveled out by the front foot.
+      \item[$t_8$] Highest point is reached. Knees are fully tucked in. Feet are
+        firmly placed on the deck.
+      \item[$t_9$] Front foot loses contact.
+      \item[$t_{10}$] Board is horizontal, both feet are in contact.
+      \item[$t_{11}$] The back wheels touch the ground and legs are almost fully streched out.
+      \item[$^1$] \url{https://www.wired.com/2014/10/skateboard-physics-empzeal}
+      \item[$^2$] \url{https://www.youtube.com/watch?v=339k4XEvbxY}
+    \end{itemize}
+  }
+  The ollie phases are (A)`Preparation': athlete lowers their centre of
+  mass(COM) prepares muscles for upward acceleration. (B) `Pre-pop': skateboard
+  rotates about it's wheels due to force of back foot. (C) `Pop': tail of the
+  skateboard hits the ground. Skater takes advantage of the collision between
+  the skateboard and ground to bring the skateboard up. (D) `Upward motion':
+  the skater and skateboard are both airborne. (E) `Downward motion': the legs
+  are extended to ensure a firm landing. (F) `Landing': the skater absorbs the
+  impact.
+  \label{fig:olliesteps}
+\end{figure*}
 
-\begin{figure}[t]
-    \centering
-        \includegraphics[width = 0.45\textwidth]{figure/f_ollie.png}
-        \caption*{\centering \footnotesize Source: \cite{frederick_biomechanics_2006}}
-        \caption[Ollie phases]{\footnotesize{(A)`Preparation': athlete lowers their centre of mass(COM) prepares muscles for upward acceleration. \\
-        (B) `Pre-pop': skateboard rotates about it's wheels due to force of back foot. \\
-        (C) `Pop': tail of the skateboard hits the ground. Skater takes advantage of the collision between the skateboard and ground to bring the skateboard up. \\
-        (D) `Upward motion': the skater and skateboard are both airborne. \\
-        (E) `Downward motion': the legs are extended to ensure a firm landing. \\
-        (F) `Landing': the skater absorbs the impact. }}
-        \label{fig:ollie}
-\end{figure}
+The skateboard evolved from the early 1960s with different motives. New
+pursuits demanded different shapes for performance motives. For example slalom
+needed a short board for quick turns, downhill preferred longboards for
+stability, and pool skating resulted in wide, concave boards for maximum
+foothold. Artistic motives shaped the skateboard to absurd coffin- and
+fish-like boards with no practical implication \cite{prentiss_get_2011}. Now
+the most widely accepted board shape is the Popsicle stick. All Olympic
+athletes use a variation to this shape. The shape is focused on free-styling,
+where the ollie is the most basic freestyle trick.
 
-Skaters know and feel when a specific skateboard performs to their liking. Though, they don’t know what dimensions support their performance. The skateboard might have evolved to an optimum throughout the years, but from an academical and mechanical point of view, skateboard design has not been proven optimal for specific tricks.
+The evolution resulted in many skateboards shapes. The industry does not have
+standardized dimensions. Every brand uses their own
+measures\cite{berger_handmade_2021}. The dimensions of the skateboard are
+usually presented to the buyer with non specific descriptions such as mellow,
+steep, and wide. Deck dimensions are measured differently per brand
+\cite{johnny_skateboarding_2013}. This makes it difficult for skaters to find
+the optimal board shape.
 
-Some researches have tackled this problem by analyzing the skateboard in a planar riding model \cite{hubbard_lateral_1979,hubbard_human_1980,kremnev_nonlinear_2010,ispolov_skateboard_1996,rosatello_skateboard_2015,varszegi_stability_2017,varszegi_stabilizing_2016,varszegi_downhill_2016,varszegi_balancing_2014,kuleshov_mathematical_2007,kuleshov_various_2010}. Which shows the relation between the dimensions and the stability while rolling and turning. These dimensional analyses don't apply to aerial movements such as the ollie. Others researched the ollie by investigating the contact forces \cite{anderson_ollie_2020,shield_contact-implicit_2022} and biomechanics \cite{frederick_biomechanics_2006,vorlicek_analysis_2015,wood_3d_2020,nakashima_simulation_2021,nevitt_ground_2006,candotti_lower_2012,dias_using_2016,anderson_ollie_2020,bridgman_human_1992,ou_postural_2021}. Two papers investigated the optimization of the ollie without changing the geometry \cite{anderson_ollie_2020,shield_contact-implicit_2022}. But research does not provide how the skateboards' dimensions influence the ollie. The skateboard community would benefit from knowing how the dimensions of the skateboard influence the performance of the ollie. 
+Skaters know and feel when a specific skateboard performs to their liking.
+Though, they don’t know what dimensions support their performance. The
+skateboard might have evolved to an optimum throughout the years, but from an
+academical and mechanical point of view, skateboard design has not been proven
+optimal for specific tricks.
 
-Now that skateboarding joined the Olympics, knowing how to improve performance is more important then ever. The most concrete (i.e. criteria with physical measurement) Olympic judging criteria that applies to the ollie is height \cite{world_skate_skateboarding_2021}. This leads to the research question:
+Some researches have tackled this problem by analyzing the skateboard in a
+planar riding model
+\cite{hubbard_lateral_1979,hubbard_human_1980,kremnev_nonlinear_2010,ispolov_skateboard_1996,rosatello_skateboard_2015,varszegi_stability_2017,varszegi_stabilizing_2016,varszegi_downhill_2016,varszegi_balancing_2014,kuleshov_mathematical_2007,kuleshov_various_2010}.
+Which shows the relation between the dimensions and the stability while rolling
+and turning. These dimensional analyses don't apply to aerial movements such as
+the ollie. Others researched the ollie by investigating the contact forces
+\cite{anderson_ollie_2020,shield_contact-implicit_2022} and biomechanics
+\cite{frederick_biomechanics_2006,vorlicek_analysis_2015,wood_3d_2020,nakashima_simulation_2021,nevitt_ground_2006,candotti_lower_2012,dias_using_2016,anderson_ollie_2020,bridgman_human_1992,ou_postural_2021}.
+Two papers investigated the optimization of the ollie without changing the
+geometry \cite{anderson_ollie_2020,shield_contact-implicit_2022}. But research
+does not provide how the skateboards' dimensions influence the ollie. The
+skateboard community would benefit from knowing how the dimensions of the
+skateboard influence the performance of the ollie.
+
+Now that skateboarding joined the Olympics, knowing how to improve performance
+is more important then ever. The most concrete (i.e. criteria with physical
+measurement) Olympic judging criteria that applies to the ollie is height
+\cite{world_skate_skateboarding_2021}. This leads to the research question:
 \begin{quote}
 \textit{
     What are the optimal geometric and inertial parameters of a skateboard for an Olympic athlete to reach maximal ollie height?}
 \end{quote}
 
-\textbf{Skateboard Terminology}\\
+\subsection{Skateboard Terminology}
 See figure \ref{f_skateterminology}. The tail is the inclined part with a rounded top, the nose is its mirrored part. The tail inclination is measured with respect to the deck. The kink between the deck and the tail or nose is called the pocket. The deck in skateboard terminology is referred to the tail, nose and the part in between. Though, in this paper the deck refers exclusively to the indicated part in figure \ref{f_skateterminology}. Two trucks connect the wheels to the axles with ball bearings. The top of the skateboard is covered with a sandpaper-like sticker called grip-tape (black part). Concave is the radius of the deck. All pictures in this paper will refer to the front as the right hand side of the skateboard and the back as the left hand side. A riding direction is assumed to the right.
 
 \begin{figure}[t]
@@ -163,41 +251,56 @@ See figure \ref{f_skateterminology}. The tail is the inclined part with a rounde
 \label{f_skateterminology}
 \end{figure}
 
-%%%%% END OF HOW TO CHANGE %%%%%%%
-\begin{figure*}[t]
-\captionsetup[subfigure]{labelformat=empty}
-    \subfloat[$t_1$=0.013]{{\includegraphics[width=0.13\textwidth]{figure/1.png} }}%
-    \subfloat[$t_2$=0.129]{{\includegraphics[width=0.13\textwidth]{figure/2.png} }}%
-    \subfloat[$t_3$=0.181]{{\includegraphics[width=0.13\textwidth]{figure/3.png} }}%
-    \subfloat[$t_4$=0.187]{{\includegraphics[width=0.13\textwidth]{figure/4.png} }}%
-    \subfloat[$t_5$=0.303]{{\includegraphics[width=0.13\textwidth]{figure/5.png} }}%
-    \subfloat[$t_6$=0.431]{{\includegraphics[width=0.13\textwidth]{figure/6.png} }}%
-    \subfloat[$t_7$=0.543]{{\includegraphics[width=0.13\textwidth]{figure/7.png} }}%
-    \protect\newline
-    \centering
-    \subfloat[$t_8$=0.676$^1$]{{\includegraphics[width=0.336\textwidth]{figure/ollie_tracking_mid.png} }}
-    \subfloat[$t_9$=0.722]{{\includegraphics[width=0.13\textwidth]{figure/9.png} }}%
-    \subfloat[$t_{10}$=0.904]{{\includegraphics[width=0.13\textwidth]{figure/10.png} }}%
-    \subfloat[$t_{11}$=1.097]{{\includegraphics[width=0.13\textwidth]{figure/11.png} }}%
-    \captionsetup{singlelinecheck=off}
-    
-    \vspace{-0.2cm}\caption[Ollie motion cues]{Green arrow: resultant force without friction, red arrows: force components with friction, blue arrow: resultant force with friction. Blue-, green- and red line are trajectory of back wheel, middle and front wheel respectively\footnotesize\begin{itemize}
-    \item[$t_1$] The skater is pushing firmly from his back leg and is starting to have less force on the front foot which results in the wheel just leaving the ground.
-    \item[$t_2$] The front foot starts sliding relative to the board for the first time.
-    \item[$t_3$] Tail collides with the ground, the front foot is still sliding and the back foot is barely in contact with the skateboard. 
-    \item[$t_4$] Back foot is no longer in contact with the skateboard, the back wheels are not in contact with the ground anymore.
-    \item[$t_5$] The front foot reached the nose of the skateboard.
-    \item[$t_6$] Back foot contacts the board again.
-    \item[$t_7$] Board is leveled out by the front foot.
-    \item[$t_8$] Highest point is reached. Knees are fully tucked in. Feet are firmly placed on the deck. 
-    \item[$t_9$] Front foot loses contact.
-    \item[$t_{10}$] Board is horizontal, both feet are in contact.
-    \item[$t_{11}$] The back wheels touch the ground and legs are almost fully streched out.
-    \item[$^1$] \url{https://www.wired.com/2014/10/skateboard-physics-empzeal}
-    \item[$^2$] \url{https://www.youtube.com/watch?v=339k4XEvbxY}
-\end{itemize}}
-    \label{f_olliesteps}
-\end{figure*}
+\subsection{Mechanics of the ollie} \label{ss_mechanics}
+
+%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
+\begin{figure}[b]
+\subfloat[Vertical ground reaction force]{\includegraphics[width=\columnhsize]{figure/GRF1.png}} 
+
+\caption[Ollie vertical ground reaction force]{Take-off ground reaction forces
+of the ollie. The green arrow is the highest force peak which coincides with
+the lowest athlete position. After the green arrow the athlete will move
+upward. The blue arrow is the skateboard hitting the ground
+\cite{frederick_biomechanics_2006}}
+\label{f_GRF}
+\end{figure}
+%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
+
+The mechanics is analyzed with a slow motion video to note the motion cues
+during the ollie. These motion cues ($t_1-t_{11}$) are given in figure
+\ref{f_olliesteps}. Motion cue $t_3$ and $t_4$ show that there is barely
+contact between the skaters back foot and the tail during impact. Literature
+supports this phenomenon. In the vertical ground reaction force (VGRF) graph
+(fig. \ref{f_GRF}(a)) you can see a VGRF that is similar to jumping without a
+skateboard. The big difference is the final small lump (blue arrow). When the
+graph is at the green arrow the athletes centre of mass (COM) is at its lowest
+point and the concentric jumping phase starts. Then when the graph has fallen
+to almost 0, the skater is weightless and thus airborne. Then due to the
+rotation of the skateboard the tail hits the ground and causes the lump at the
+blue arrow. This same tiny peak is found when performing a kick-flip, a similar
+movement to the ollie but with a body rotation of the skateboard
+\cite{determan_kinetics_2006}. Other research states that it is a requirement
+for the ollie to have the foot separated from the tail to perform an ollie
+\cite{nakashima_simulation_2021}.
+
+Due to the force normal to the board exerted by the feet together with sliding
+movement tangential to the surface, friction occurs between the feet and the
+grip-tape. This is beneficial for ollie height because without friction, the
+resultant force (fig. \ref{f_olliesteps} $t_4$, green arrow) is directed more
+vertically down than resultant force in the scenario with friction
+(\ref{f_olliesteps} $t_5$, blue arrow). A more vertically up resultant force
+will result in less downward motion while leveling out the skateboard mid air.
+The higher the coefficient of friction between the foot and the deck, the more
+up the resultant force will be. That is why grip-tape with rubber soles is the
+choice of preference among skaters (coefficient of friction of 0.7 or higher
+\cite{bron_nog_nodate}).
+
+Furthermore the video shows that the bio mechanical obstruction of the feet
+cause the skateboard to not go further up. The knees are fully tucked in at the
+highest point, the skateboard can't go higher through this physical bound.
+
+A skateboard bends and flexes during the ollie. This study assumes a rigid body
+model of the skateboard to reduce mathematical complexity.
 
 \section{Method}
 % I have parameterized the geometry and inertia characteristics of a skateboard modeled as a single rigid body with parameters: tail length, tail angle, deck length, truck height, and wheel radius. This is an appropriate parameterization for a skateboard designer because the width of the skateboard is usually chosen by preference. Also, the ollie is a movement that involves rotation in one plane, visible in fig. \ref{f_olliesteps}, which means only the inertia characteristics for this rotation are necessary. 
@@ -210,126 +313,140 @@ The chosen method is modeling and optimization to find the optimal skateboard ge
     \item Solve the optimization problem for the dimensions of the skateboard for maximum ollie height. 
 \end{enumerate}
 
-\subsection{Mechanics of the ollie} \label{ss_mechanics}
-
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}[b]
-\subfloat[Vertical ground reaction force]{\includegraphics[width=\columnhsize]{figure/GRF1.png}} 
-
-\caption[Ollie vertical ground reaction force]{Take-off ground reaction forces of the ollie. The green arrow is the highest force peak which coincides with the lowest athlete position. After the green arrow the athlete will move upward. The blue arrow is the skateboard hitting the ground \cite{frederick_biomechanics_2006}}
-\label{f_GRF}
-\end{figure}
-%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
-
-The mechanics is analyzed with a slow motion video to note the motion cues during the ollie. These motion cues ($t_1-t_{11}$) are given in figure \ref{f_olliesteps}. Motion cue $t_3$ and $t_4$ show that there is barely contact between the skaters back foot and the tail during impact. Literature supports this phenomenon. In the vertical ground reaction force (VGRF) graph (fig. \ref{f_GRF}(a)) you can see a VGRF that is similar to jumping without a skateboard. The big difference is the final small lump (blue arrow). When the graph is at the green arrow the athletes centre of mass (COM) is at its lowest point and the concentric jumping phase starts. Then when the graph has fallen to almost 0, the skater is weightless and thus airborne. Then due to the rotation of the skateboard the tail hits the ground and causes the lump at the blue arrow. This same tiny peak is found when performing a kick-flip, a similar movement to the ollie but with a body rotation of the skateboard \cite{determan_kinetics_2006}. Other research states that it is a requirement for the ollie to have the foot separated from the tail to perform an ollie \cite{nakashima_simulation_2021}. 
-
-Due to the force normal to the board exerted by the feet together with sliding movement tangential to the surface, friction occurs between the feet and the grip-tape. This is beneficial for ollie height because without friction, the resultant force (fig. \ref{f_olliesteps} $t_4$, green arrow) is directed more vertically down than resultant force in the scenario with friction (\ref{f_olliesteps} $t_5$, blue arrow). A more vertically up resultant force will result in less downward motion while leveling out the skateboard mid air. The higher the coefficient of friction between the foot and the deck, the more up the resultant force will be. That is why grip-tape with rubber soles is the choice of preference among skaters (coefficient of friction of 0.7 or higher \cite{bron_nog_nodate}). 
-
-Furthermore the video shows that the bio mechanical obstruction of the feet cause the skateboard to not go further up. The knees are fully tucked in at the highest point, the skateboard can't go higher through this physical bound. 
-
-A skateboard bends and flexes during the ollie. This study assumes a rigid body model of the skateboard to reduce mathematical complexity.
 
 \subsection{Optimal Control Problem}
-The chosen method to solve the optimal control problem is direct collocation. Direct methods are generally best for problems where dynamics and control must be computed to a similar accuracy, and the structure of the control trajectory is not known a priori \cite{kelly_introduction_2017}. Also, the ollie is highly non-linear and complex movement with high dimensionality . With this method it is possible to increase the dimensionality without increasing the difficulty to converge to the solution. The direct method transcribes a continuous problem into a non-linear programming problem (NLP). The software used is PyCollo for , which is direct orthogonal collocation transcription tool for Python \cite{brockie_predictive_nodate}. The dynamics and constraints are enforced over a discretization. The discretization exists of $N$ collocation points. The collocation points are either mesh points or polynomial points, but all collocation points are enforced to the constraints and dynamics. After transcription the problem is passed to the solver IPOPT (Interior Point OPTimizer). When the found IPOPT solution does not meet the error-tolerance set in PyCollo, the discretization is refined and a new iteration is solved in IPOPT. The solution is interpolated using the Legendre-Gauss-Lobatto (LGL) method. The integration scheme is an implicit Runge-Kutta Kth method \cite{brockie_predictive_nodate}. This high order method will have a high accuracy with the disadvantage that all states and constraints need to be differentiable.
+We use direct collocation to formulate an optimal control problem that
+simultaneously optimizes the input control trajectories and the board geometry
+parameters.
+Direct methods are generally best for problems where dynamics and control must
+be computed to a similar accuracy and the structure of the control trajectory
+is not known a priori \cite{kelly_introduction_2017}.
+We make use of PyCollo~\cite{brockie_predictive_nodate} to transcribe the
+continous optimal control problem into a non-linear programming (NLP) problem.
+PyCollo uses direct orthogonal collocation transcription which enforces the 
+dynamics and constraints a variable discretization.
+The discretization exists of $N$ collocation points.
+The collocation points are either mesh points or polynomial points, but all
+collocation points are enforced to the constraints and dynamics.
+After transcription the problem is passed to IPOPT~\cite{ipopt}, an Interior
+Point Optimizer for large sparse NLP problems.
+PyCollo iteratively improves the discretation based on prior IPOPT solutions to
+meet the specified error tolerances.
+The solution are interpolated using the Legendre-Gauss-Lobatto (LGL) method and
+the integration scheme is an implicit Runge-Kutta Kth method.
 
-The ollie problem is a hybrid problem, meaning that there will be discontinuities in the states. During impact the velocity states change sign instantly causing discontinuities. Discontinuities are per definition not differentiable, this means that in a higher order optimization the discontinuity need to be solved differently. To merge higher order optimization and discontinuities, multi-phase optimization is used. Multi-phase optimization concerns a sequence of continuous-state phases separated by discrete jumps in the states. Multi-phase optimization requires pre-modeled phases which leaves no opportunity for unsought solutions. Though, they are easier to compute and tend to be more accurate \cite{kelly_introduction_2017}. 
+The ollie problem is a hybrid problem due to the necessary discontinuities in
+the state trajectories.
+For example, during impact the velocity states change sign instantly causing
+discontinuities.
+We use multiple phases to break the problem into several continous
+differentiable phases.
+A disadvantage of phases is that the phase state transition is prescribed,
+leaving no room for the optimizer to discover these transitions.  The advantage
+is that they are easier to compute and tend to be more accurate
+\cite{kelly_introduction_2017}.
 
-\subsection{Parameter optimization}\label{s_paropt}
-The skateboards' parameters can be optimized as decision variables which increases the dimensionality, but with direct methods this is not be a problem. To optimize the geometry of the skateboard, a parameterized model of the skateboard that scales it's mass and inertia values when changing the geometry is made, such that the dynamical response is scaled accordingly. I used the SymPy symbolic toolbox to create the parameterized models \cite{meurer_sympy_2017}. 
+\subsection{Parameterization}\label{s_paropt}
+Since we want to optimize the input trajectories simulatenously with the
+skateboard's physical parameters, we parameterize the dynamics model so that it
+it's mass and inertia scale when geometry changes are made.
 
-%%%%%%%%%%%%%
-%Part about why in 2D
-%%%%%%%%%%%%%
-
-\subsubsection{Parameterized model}\label{ss_model}
+The most widely used modern skateboard is the Popsicle stick skateboard. We
+simplify the Popsicle stick skateboard design for our 2D model and describe it
+with ten variables, see Table~\ref{t_variables}. We enforce symmetry, whereas
+in reality nose and tail lengths and inclinations vary. We ignore the concavity
+present in the deck. The variables colored blue in Figure~\ref{f_11segments}
+are optimized and the green variables are set to an industrial standard because
+they influence the mass and inertia properties but play little role in the
+ollie dynamics.
+%
 \begin{table}
-    \centering
-    \begin{tabular}{=l +l +c}
-        \rowstyle{\textbf}& Variable & Description \\
-        \hline
-        \rowstyle{\color{blue}} & $l_{wb}$ & Wheelbase \\
-        \rowstyle{\color{blue}} & $l_{d}$ & Deck length \\
-        \rowstyle{\color{blue}} & $l_{t}$ & Tail/nose length \\
-        \rowstyle{\color{blue}} & $\phi$ & Tail/nose inclination \\
-        \rowstyle{\color{blue}} & $h_{tr}$ & Truck height \\
-        \rowstyle{\color{blue}} & $r_{w}$ & Wheel radius \\
-        \rowstyle{\color{ao}} & $h_d$ & Deck thickness \\
-        \rowstyle{\color{ao}} & $d_{tr}$ & Truck width \\
-        \rowstyle{\color{ao}} & $d_{d}$ & Deck width \\
-        \rowstyle{\color{ao}} & $d_w$ & Wheel width \\
-        \rowstyle{\color{orange}} & $d_{com}$ & COM distance from deck \\
-    \end{tabular}
-    \caption{Variables used to describe skateboard shape (see fig. \ref{f_11segments}). Blue parameters are optimized, green parameters are set to industrial standard. Orange is a dependent on other variables.}
-    \label{t_variables}
+  \centering
+  \begin{tabular}{=l +l +c}
+    \rowstyle{\textbf}& Variable & Description \\
+    \hline
+    \rowstyle{\color{blue}} & $l_{wb}$ & Wheelbase \\
+    \rowstyle{\color{blue}} & $l_{d}$ & Deck length \\
+    \rowstyle{\color{blue}} & $l_{t}$ & Tail/nose length \\
+    \rowstyle{\color{blue}} & $\phi$ & Tail/nose inclination \\
+    \rowstyle{\color{blue}} & $h_{tr}$ & Truck height \\
+    \rowstyle{\color{blue}} & $r_{w}$ & Wheel radius \\
+    \rowstyle{\color{ao}} & $h_d$ & Deck thickness \\
+    \rowstyle{\color{ao}} & $d_{tr}$ & Truck width \\
+    \rowstyle{\color{ao}} & $d_{d}$ & Deck width \\
+    \rowstyle{\color{ao}} & $d_w$ & Wheel width \\
+    \rowstyle{\color{orange}} & $d_{com}$ & COM distance from deck \\
+  \end{tabular}
+  \caption{Variables used to describe skateboard shape (see fig.
+    \ref{f_11segments}). Blue parameters are optimized, green parameters are
+    set to industrial standard. Orange is a dependent on other variables.}
+  \label{t_variables}
 \end{table}
+
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centerline{\includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}}
-\caption[11-Segment skateboard model]{Parameterized skateboard. Red lines split the skateboard into 11 basic shaped segments for inertia calculation (see figure \ref{f_basicshapes})}
+  \centerline{
+    \includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}
+  }
+  \caption[11-Segment skateboard model]{Parameterized skateboard. Red lines
+    split the skateboard into 11 basic shaped segments for inertia calculation
+    (see figure \ref{f_basicshapes})}
 \label{f_11segments}
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-The most widely accepted skateboard is the Popsicle stick skateboard (see section \ref{s_intro}). A simplification of the Popsicle stick skateboard with straight lines only is minimally described with ten variables (see table \ref{t_variables}. A symmetrical shape is assumed, whereas in reality nose and tail length and inclination often vary. The simplified skateboard is made up of straight lines only and concavity is not taken into account. Blue variables are optimized because the ollie movement can be described minimally by a 2D movement in the xy-plane (see fig. \ref{f_11segments}). Green variables influence the mass and inertia properties and are set to an industrial standard. These are usually chosen by preference.
 
-%\begin{equation}
-%    [l_{wb},\ l_d,\ l_t,\ \phi,\ h_{tr},\ r_w ]
-%\end{equation}
-
-\subsubsection{Mass and Inertia}\label{ss_mass}
-The mass and it's distribution influence the dynamic response of the skateboard \cite{moore_force_nodate}. A mass model is made to be able to scale the mass and it's distribution when the optimized parameters are changed. The skateboards' COM is calculated as a composite of 11 basic constant density shapes shown in figure \ref{f_basicshapes} to easily calculate the mass and inertia of each segment. The shapes consist of semi-cylinders, cuboids, cylinders and triangular prisms. A series of measurements is performed to validate the inertia model. See appendix A for mass, inertia, and geometry calculations. 
-
+We developed a mass and inertial model which is a function of the skateboard's
+essential geometry, see Figure~\ref{f_11segments}), and material densities
+(wood, steel, urethane). The model is made up of eleven basic constant density
+shapes shown in Figure~\ref{f_basicshapes}: semi-cylinders, cuboids, cylinders
+and triangular prisms.
+%
 \begin{figure}
-    \centering
-    \includegraphics[width = 0.5 \textwidth]{figure/Basicshapes.png}
-    \caption[Exploded 11 segment model]{Clarification on the 11 segment model. 13 shapes are visible, but the wheels are taken as one wider cylinder in 2D}
-    \label{f_basicshapes}
+  \centering
+  \includegraphics[width = 0.5 \textwidth]{figure/Basicshapes.png}
+  \caption[Exploded 11 segment model]{Clarification on the 11 segment model.
+    13 shapes are visible, but the wheels are taken as one wider cylinder in
+    2D. Sections 1-5 are wood, 6, 7, 8, 10 are steel, and 9, 11 are urethane.}
+  \label{f_basicshapes}
 \end{figure}
 
-%%%%%%%%%%%%%%% begin table   %%%%%%%%%%%%%%%%
-\begin{table}
-\begin{center}
-\caption[Inertia]{Formulas of volume and inertia of each basic shape to calculate skateboards inertia. $l=$ length, $d=$ width, $r=$ radius L = length of isosceles, $\beta$ = top angle of isosceles}
-\label{t_volume_inert}
-\begin{tabular}{c l p{1.06in}}
-& & \\ % put some space after the caption
-\hline
-Shape & Volume & Inertia \\
-\hline
-Cuboid           & $l\cdot d\cdot h$              & $\frac{m}{12} (l_x^2+l_y^2)$ \\
-Triangular prism & $\frac{1}{2} l\cdot d\cdot h$  &  $\frac{1}{2} m L^2\left(1-\frac{2}{3} \sin ^2 \beta\right)$ \cite{morin_introduction_2008}\\
-Cylinder         & $\pi h (R^2-r^2)$                        &  $I_{x},I_{y} = \frac{m}{12} (3 r^2 + l^2)$ $I_{z} = \frac{r^2}{2 m} $ \\
-Semi-cylinder    & $\frac{1}{2}\pi h (R^2-r^2)$             &  $(\frac{1}{4}-\frac{16}{9 \pi^2}) m r^2)$ \\
-\hline
-\end{tabular}
-
-\end{center}
-\end{table}
-%%%%%%%%%%%%%%%% end table %%%%%%%%%%%%%%%%%%%
-
-\subsection{Multi-phase Direct Collocation}\label{s_multiphase}
-Provided the framework to perform a parameter optimization that scales mass and inertial values accordingly, the ollie optimal control problem is set up next. 
-
-\subsubsection{General formulation}
-The multi-phase OCP with phases $p \in [1,2,3]$ involves determining the states $\mathbf{q^{(p)}}$, control $u^{(p)}$, phase initial times $t_0^{(p)}$, phase final times $t_F^{(p)}$, global parameter variables $\sigma$, while maximizing the objective function:
+\subsection{General formulation}
+The multi-phase OCP with phases $p \in [1,2,3]$ involves determining the states
+$\mathbf{q^{(p)}}$, control $u^{(p)}$, phase initial times $t_0^{(p)}$, phase
+final times $t_F^{(p)}$, global parameter variables $\sigma$, while maximizing
+the objective function:
 \begin{equation}
-    maximize\ \mathcal{J}
-\end{equation} 
+  maximize\ \mathcal{J}
+  \label{eq:obj}
+\end{equation}
 Subject to the dynamical constraints:
 \begin{equation}
-\ddot{\mathbf{q}}^{(p)}=\alpha^{(p)}
+  \ddot{\mathbf{q}}^{(p)}=\alpha^{(p)}
 \end{equation}
 with path constraints,
 \begin{equation}
-        \gamma^{(p)}:\quad \gamma_{min} < ... < \gamma_{max}\\
+  \gamma^{(p)}:\quad \gamma_{min} < ... < \gamma_{max}\\
 \end{equation}
 and with endpoint constraints:
 \begin{equation}
     \beta:\quad \beta_{min} < ... < \beta_{max}
+    \label{eq:endpoint}
 \end{equation}
-The ollie OCP will be explained in the order of equations (2-5). Starting with the choice of phases ($^{(p)}$) and objective ($\mathcal{J}$). Then describing the dynamic constraints $\alpha$, consisting of the equations of motion (EOM) for the different phases for the human and the skateboard. Followed by the constraints $\gamma$, where the kinetics and kinematics of the human, and friction are implemented. Then endpoint constraints $\beta$, which contain modeling of impact and the bounding of time. The initial and final state and control values are found in Appendix A and are set to a wide margin. If the margin is not set widely, it will be discussed during these paragraphs. All together, this gives all information necessary to solve the ollie OCP. %Section \ref{s_summary} gives a summary of the implementations before starting the results section.
+In the following sections we explain the specific implementation of equations
+\ref{eq:obj} through \ref{eq:endpoint}.
+We define the phases ($^{(p)}$) based on the mechanics of the ollie and maximal
+height objective ($\mathcal{J}$).
+The constraints are made up of the the dynamic constraints $\alpha$, consisting
+of the equations of motion (EOM) for the different phases for the human and the
+skateboard, followed by the constraints $\gamma$, where the kinetics and
+kinematics of the human, and friction are implemented.
+Then endpoint constraints $\beta$ model impact and the time bounds.
+The initial and final state and control values are found in Appendix A and are
+set to a wide margin.
 
-In section \ref{ss_model} are the geometrical variables described that are optimized. Leading to global optimization parameter variables:
+In section \ref{ss_model} are the geometrical variables described that are
+optimized. Leading to global optimization parameter variables:
 \begin{equation}
 \begin{array}{rlrl}
     \sigma_{1} &= l_{wb},\ \sigma_{2} &= l_d,\ \sigma_{3} &= l_t,   \\ 
@@ -337,24 +454,46 @@ In section \ref{ss_model} are the geometrical variables described that are optim
 \end{array}
 \end{equation}
 
-\subsubsection{Phases and Objective} \label{s_phases}
-For the purpose of the optimization this has been simplified to three phases:
+\subsection{Phases and Objective} \label{s_phases}
+We define these three dynamically distinct phases base on the mechanics of the
+ollie:
 \begin{enumerate} \label{n_phases}
-    \item Preparation phase 
-    \item Upward motion 
-    \item Downward motion 
+  \item Preparation phase
+  \item Upward motion
+  \item Downward motion
 \end{enumerate}
-\noindent During the preparation phase the back wheels are in contact with the ground. Between the preparation and upward motion phases, the tail impacts the ground and states will have discontinuities. The dynamics change between the preparation and upward motion phases due to the loss of contact of the back wheels. The dynamics between the Upward and downward motion stay the same. The Upward motion and downward motion are split into two phases because the objective function of the multi-phase optimization needs to be a function of initial or final state variables \cite{brockie_predictive_nodate}. The objective is to ollie as high as possible, now the final state variables of phase two can be used to describe the objective. 
+During the preparation phase the back wheels are in contact with the
+ground.
+The tail impact with the ground defines the transition from preparation to the
+upward motion.
+During upward and downward motion nothing is in contact with the ground and
+they both are governed by the same equations of motion.
+We split the upward motion and downward motion into two phases because PyCollo
+requires that the objective function be a function of initial or final state
+variables \cite{brockie_predictive_nodate} of a phase. In case the transition
+from upward to downward motion defines the highest ollie.
 
-Because a parameter optimization will occur simultaneously with finding the optimal trajectory, the parameters should not be able to influence the objective. To make sure the objective function is independent of the parameter variables, the skateboard is constrained to be level at the highest point and the objective is the middle of a fictional tangent touching lowest point of both wheels. This result in the objective function:
-
+% TODO : If the parameters can't influence the objective, then how can you
+% possible find a maximum as a function of the parameters? I'm guessing you
+% aren't actually doing what you write here. -- JKM
+Because a parameter optimization will occur simultaneously with finding the
+optimal trajectory, the parameters should not be able to influence the
+objective.
+To make sure the objective function is independent of the parameter
+variables, the skateboard is constrained to be level at the highest point and
+the objective is the middle of a fictional tangent touching lowest point of
+both wheels.
+This result in the objective function:
+%
 \begin{equation}
-    \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w 
+  \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w
 \end{equation}
 
-\noindent Where $y_s^{(2)}(t_F)$ is the final state COM location of the skateboard, $d_{com}$ the skateboards' COM to the deck, $h_{tr}$ the truck height, and $r_w$ is the wheel radius.
+\noindent Where $y_s^{(2)}(t_F)$ is the final state COM location of the
+skateboard, $d_{com}$ the skateboards' COM to the deck, $h_{tr}$ the truck
+height, and $r_w$ is the wheel radius.
 
-\subsubsection{System Dynamics}\label{s_systemdynamics}
+\subsection{System Dynamics}\label{s_systemdynamics}
 \begin{figure}
     \centering
     \includegraphics[width = 0.5\textwidth]{figure/FBD_phase1.png}
@@ -367,21 +506,31 @@ Because a parameter optimization will occur simultaneously with finding the opti
     \label{f_FBDphas1}
 \end{figure}
 
-\noindent \; \textbf{Skateboard Equations of Motion - phase 1}\\
-The EOMs are derived using SymPy mechanics and symbolic toolbox \cite{meurer_sympy_2017}. The EOM of the skateboard are derived with the TMT method \cite{vallery_heike_advanced_2018}. As stated in section \ref{s_phases}, the dynamics of phase 1 and 2 are different. During phase 1 the EOM are derived with a sliding joint at the back wheel. This is done to eliminate the ground reaction forces from the EOM. The COM coordinates are
+We derive the equations of motion using SymPy~\cite{meurer_sympy_2017} using
+the TMT method~\cite{vallery_heike_advanced_2018}.
 
+\subsubsection{Skateboard Equations of Motion - phase 1}
+During phase 1 we use a sliding joint for the rear wheel to ground constraint.
+This is done to eliminate the ground reaction forces from the equations of
+motion.
+The skateboard center of mass coordinates are
+%
 \begin{equation}
     \mathbf{x} = [x_s, y_s, \theta_s]^T
 \end{equation}
 
-The skateboard when considering the back wheel as a joint can be described by two generalized coordinates $x_w$ (x-location back wheels), and $\theta_s$ (angle w.r.t. ground) as shown in figure \ref{f_FBDphas1}. This is done to eliminate the ground reaction forces. The skateboard has 2 degrees of freedom (DOF), leading to the generalized coordinates:
-
+With the sliding joint, we use two generalized coordinates $x_w$ (x-location
+back wheels) and $\theta_s$ (angle w.r.t. ground) as shown in figure
+\ref{f_FBDphas1}.
+The skateboard then has 2 degrees of freedom (DOF) with the the generalized
+coordinates:
+%
 \begin{equation}
     \mathbf{q} = [x_w, \theta_s]^T
 \end{equation}
 
-And the CoM coordinates expressed in the generalized coordinates are:
-
+The center of mass in terms of the generalized coordinates is:
+%
 \begin{equation}
 \mathbf{x}=\left[\begin{array}{c}
 \frac{l_{w b} \cos \left(\theta_s\right)}{2}+x_w+\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right) \\
@@ -390,8 +539,9 @@ And the CoM coordinates expressed in the generalized coordinates are:
 \end{array}\right]
 \end{equation}
 
-Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the velocities gives transformation matrix T:
-
+Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the
+velocities gives transformation matrix $\mathbf{T}$:
+%
 \begin{equation}
     J_{\dot{\mathbf{x}}}(\mathbf{q}) = \textbf{T} = \left[\begin{array}{c c}
 1 & -\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right) \\
@@ -526,7 +676,7 @@ This leads to the last two dynamic constraints valid for phase 2, and 3:
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Constraints}
+\subsection{Constraints}
 \quad \textbf{Human}\\
 The human is simplified as a point mass which reduces complexity for the optimization but sacrifices the reality. To make sure the human as a point mass still gives the output of a more complex model, the kinetics and kinematics will be constrained. 
 
@@ -626,51 +776,71 @@ The horizontal ($\mathbf{\hat n_x}$) direction forces are now unconstrained. The
 
 Only the maximum force constraints $\gamma_{11-13}$ and $\gamma_{18-19}$ apply to all phases. The CMJ constraints are only applied to the first phase, since phase 1 concerns the CMJ movement. 
 
-\textbf{Friction}\\
-According to section \ref{ss_mechanics} the feet are sliding along the griptape to level the skateboard out and drag the skateboard up during the preparation phase 1, and upward motion phase 2. Static and dynamic friction is are used to describe this phenomena. The method to implement these in the optimization is a simplification to the frictional contact implicit optimization called the relaxed formulation by Patel et al. \cite{patel_contact-implicit_2019}. This method is able to have unplanned discontinuous frictional contact with direct collocation without a hybrid method. Usually this would be considered impossible since direct collocation enforces the dynamics and constraints over a continuous domain, where discontinuities in the system dynamics usually lead to infeasibility \cite{kelly_transcription_2017}. The downside is that with this method it is difficult to converge to a feasible solution without a proper initial guess and the computation time is rather high \cite{shield_contact-implicit_2022,patel_contact-implicit_2019}. I have found a way to simplify this method, which represents a contact implicit frictional contact that solves optimally under 2 minutes without initial guess. To explain the simplifications and for the sake of clarity, I will first explain the impact method of Patel et al..
+\subsection{Friction}
+In section \ref{ss_mechanics}, we show that the feet slide along the deck's
+griptape to level the skateboard out during the preparation phase 1 and drag
+the skateboard up during the upward motion phase 2.
+We use both static and dynamic friction to model the foot sliding across the
+deck's surface and make use of the relaxed friction formulation presented by
+Patel et al.~\cite{patel_contact-implicit_2019} to do so.
+This method allows for unplanned discontinuous frictional contact with direct
+collocation without needing a hybrid method.
+Usually this would be considered impossible since direct collocation enforces
+the dynamics and constraints over a continuous domain, where discontinuities in
+the system dynamics usually lead to infeasibility
+\cite{kelly_transcription_2017}.
+The downside is that it is difficult to converge to a feasible solution without
+a close initial guess and the computation time can be higher
+\cite{shield_contact-implicit_2022,patel_contact-implicit_2019}.
+We simplified Patel et al.'s method by removing the impact condition between
+the human and the board.
+We assume that the feet never impact the skateboard and simply exert zero
+normal force when out of contact.
+We can do this because, unlike Patel et al., we do not model the human as
+multiple body segments but as a point mass.
+Patel et al. requires the initial guess to be similar to the solution, and the
+model 43 minutes to solve \cite{shield_contact-implicit_2022}. Our model solves
+optimally under two minutes with an initial guess of zero.
 
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centerline{\includegraphics[width=0.4\textwidth]{figure/relaxed_method.png}}
-\caption[Relaxed impact method]{Relaxed impact formulation. Contact mode is changed at each mesh point, the contact force $\lambda$ is selected by solver at each collocation point. Source: \cite{patel_contact-implicit_2019}}
-\label{f_relaxed}
-\end{figure}
-%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
-
-The relaxed formulation is shown in figure \ref{f_relaxed}. It implements a contact constraint that will look one time-step ahead to be able to initiate a contact force before impact. Let $C_c(\mathbf{q})$ be the relative distance between the two bodies that impact, and let the normal force $F_n$ be a control variable. The following constraints will ensure that only when the next time step is in contact ($C_c(\mathbf{q}(t+1)$) the normal force $F_n > 0$ when there is no contact at the next time step, $F_n$ must be zero:
-\begin{equation}\label{e_patelimpact}
-    F_n\ C_c(\mathbf{q}(t+1) = 0,\quad C_c(\mathbf{q}) \geq 0,\quad F_n \geq 0
-\end{equation}
-This result of this formulation is shown graphically in figure \ref{f_discontinuities}. When constraining an optimization problem likewise, the solver will find the normal forces needed to comply to the non penetration constraint $C_c(\mathbf{q}) \geq 0$. This method has been used in the optimization of an ollie. Though the initial guess needed to be similar to the solution to find feasible solutions. The model with a full body human operator took 43 minutes to solve \cite{shield_contact-implicit_2022}. 
-To simplify the model I excluded this impact formulation, because I assume that the feet are always located on the skateboard, but can be out of contact by exerting zero force. In this case, where the human is not modeled with multiple segments but as a point mass, it is possible to exclude equation \ref{e_patelimpact}. By setting the normal forces of the feet $F_{p1},F_{p2}$ as control variables. The foot location is also regulated by a control variables. The acceleration is controlled instead of the foot location itself to still have smooth realistic foot trajectories. Resulting in the control variables:
+We start by setting the normal forces of the feet $F_{p1},F_{p2}$ and the feet
+accerelations as control variables.
+The acceleration is controlled instead of the foot location itself to ensure
+have smooth realistic foot trajectories.
+Our control variables are:
+%
 \begin{equation}
-    \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]    
+    \mathbf{u}^{(1,2,3)} = [F_{p1},F_{p2},\ddot s_1, \ddot s_2]
 \end{equation}
 
-Now that the difficult to solve contact formulation by Patel in equation \ref{e_patelimpact} is replaced by a simplified formulation, I will continue with the friction model that is used in this optimization.
-Friction is present during the ollie when sliding the foot along grip-tape, when rolling, and when the tail hits the ground if the tail has a relative velocity tangential to the impact surface. Friction is a highly non-linear and discontinuous phenomenon. In general the dominant friction components that have been modeled include static friction (A force that opposes the input force at zero velocity), Coulomb friction (constant motion opposing force at non-zero velocity), viscous friction (when fluid exists between the contact surfaces), and the Stribeck effect (a speed dependent friction) \cite{makkar_new_2005}. 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.4\textwidth]{figure/friction_.png}
-    \caption[Friction effects]{Friction model as a composition of different effects including a) Stribeck effect, b) viscous dissipation, c) coulomb effect, d) combined model}
-    \label{f_friction}
-\end{figure}
-
-%When modeling friction continuously, pure static friction does not exist since at zero velocity the friction function will be zero as well due to symmetry. 
-Friction can only exist during contact. The friction is solved with a set of constraints. The first step to implement this friction is to create slack variables that divide the friction forces as described in the system dynamics $F_{f1},F_{f2}$ into a positive and negative components. For simplicity reasons I will only derive the friction of the back foot along the skateboard. The front foot friction is obtained by exactly the same process. By replacing $_1$ to $_2$ in the following equations, the front foot friction is also realized
-
+We utilize the remainder of Patel's friction approach for the foot sliding and
+the tail hitting the ground. We consider both static and Coulomb friction when
+in motion.
+The friction is solved with a set of constraints.
+Here we derive the friction of the back foot along the skateboard; the front
+foot friction is obtained by exactly the same process.
+The first step to implement friction is to create slack variables that divide
+the friction forces $F_{f1},F_{f2}$ into a positive and negative components:
+%
 \begin{equation} \label{e_plusminfric}
-   F_{f1} = F_{f1}^+ - F_{f1}^- 
+   F_{f1} = F_{f1}^+ - F_{f1}^-
 \end{equation}
 
-As described in section \ref{s_systemdynamics}, the forces perpendicular to the skateboard are positive definite such that the force can never pull on the skateboard. Now the created slack variables also need to be positive definite:
+As described in section \ref{s_systemdynamics}, the forces perpendicular to the
+skateboard are positive definite such that the force can never pull on the
+skateboard. Now the created slack variables also need to be positive definite:
 
 \begin{equation}
-    F_{p1} \geq 0,\quad F_{f1}^+ \geq 0,\quad F_{f1}^- \geq 0  
+    F_{p1} \geq 0,\quad F_{f1}^+ \geq 0,\quad F_{f1}^- \geq 0
 \end{equation}
 
-Static and dynamic friction is bound by the friction cone shown in figure \ref{f_frictioncone}. The magnitude of dynamic friction is $F_{p1}\ \mu$ with a direction opposed to the relative sliding velocity (see figure \ref{f_frictioncone}. The static friction is bound by the yellow surface of the friction cone in fig. \ref{f_frictioncone} and is only possible when the feet are not sliding. To realize this, another slack variable $\psi$ is introduced which represents the magnitude of the relative velocity $\dot s_1$ between the foot and the skateboard. 
-
+The magnitude of dynamic friction is $F_{p1}\ \mu$ with a direction opposed to
+the relative sliding velocity.
+The static friction is bound by the yellow surface of the friction cone in fig.
+\ref{f_frictioncone} and is only possible when the feet are not sliding.
+To realize this, another slack variable $\psi$ is introduced which represents
+the magnitude of the relative velocity $\dot s_1$ between the foot and the
+skateboard.
+%
 \begin{equation}
 \begin{split}
     \gamma_{18}^{(1,2,3)}: \quad & \psi_1 + \dot s_1  \geq 0 \\
@@ -687,7 +857,13 @@ Now static friction can be implemented with a set of constraints:
 \end{split}
 \end{equation}
 
-The first constraint assures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$. The second constraint ensures that when the foot slides ($\psi_1 \not = 0$),  the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in positive direction, the negative friction component $F_{f1}^-$ should equal $\mu F_{p1}$ and $F_{f1}^+=0$ and vice versa. This is realized with the following constraints:
+The first constraint assures that the positive or negative component of the
+friction is always smaller than $\mu F_{p1}$. The second constraint ensures
+that when the foot slides ($\psi_1 \not = 0$),  the sum of the positive and
+negative friction components equal $\mu F_{p1}$. It is important that when
+sliding in positive direction, the negative friction component $F_{f1}^-$
+should equal $\mu F_{p1}$ and $F_{f1}^+=0$ and vice versa. This is realized
+with the following constraints:
 
 \begin{equation}
 \begin{split}
@@ -696,18 +872,18 @@ The first constraint assures that the positive or negative component of the fric
 \end{split}
 \end{equation}
 
-This type of constraint ($A\cdot B = 0$) has three possible solutions $A= 0,\ B=0,\ or\ A,B = 0$. By filling in a numerical example, the desired behaviour is shown. For example looking at the first constraint, when $\dot s_1 = -1$, then $\psi_1 + \dot s =  0$ and $F_{f1}^+$ can be a positive number. Then looking at the second constraint, when $\dot s = -1$, then $\psi - \dot s = 2$ and $F_{f1}^- = 0$. Combining this with the second equation in equation \ref{e_frictioncontrol} gives: $(\mu F_{p1} - F_{f1}^+ - 0) \cdot 0 = 0$, which results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a negative relative sliding velocity. 
-The friction for the front foot will be another six constraints: $\gamma_{24-30}^{(1,2,3)}$ 
+This type of constraint ($A\cdot B = 0$) has three possible solutions $A= 0,\
+B=0,\ or\ A,B = 0$. By filling in a numerical example, the desired behaviour is
+shown. For example looking at the first constraint, when $\dot s_1 = -1$, then
+$\psi_1 + \dot s =  0$ and $F_{f1}^+$ can be a positive number. Then looking at
+the second constraint, when $\dot s = -1$, then $\psi - \dot s = 2$ and
+$F_{f1}^- = 0$. Combining this with the second equation in equation
+\ref{e_frictioncontrol} gives: $(\mu F_{p1} - F_{f1}^+ - 0) \cdot 0 = 0$, which
+results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a
+negative relative sliding velocity. The friction for the front foot adds
+another six constraints: $\gamma_{24-30}^{(1,2,3)}$
 
-\begin{figure}
-    \centering
-    \includegraphics{figure/Frictioncone.png}
-    \caption[friction cone]{$f_c$ is the reaction force exerted by the ground on the box, which is composed of a normal force $f_n$ equal and opposite to $mg$ and friction $f_w$ equal and opposite to $f_{ext}$. The box is stationary if $f_{ext} < f_n\ \mu$. Static friction is bound by $-f_n\ \mu < f_w < f_n\ \mu$. But when $f_{ext}\ >\ f_n\ \mu$, the box will start to slide with velocity $v$ and $f_w = f_n\ \mu$. Dynamic friction is described by $f_w = -sign(v) f_n\ \mu$. The top of the cone is unbound, because when a vertical external load would be applied, the normal force would change in magnitude.} 
-    \footnotesize Source:\url{https://scaron.info/robot-locomotion/}
-    \label{f_frictioncone}
-\end{figure}
-
-\subsubsection{Endpoint constraints} \label{p_endpoints}
+\subsection{Endpoint constraints} \label{p_endpoints}
 To fully describe the ollie optimization problem, all phases need to be glued together. In the multi-phase optimization scheme all initial and final time variables are treated as separate variables. By constraining the corresponding variables between the phases, the variables can be treated as one variable over all three phases.
 
 \textbf{Impact}\\
@@ -806,7 +982,7 @@ The definition of landing the ollie has been set to the back wheel touching the 
 
 Variables $\theta_s, s_1, s_2, \dot s_1, \dot s_2, x_h, y_h, \dot x_h, \dot y_h$ have equal endpoints between phase 1 and 2 ($b_{9-18})$. All state variables have equal endpoints between phase 2 and 3 ($b_{18-32}$). Initial and final endpoint constraints are set to a wide range and are found in Appendix B.
 
-\subsubsection{Settings}\label{s_settings}
+\subsection{Settings}\label{s_settings}
 The NLP tolerance is set to $1e^{-8}$, and the mesh tolerance is set to $1e^{-3}$. The amount of mesh sections for the first two phases are set to 30, phase 3 is set to 10 mesh sections. The landing phase is not as important as the preparation and upward motion phase as those define the final height and thus the objective.
 
 \subsection{Summary}\label{s_summary}
@@ -884,6 +1060,8 @@ With the global parameters variables $\sigma$ as any combination of the optimize
 The results will show several optimizations with different combinations of parameter optimizations to search the solution space for optimal shapes. The first set of optimizations will be without optimized parameter variables to show proper functioning of the model. The second set of optimizations will be single variable optimizations where only one variable from the optimized parameter variables is chosen to be optimized. The third set of optimization will be variations to multiple optimized parameter variables. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Appendix: Equation of Motion Derivation}
 
 \bibliographystyle{asmems4}
 \bibliography{references}
