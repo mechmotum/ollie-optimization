@@ -3,11 +3,12 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from enum import Enum, unique
+from typing import Sequence
 
-import sympy as sm
 import sympy.physics.mechanics as me
 
-from ollie.human import HumanBase
+from ollie.connection import Friction
+from ollie.controller import ControllerBase
 from ollie.skateboard import Skateboard
 
 
@@ -88,7 +89,8 @@ class OlliePhaseBase(ABC):
         #     "middle deck",
         #     sm.S.Half * self.skateboard.l_wb * self._A.x,
         # )
-        # self._com_a = self._mid_a.locatenew("centre of mass", -self._d_com_ * self._A.y)
+        # self._com_a = self._mid_a.locatenew("centre of mass",
+        #                                     -self._d_com_ * self._A.y)
         # self._B0_a = self._mid_a.locatenew("back pocket", -self._l_f / 2 * self._A.x)
         # self._tail_a = self._B0_a.locatenew("tail", -self._l_t * self._B.x)
         # self._bf_a = self._tail_a.locatenew("back foot", self._s_1 * self._B.x)
@@ -180,26 +182,45 @@ class LandingPhase(OlliePhaseBase):
 
 
 class Ollie:
-    def __init__(self, skateboard: Skateboard, human: HumanBase, phases: list[str | OlliePhase | OlliePhaseBase]):
+    """"""
+
+    def __init__(
+        self,
+        skateboard: Skateboard,
+        controller: ControllerBase,
+        phases: Sequence[str | OlliePhase | OlliePhaseBase],
+    ) -> None:
+        """"""
         self.skateboard = skateboard
-        self.human = human
+        self.controller = controller
         self.phases = phases
 
         self.frame = me.ReferenceFrame(r"N_{ollie}")
 
         # Attach feet to skateboard
-        self.human.rear_foot.set_pos(
+        self.rear_foot = Friction("rear_foot", frame=self.skateboard.frame)
+        self.rear_foot.point.set_pos(
             self.skateboard.deck.back_pocket,
-            -self.skateboard.deck.tail_length * self.human.pos_rear_foot * self.skateboard.deck.tail_frame.x,
+            -self.skateboard.deck.tail_length
+            * self.rear_foot.position
+            * self.skateboard.deck.frame.x
         )
-        self.human.front_foot.set_pos(
+        self.front_foot = Friction("front_foot", frame=self.skateboard.frame)
+        self.front_foot.point.set_pos(
             self.skateboard.deck.back_pocket,
-            self.skateboard.deck.length * self.human.pos_front_foot * self.skateboard.deck.frame.x,
+            (self.wheelbase + self.tail_length)
+            * self.front_foot.position
+            * self.skateboard.deck.frame.x
         )
-        self.human.mass_center.set_pos(
-            self.human.rear_foot,
-            self.human.pos_mass_center_x * self.human.feet_frame.x + self.human.pos_mass_center_y * self.human.feet_frame.y,
-        )
+
+
+        self._construct_system()
+        self._apply_forces()
+        # self.controller.mass_center.set_pos(
+        #     self.controller.rear_foot,
+        #     self.controller.pos_mass_center_x * self.controller.feet_frame.x
+        #     + self.controller.pos_mass_center_y * self.controller.feet_frame.y,
+        # )
 
     @property
     def skateboard(self) -> Skateboard:
@@ -219,20 +240,26 @@ class Ollie:
         self._skateboard = skateboard
 
     @property
-    def human(self) -> HumanBase:
+    def controller(self) -> ControllerBase:
         """"""
-        return self._human
+        return self._controller
 
-    @human.setter
-    def human(self, human: HumanBase) -> None:
+    @controller.setter
+    def controller(self, controller: ControllerBase) -> None:
         """"""
-        if hasattr(self, "_human"):
-            msg = f"Cannot reset human {self.human} to {human} once set"
+        if hasattr(self, "_controller"):
+            msg = (
+                f"Cannot reset controller {self.controller} to {controller} "
+                f"once set"
+            )
             raise AttributeError(msg)
-        if not isinstance(human, HumanBase):
-            msg = f"Human must be a `HumanBase`, not a {type(human)}"
+        if not isinstance(controller, ControllerBase):
+            msg = (
+                f"Controller must be a `ControllerBase`, not a "
+                f"{type(controller)}"
+            )
             raise TypeError(msg)
-        self._human = human
+        self._controller = controller
 
     @property
     def phases(self) -> tuple[OlliePhaseBase]:
@@ -271,6 +298,12 @@ class Ollie:
             msg = "Phases must be unique"
             raise ValueError(msg)
         self._phases = tuple(ollie_phases)
+
+    def _construct_system(self) -> None:
+        pass
+
+    def _apply_forces(self) -> None:
+        pass
 
     @staticmethod
     def _instantiate_ollie_phase(ollie_phase: OlliePhase) -> OlliePhaseBase:
