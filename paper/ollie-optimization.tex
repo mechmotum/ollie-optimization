@@ -1,14 +1,15 @@
 \documentclass[default,iicol]{sn-jnl}
 
-\usepackage{epsfig} %% for loading postscript figures
-\usepackage{array}
 \usepackage{amsmath}
-\usepackage{xcolor}
-\usepackage{subfig}
+\usepackage{array}
+\usepackage{epsfig} %% for loading postscript figures
 \usepackage{float}
-%\usepackage{caption}
-\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
 \usepackage{stfloats}
+\usepackage{subfig}
+\usepackage{titlesec}
+\usepackage{url}
+\usepackage{xcolor}
 
 \setcounter{secnumdepth}{4}
 
@@ -18,7 +19,6 @@
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 %\def\url#1{\expandafter\string\csname #1\endcsname}
-\usepackage{url}
 \newcounter{exno}
 \newenvironment{examples}
 {
@@ -72,27 +72,13 @@
 
 \jyear{2021}%
 
-%% as per the requirement new theorem styles can be included as shown below
-\theoremstyle{thmstyleone}%
-\newtheorem{theorem}{Theorem}%  meant for continuous numbers
-%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
-%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
-\newtheorem{proposition}[theorem]{Proposition}% 
-%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
-
-\theoremstyle{thmstyletwo}%
-\newtheorem{example}{Example}%
-\newtheorem{remark}{Remark}%
-
-\theoremstyle{thmstylethree}%
-\newtheorem{definition}{Definition}%
-
 \raggedbottom
 %%\unnumbered% uncomment this for unnumbered level heads
 
 \begin{document}
 
-\title[]{\vspace{-3cm}Optimal Skateboard Geometry for Maximizing Ollie Height}
+\title[Optimal Skateboard Geometry for Maximizing Ollie Height]{
+  Optimal Skateboard Geometry for Maximizing Ollie Height}
 
 %%=============================================================%%
 %% Prefix	-> \pfx{Dr}
@@ -124,7 +110,36 @@
 
 \affil[2]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \city{City}, \postcode{10587}, \state{State}, \country{Country}}}
 
-%\abstract{Skateboarding involves a human controlling a four wheeled vehicle that is steered by tilting the standing surface. The riding mechanics of skateboarding have been well reported \cite{hubbard_clearing_1985,varszegi_stabilizing_2016}. The sport also includes aerial maneuvers such as jumping of stairs, flying off ramps and flipping and rotating the skateboard. The most basic aerial trick is called the ollie. The athlete jumps up while pushing down on the back end of the skateboard’s tail, causing a rotation about the back axle. The upward acceleration due to the rotation together with the tail-ground impact cause the skateboard to go airborne. Midair the athlete drags the skateboard up through frictional contact and levels it out to land the trick. The most concrete performance measure of the ollie is height according to the Olympic judging criteria\cite{world_skate_skateboarding_2021}. To reach maximum height the dynamics such as impact, dynamic response, and torque production are dependent on shape, inertia and mass, which gives reason to assume an optimal shape exists. This leads to the research question: What are the optimal geometric and inertial parameters of a skateboard for an Olympic athlete to reach maximal ollie height. The skateboard geometry is optimized through multiphase direct collocation with the objective of maximal ollie height. A parameterized model is created with scaling mass and inertia properties such that the geometry of the skateboard. Modelling the dynamics of the ollie including impact and friction are done with a point mass human controller that is kineticly and kinematicly mapped to a counter movement jump. A simplistic contact implicit impact scheme is made for a higher order optimization. The ollie height is improved by changing the mass and inertia properties of the skateboard. Multiple optimal board shapes are generated for example a skateboard with a smaller wheelbase can reach higher ollie height compared to an industry standard skateboard.}
+\abstract{
+  Skateboarding involves a human controlling a four wheeled vehicle that is
+  steered by tilting the standing surface. The riding mechanics of
+  skateboarding have been well reported
+  \cite{hubbard_clearing_1985,varszegi_stabilizing_2016}. The sport also
+  includes aerial maneuvers such as jumping of stairs, flying off ramps and
+  flipping and rotating the skateboard. The most basic aerial trick is called
+  the ollie. The athlete jumps up while pushing down on the back end of the
+  skateboard’s tail, causing a rotation about the back axle. The upward
+  acceleration due to the rotation together with the tail-ground impact cause
+  the skateboard to go airborne. Midair the athlete drags the skateboard up
+  through frictional contact and levels it out to land the trick. The most
+  concrete performance measure of the ollie is height according to the Olympic
+  judging criteria\cite{world_skate_skateboarding_2021}. To reach maximum
+  height the dynamics such as impact, dynamic response, and torque production
+  are dependent on shape, inertia and mass, which gives reason to assume an
+  optimal shape exists. This leads to the research question: What are the
+  optimal geometric and inertial parameters of a skateboard for an Olympic
+  athlete to reach maximal ollie height. The skateboard geometry is optimized
+  through multiphase direct collocation with the objective of maximal ollie
+  height. A parameterized model is created with scaling mass and inertia
+  properties such that the geometry of the skateboard. Modelling the dynamics
+  of the ollie including impact and friction are done with a point mass human
+  controller that is kineticly and kinematicly mapped to a counter movement
+  jump. A simplistic contact implicit impact scheme is made for a higher order
+  optimization. The ollie height is improved by changing the mass and inertia
+  properties of the skateboard.  Multiple optimal board shapes are generated
+  for example a skateboard with a smaller wheelbase can reach higher ollie
+  height compared to an industry standard skateboard.
+}
 
 \keywords{Skateboarding, Optimal Control, Parameter Optimization, Direct Collocation}
 \maketitle
@@ -141,7 +156,7 @@ movements is needed to keep the skater and skateboard together
 distinct phases which are shown in figure \ref{fig:ollie_steps}.
 
 
-\begin{figure*}[t]
+\begin{figure*}
 \captionsetup[subfigure]{labelformat=empty}
   \subfloat[$t_1$=0.013]{{\includegraphics[width=0.13\textwidth]{figure/1.png} }}%
   \subfloat[$t_2$=0.129]{{\includegraphics[width=0.13\textwidth]{figure/2.png} }}%
@@ -245,7 +260,7 @@ measurement) Olympic judging criteria that applies to the ollie is height
 \subsection{Skateboard Terminology}
 See figure \ref{f_skateterminology}. The tail is the inclined part with a rounded top, the nose is its mirrored part. The tail inclination is measured with respect to the deck. The kink between the deck and the tail or nose is called the pocket. The deck in skateboard terminology is referred to the tail, nose and the part in between. Though, in this paper the deck refers exclusively to the indicated part in figure \ref{f_skateterminology}. Two trucks connect the wheels to the axles with ball bearings. The top of the skateboard is covered with a sandpaper-like sticker called grip-tape (black part). Concave is the radius of the deck. All pictures in this paper will refer to the front as the right hand side of the skateboard and the back as the left hand side. A riding direction is assumed to the right.
 
-\begin{figure}[t]
+\begin{figure}
 \includegraphics[width=0.5\textwidth]{figure/terminology.png}
 \caption[Skateboard terminology]{Skateboard terminology}
 \label{f_skateterminology}
@@ -665,7 +680,7 @@ This leads to the last two dynamic constraints valid for phase 2, and 3:
 \end{equation}
 
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}[b]%
+\begin{figure}
     \centering
     \subfloat[\centering 45.5" world record ollie. $^{1}$  ]{{\includegraphics[width=0.2\textwidth]{figure/JakeHayes.png} }}%
     \quad
