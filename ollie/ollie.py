@@ -20,6 +20,7 @@ class OlliePhase(str, Enum):
     PrePop = "pre-pop"
     Pop = "pop"
     UpwardMotion = "upward motion"
+    PeakHeight = "peak height"
     DownwardMotion = "downward motion"
     Landing = "landing"
 
@@ -132,6 +133,18 @@ class PopPhase(OlliePhaseBase):
 
 class UpwardMotionPhase(OlliePhaseBase):
     name = OlliePhase.UpwardMotion.value
+
+    @property
+    def state_variables(self):
+        raise NotImplementedError
+
+    @property
+    def control_variables(self):
+        raise NotImplementedError
+
+
+class PeakHeightPhase(OlliePhaseBase):
+    name = OlliePhase.PeakHeight.value
 
     @property
     def state_variables(self):
@@ -269,6 +282,8 @@ class Ollie:
             return PopPhase()
         elif ollie_phase == OlliePhase.UpwardMotion:
             return UpwardMotionPhase()
+        elif ollie_phase == OlliePhase.PeakHeight:
+            return PeakHeightPhase()
         elif ollie_phase == OlliePhase.DownwardMotion:
             return DownwardMotionPhase()
         elif ollie_phase == OlliePhase.Landing:
