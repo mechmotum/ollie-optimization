@@ -287,6 +287,10 @@ class SegmentDeck(DeckBase):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the deck's inertia-related attributes."""
+        self.mass_center_tail_semicircle = me.Point(r"C_{tail_semi}")
+        self.mass_center_nose_semicircle = me.Point(r"C_{nose_semi}")
+        self.mass_center_tail_rectangle = me.Point(r"C_{tail_rect}")
+        self.mass_center_nose_rectangle = me.Point(r"C_{nose_rect}")
         self.inertia = Container(
             symbol=sm.Symbol(r"I_{deck}")
         )
