@@ -10,6 +10,12 @@ import sympy as sm
 import sympy.physics.mechanics as me
 
 from ollie.container import Container
+from ollie.inertia import (
+    inertia_of_cuboid,
+    inertia_of_cylinder,
+    inertia_of_isosceles_triangular_prism,
+    parallel_axis_theorem,
+)
 from ollie.material import Glue, Polyurethane, Maple, Steel
 from ollie.model import ModelObject
 
@@ -93,6 +99,7 @@ class DeckBase(ABC, ModelObject):
         # Mechanics
         self.origin = me.Point(r"O_{deck}")
         self.frame = me.ReferenceFrame(r"A_{deck}")
+        self.mass_center = me.Point(r"C_{deck}")
 
         self._calculate_mass()
         self._calculate_inertia()
@@ -118,8 +125,72 @@ class DeckBase(ABC, ModelObject):
         )
 
 
+class FlatDeck(DeckBase):
+    """A flat rectangular skateboard deck without a traditional nose and tail."""
+
+    def __init__(
+        self,
+        *,
+        width: float = 0.21,
+        ply: int = 7,
+        veneer_thickness: float = 0.0016,
+        wheelbase: float | None = None,
+        length: float | None = None,
+        tail_length: float | None = None,
+        tail_inclination: float | None = None,
+    ) -> None:
+        """Initializer the segment deck instance."""
+        super().__init__(
+            width=width,
+            ply=ply,
+            veneer_thickness=veneer_thickness,
+            wheelbase=wheelbase,
+            length=length,
+        )
+
+        self.tail_length = Container(
+            symbol=sm.Symbol(r"l_{tail}"),
+            value=(sm.Rational(1, 2) * (self.length - self.wheelbase)),
+        )
+
+        self.back_pocket = me.Point(r"P_{back\_pocket}")
+        self.back_pocket.set_pos(
+            self.origin,
+            -sm.Rational(1, 2) * self.wheelbase * self.frame.x,
+        )
+
+    def _calculate_mass(self):
+        """Calculate and instantiate the deck's mass-related attributes."""
+        self.mass = Container(
+            symbol=sm.Symbol(r"m_{deck}"),
+            value=self.wheelbase * self.width * self.area_density,
+        )
+        self.mass_center.set_pos(self.origin, 0)
+
+    def _calculate_inertia(self):
+        """Calculate and instantiate the deck's inertia-related attributes."""
+        self.inertia = Container(
+            symbol=sm.Symbol('I_{deck}'),
+            value=inertia_of_cuboid(
+                self.frame,
+                self.mass,
+                x_dim=self.length,
+                y_dim=self.thickness,
+                z_dim=self.width,
+            ),
+        )
+
+    def __repr__(self) -> str:
+        """Formatted representation of the flat deck."""
+        return (
+            f"{self.__class__.__name__}(width={self.width}), ply={self.ply}, "
+            f"veneer_thickness={self.veneer_thickness}, "
+            f"wheelbase={self.wheelbase}, length={self.length})"
+        )
+
+
 class SegmentDeck(DeckBase):
-    """A segmented skateboard deck with inclined semicircular node and tail."""
+    """A segmented skateboard deck with inclined semicircular nose and tail."""
 
     def __init__(
         self,
@@ -163,10 +234,10 @@ class SegmentDeck(DeckBase):
             length=length,
         )
 
-        self.back_pocket = me.Point(r"P_{bp}")
+        self.back_pocket = me.Point(r"P_{back_pocket}")
         self.back_pocket.set_pos(self.origin, -0.5 * self.length * self.frame.x)
 
-        self.tail_frame = me.ReferenceFrame(r"A_{t}")
+        self.tail_frame = me.ReferenceFrame(r"A_{tail}")
         self.tail_frame.orient_axis(
             self.frame,
             self.frame.z,
@@ -180,11 +251,11 @@ class SegmentDeck(DeckBase):
             * self.area_density
         )
         self.mass_tail_semicircle = Container(
-            symbol=sm.Symbol(r"m_{t_semi}"),
+            symbol=sm.Symbol(r"m_{tail_semi}"),
             value=mass_tail_nose_semicircle,
         )
         self.mass_nose_semicircle = Container(
-            symbol=sm.Symbol(r"m_{n_semi}"),
+            symbol=sm.Symbol(r"m_{nose_semi}"),
             value=mass_tail_nose_semicircle,
         )
 
@@ -193,20 +264,20 @@ class SegmentDeck(DeckBase):
             * self.area_density
         )
         self.mass_tail_rectangle = Container(
-            symbol=sm.Symbol(r"m_{t_rec}"),
+            symbol=sm.Symbol(r"m_{tail_rect}"),
             value=mass_tail_nose_rectangle,
         )
         self.mass_nose_rectangle = Container(
-            symbol=sm.Symbol(r"m_{n_rec}"),
+            symbol=sm.Symbol(r"m_{nose_rect}"),
             value=mass_tail_nose_rectangle,
         )
 
         self.mass_deck_rectangle = Container(
-            symbol=sm.Symbol(r"m_{d_rec}"),
+            symbol=sm.Symbol(r"m_{deck_rec}"),
             value=self.wheelbase * self.width * self.area_density,
         )
         self.mass = Container(
-            symbol=sm.Symbol(r"m_{d}"),
+            symbol=sm.Symbol(r"m_{deck}"),
             value=(
                 self.mass_tail_semicircle + self.mass_tail_rectangle
                 + self.mass_deck_rectangle + self.mass_nose_rectangle
@@ -216,7 +287,13 @@ class SegmentDeck(DeckBase):
 
     def _calculate_inertia(self):
         """Calculate and instantiate the deck's inertia-related attributes."""
-        raise NotImplementedError
+        self.mass_center_tail_semicircle = me.Point(r"C_{tail_semi}")
+        self.mass_center_nose_semicircle = me.Point(r"C_{nose_semi}")
+        self.mass_center_tail_rectangle = me.Point(r"C_{tail_rect}")
+        self.mass_center_nose_rectangle = me.Point(r"C_{nose_rect}")
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{deck}")
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the segment deck."""
@@ -224,7 +301,8 @@ class SegmentDeck(DeckBase):
             f"{self.__class__.__name__}(width={self.width}), ply={self.ply}, "
             f"veneer_thickness={self.veneer_thickness}, "
             f"wheelbase={self.wheelbase}, length={self.length}, "
-            f"tail_length={self.tail_length}, tail_inclination={self.tail_inclination})"
+            f"tail_length={self.tail_length}, "
+            f"tail_inclination={self.tail_inclination})"
         )
 
 
@@ -238,8 +316,10 @@ class Axle(ModelObject):
         self.diameter = Container(symbol=sm.Symbol(r"d_{axle}"), value=diameter)
         self.width = Container(symbol=sm.Symbol(r"w_{axle}"), value=width)
 
+        # Mechanics
         self.origin = me.Point(r"O_{axle}")
-        self.frame = me.ReferenceFrame(r"N_{axle}")
+        self.frame = me.ReferenceFrame(r"A_{axle}")
+        self.mass_center = me.Point(r"C_{axle}")
 
         self._calculate_mass()
         self._calculate_inertia()
@@ -255,10 +335,20 @@ class Axle(ModelObject):
                 * Steel.density
             ),
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the axle's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{axle}"),
+            value=inertia_of_cylinder(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                radius=sm.Rational(1, 2) * self.diameter,
+                length=self.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the axle."""
@@ -296,6 +386,11 @@ class Wheel(ModelObject):
                 guess=0.0245,
             )
 
+        # Mechanics
+        self.origin = me.Point(r"O_{wheel}")
+        self.frame = me.ReferenceFrame(r"A_{wheel}")
+        self.mass_center = me.Point(r"C_{wheel}")
+
         self._calculate_mass()
         self._calculate_inertia()
 
@@ -314,10 +409,20 @@ class Wheel(ModelObject):
                 )
             ),  # V=pi*h*(D^2-d^2)/4
         )
+        self.mass_center.set_pos(self.origin, 0)
 
     def _calculate_inertia(self):
         """Calculate and instantiate the wheel's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{wheel}"),
+            value=inertia_of_cylinder(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                radius=self.radius,
+                length=self.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the wheel."""
@@ -353,6 +458,11 @@ class Truck(ModelObject):
                 symbol=sm.Symbol(r"h_{truck}"), bounds=[0.045, 0.3], guess=0.053,
             )
 
+        # Mechanics
+        self.origin = me.Point(r"O_{truck}")
+        self.frame = me.ReferenceFrame(r"A_{truck}")
+        self.mass_center = me.Point(r"C_{truck}")
+
         self._calculate_mass()
         self._calculate_inertia()
 
@@ -365,14 +475,27 @@ class Truck(ModelObject):
             ),  # truck mass scales linear with height compared to measured truck
         )
 
+        mass_center_offset = -sm.Rational(1, 3) * self.height * self.frame.y
+        self.mass_center.set_pos(self.origin, mass_center_offset)
+
     def _calculate_inertia(self):
         """Calculate and instantiate the truck's inertia-related attributes."""
-        raise NotImplementedError
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{truck}"),
+            value=inertia_of_isosceles_triangular_prism(
+                self.frame,
+                self.mass,
+                axis=self.frame.z,
+                base=sm.Float(0.053),
+                height=self.height,
+                length=self.axle.width,
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the truck."""
         return (
-            f"{self.__class__.__name__}({self.axle}, {self.wheel}"
+            f"{self.__class__.__name__}({self.axle}, {self.wheels}"
             f"height={self.height})"
         )
 
@@ -396,14 +519,16 @@ class Skateboard(ModelObject):
         self.trucks = trucks
 
         self.origin = me.Point(r"O_{skateboard}")
+        self.frame = me.ReferenceFrame(r"A_{skateboard}")
+        self.mass_center = me.Point(r"C_{skateboard}")
 
-        # self._set_point_positions()
+        self._set_kinematics()
         self._calculate_mass()
-        # self._calculate_inertia()
+        self._calculate_inertia()
 
     @property
-    def axle(self):
-        """Utility accessor to get the skateboard's truck's axle."""
+    def axles(self):
+        """Utility accessor to get the skateboard's truck's axles."""
         return self.trucks.axle
 
     @property
@@ -411,22 +536,78 @@ class Skateboard(ModelObject):
         """Utility accessor to get the skateboard's wheels."""
         return self.trucks.wheels
 
-    def _set_point_positions(self):
-        raise NotImplementedError
+    def _set_kinematics(self):
+        """Set the skateboard's point positions and velocities."""
+        self.deck.origin.set_pos(self.origin, 0)
+        half = sm.Rational(1, 2)
+        truck_mass_center_offset = -half * self.deck.wheelbase * self.deck.frame.x
+        self.trucks.origin.set_pos(self.origin, truck_mass_center_offset)
+        axle_mass_center_offset = -self.trucks.height * self.trucks.frame.y
+        self.axles.origin.set_pos(self.trucks.origin, axle_mass_center_offset)
+        self.wheels.origin.set_pos(self.axles.origin, 0)
+
+        self.deck.frame.orient_axis(self.frame, self.frame.x, 0)
+        self.trucks.frame.orient_axis(self.frame, self.frame.x, 0)
+        self.axles.frame.orient_axis(self.frame, self.frame.x, 0)
+        self.wheels.frame.orient_axis(self.frame, self.frame.x, 0)
 
     def _calculate_mass(self):
         """Calculate and instantiate the skateboard's mass-related attributes."""
         self.mass = Container(
             symbol=sm.Symbol(r"m_{skateboard}"),
             value=(
-                self.deck.mass + 2*self.trucks.mass + 2*self.axle.mass
+                self.deck.mass + 2*self.trucks.mass + 2*self.axles.mass
                 + 4*self.wheels.mass
             ),
         )
 
+        two = sm.Integer(2)
+        four = sm.Integer(4)
+        mass_center_offset_x = sm.S.Zero
+        mass_center_offset_y = (
+            self.deck.mass * self.deck.mass_center.pos_from(self.origin)
+            + two * self.trucks.mass * self.trucks.mass_center.pos_from(self.origin)
+            + two * self.axles.mass * self.axles.mass_center.pos_from(self.origin)
+            + four * self.wheels.mass * self.wheels.mass_center.pos_from(self.origin)
+        ).dot(self.frame.y) / self.mass
+        mass_center_offset_z = sm.S.Zero
+        mass_center_offset = (
+            mass_center_offset_x * self.frame.x
+            + mass_center_offset_y * self.frame.y
+            + mass_center_offset_z * self.frame.z
+        )
+        self.mass_center.set_pos(self.origin, mass_center_offset)
+
     def _calculate_inertia(self):
         """Calculate and instantiate the skateboard's inertia-related attributes."""
-        raise NotImplementedError
+        two = sm.Integer(2)
+        four = sm.Integer(4)
+        self.inertia = Container(
+            symbol=sm.Symbol(r"I_{skateboard}"),
+            value=(
+                parallel_axis_theorem(
+                    self.deck.inertia.value,
+                    self.deck.mass,
+                    self.frame,
+                    self.deck.mass_center.pos_from(self.mass_center),
+                ) + two * parallel_axis_theorem(
+                    self.trucks.inertia.value,
+                    self.trucks.mass,
+                    self.frame,
+                    self.trucks.mass_center.pos_from(self.mass_center),
+                ) + two * parallel_axis_theorem(
+                    self.axles.inertia.value,
+                    self.axles.mass,
+                    self.frame,
+                    self.axles.mass_center.pos_from(self.mass_center),
+                ) + four * parallel_axis_theorem(
+                    self.wheels.inertia.value,
+                    self.wheels.mass,
+                    self.frame,
+                    self.wheels.mass_center.pos_from(self.mass_center),
+                )
+            ),
+        )
 
     def __repr__(self) -> str:
         """Formatted representation of the skateboard."""

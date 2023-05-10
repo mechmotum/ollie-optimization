@@ -8,6 +8,7 @@ from typing import Any
 import sympy as sm
 
 from ollie.container import Container
+from ollie.typing import DynamicSymbol
 
 
 def is_auxiliary_data(attribute: Any) -> bool:
@@ -19,10 +20,37 @@ def is_auxiliary_data(attribute: Any) -> bool:
         and guess is None
     )
 
+
+def is_state(attribute: Any) -> bool:
+    """Utility function to tell if an attribute is a state."""
+    return (
+        isinstance(attribute, Container)
+        and isinstance(attribute.symbol, DynamicSymbol)
+        and attribute.state_equation is not None
+        and attribute.bounds is not None
+        and attribute.bounds[0] < attribute.bounds[1]
+        and attribute.guess is not None
+    )
+
+
+def is_control(attribute: Any) -> bool:
+    """Utility function to tell if an attribute is a control."""
+    return (
+        isinstance(attribute, Container)
+        and isinstance(attribute.symbol, DynamicSymbol)
+        and attribute.state_equation is None
+        and attribute.bounds is not None
+        and attribute.bounds[0] < attribute.bounds[1]
+        and attribute.guess is not None
+    )
+
+
 def is_static_parameter(attribute: Any) -> bool:
     """Utility function to tell if an attribute is a static parameter."""
     return (
         isinstance(attribute, Container)
+        and isinstance(attribute.Symbol, sm.Symbol)
+        and attribute.state_equation is None
         and attribute.bounds is not None
         and attribute.bounds[0] < attribute.bounds[1]
         and attribute.guess is not None
@@ -44,6 +72,94 @@ class ModelObject:
             if isinstance(attribute, ModelObject):
                 mapping = mapping | attribute.symbols_to_values_mapping
         return mapping
+
+    @property
+    def number_states(self) -> int:
+        """Number of states an instance will yield."""
+        return len(self.states)
+
+    @property
+    def states(self) -> tuple[DynamicSymbol]:
+        """The states (as dynamic symbols) that an instance yields."""
+        states = tuple(
+            container.symbol
+            for container in self.__dict__.values()
+            if is_state(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                states += attribute.states
+        return states
+
+    @property
+    def state_bounds(self) -> tuple[tuple[float, float]]:
+        """The bounds on an instance's states."""
+        bounds = tuple(
+            container.bounds
+            for container in self.__dict__.values()
+            if is_state(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                bounds += attribute.state_bounds
+        return bounds
+
+    @property
+    def state_guesses(self) -> tuple[float]:
+        """The guesses for an instance's states."""
+        guess = tuple(
+            container.guess
+            for container in self.__dict__.values()
+            if is_state(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                guess += attribute.state_guesses
+        return guess
+
+    @property
+    def number_controls(self) -> int:
+        """Number of controls an instance will yield."""
+        return len(self.controls)
+
+    @property
+    def controls(self) -> tuple[DynamicSymbol]:
+        """The controls (as dynamic symbols) that an instance yields."""
+        controls = tuple(
+            container.symbol
+            for container in self.__dict__.values()
+            if is_control(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                controls += attribute.controls
+        return controls
+
+    @property
+    def control_bounds(self) -> tuple[tuple[float, float]]:
+        """The bounds on an instance's controls."""
+        bounds = tuple(
+            container.bounds
+            for container in self.__dict__.values()
+            if is_control(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                bounds += attribute.control_bounds
+        return bounds
+
+    @property
+    def control_guesses(self) -> tuple[float]:
+        """The guesses for an instance's controls."""
+        guess = tuple(
+            container.guess
+            for container in self.__dict__.values()
+            if is_control(container)
+        )
+        for attribute in self.__dict__.values():
+            if isinstance(attribute, ModelObject):
+                guess += attribute.control_guesses
+        return guess
 
     @property
     def number_static_parameters(self) -> int:
