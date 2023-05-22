@@ -320,60 +320,16 @@ model of the skateboard to reduce mathematical complexity.
 \section{Method}
 % I have parameterized the geometry and inertia characteristics of a skateboard modeled as a single rigid body with parameters: tail length, tail angle, deck length, truck height, and wheel radius. This is an appropriate parameterization for a skateboard designer because the width of the skateboard is usually chosen by preference. Also, the ollie is a movement that involves rotation in one plane, visible in fig. \ref{f_olliesteps}, which means only the inertia characteristics for this rotation are necessary. 
 
-The chosen method is modeling and optimization to find the optimal skateboard geometry. The hierarchy of the paper will follow these four fundamental steps: 
+To find the optimal skateboard geometry, we take a modeling and optimization approach involving the following four fundamental steps: 
 \begin{enumerate}
-    \item Understanding the Mechanics of the ollie through literature and a video analysis
-    \item Defining the Optimal Control Problem (OCP) and parameter optimization
-    \item Implementing the mechanics into the optimization
-    \item Solve the optimization problem for the dimensions of the skateboard for maximum ollie height. 
+    \item understand the mechanics of the ollie through literature and a video analysis,
+    \item define the parameter optimization and optimal control problem (OCP),
+    \item implement the mechanics into the optimization problem, and
+    \item solve the optimization problem.
 \end{enumerate}
 
-
-\subsection{Optimal Control Problem}
-We use direct collocation to formulate an optimal control problem that
-simultaneously optimizes the input control trajectories and the board geometry
-parameters.
-Direct methods are generally best for problems where dynamics and control must
-be computed to a similar accuracy and the structure of the control trajectory
-is not known a priori \cite{kelly_introduction_2017}.
-We make use of PyCollo~\cite{brockie_predictive_2021} to transcribe the
-continous optimal control problem into a non-linear programming (NLP) problem.
-PyCollo uses direct orthogonal collocation transcription which enforces the 
-dynamics and constraints a variable discretization.
-The discretization exists of $N$ collocation points.
-The collocation points are either mesh points or polynomial points, but all
-collocation points are enforced to the constraints and dynamics.
-After transcription the problem is passed to IPOPT~\cite{wachter_implementation_2006}, an Interior
-Point Optimizer for large sparse NLP problems.
-PyCollo iteratively improves the discretation based on prior IPOPT solutions to
-meet the specified error tolerances.
-The solution are interpolated using the Legendre-Gauss-Lobatto (LGL) method and
-the integration scheme is an implicit Runge-Kutta Kth method.
-
-The ollie problem is a hybrid problem due to the necessary discontinuities in
-the state trajectories.
-For example, during impact the velocity states change sign instantly causing
-discontinuities.
-We use multiple phases to break the problem into several continous
-differentiable phases.
-A disadvantage of phases is that the phase state transition is prescribed,
-leaving no room for the optimizer to discover these transitions.  The advantage
-is that they are easier to compute and tend to be more accurate
-\cite{kelly_introduction_2017}.
-
-\subsection{Parameterization}\label{s_paropt}
-Since we want to optimize the input trajectories simulatenously with the
-skateboard's physical parameters, we parameterize the dynamics model so that it
-it's mass and inertia scale when geometry changes are made.
-
-The most widely used modern skateboard is the Popsicle stick skateboard. We
-simplify the Popsicle stick skateboard design for our 2D model and describe it
-with ten variables, see Table~\ref{t_variables}. We enforce symmetry, whereas
-in reality nose and tail lengths and inclinations vary. We ignore the concavity
-present in the deck. The variables colored blue in Figure~\ref{f_11segments}
-are optimized and the green variables are set to an industrial standard because
-they influence the mass and inertia properties but play little role in the
-ollie dynamics.
+\subsection{Geometry and Parameterization}\label{s_paropt}
+The most widely used modern skateboard is the Popsicle stick skateboard. We simplify the Popsicle stick skateboard design for our 2D model with an assumption about nose-tail symmetry and by ignoring the deck concavity, and describe it with ten variables, see Table~\ref{t_variables}. The variables colored blue in Figure~\ref{f_11segments} are optimized and the green variables are set to an industrial standard because they influence the mass and inertia properties but play little role in the ollie dynamics.
 %
 \begin{table}
   \centering
@@ -410,12 +366,7 @@ ollie dynamics.
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-
-We developed a mass and inertial model which is a function of the skateboard's
-essential geometry, see Figure~\ref{f_11segments}), and material densities
-(wood, steel, urethane). The model is made up of eleven basic constant density
-shapes shown in Figure~\ref{f_basicshapes}: semi-cylinders, cuboids, cylinders
-and triangular prisms.
+We developed a mass and inertial model, which is a function of the skateboard's essential geometry, see Figure~\ref{f_11segments}), and material densities (wood, steel, urethane). The model is made up of eleven basic constant density shapes shown in Figure~\ref{f_basicshapes}: semi-cylinders, cuboids, cylinders and triangular prisms.
 %
 \begin{figure}
   \centering
@@ -426,87 +377,28 @@ and triangular prisms.
   \label{f_basicshapes}
 \end{figure}
 
-\subsection{General formulation}
-The multi-phase OCP with phases $p \in [1,2,3]$ involves determining the states
-$\mathbf{q^{(p)}}$, control $u^{(p)}$, phase initial times $t_0^{(p)}$, phase
-final times $t_F^{(p)}$, global parameter variables $\sigma$, while maximizing
-the objective function:
-\begin{equation}
-  maximize\ \mathcal{J}
-  \label{eq:obj}
-\end{equation}
-Subject to the dynamical constraints:
-\begin{equation}
-  \ddot{\mathbf{q}}^{(p)}=\alpha^{(p)}
-\end{equation}
-with path constraints,
-\begin{equation}
-  \gamma^{(p)}:\quad \gamma_{min} < ... < \gamma_{max}\\
-\end{equation}
-and with endpoint constraints:
-\begin{equation}
-    \beta:\quad \beta_{min} < ... < \beta_{max}
-    \label{eq:endpoint}
-\end{equation}
-In the following sections we explain the specific implementation of equations
-\ref{eq:obj} through \ref{eq:endpoint}.
-We define the phases ($^{(p)}$) based on the mechanics of the ollie and maximal
-height objective ($\mathcal{J}$).
-The constraints are made up of the the dynamic constraints $\alpha$, consisting
-of the equations of motion (EOM) for the different phases for the human and the
-skateboard, followed by the constraints $\gamma$, where the kinetics and
-kinematics of the human, and friction are implemented.
-Then endpoint constraints $\beta$ model impact and the time bounds.
-The initial and final state and control values are found in Appendix A and are
-set to a wide margin.
-
-In section \ref{ss_model} are the geometrical variables described that are
-optimized. Leading to global optimization parameter variables:
-\begin{equation}
-\begin{array}{rlrl}
-    \sigma_{1} &= l_{wb},\ \sigma_{2} &= l_d,\ \sigma_{3} &= l_t,   \\ 
-    \sigma_{4} &= \phi,\ \sigma_{5} &= h_{tr},\  \sigma_{6} &= r_w 
-\end{array}
-\end{equation}
+\subsection{Optimal Control Problem}
+We formulate an OCP with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_2021_predictive} to numerically solve the OCP. Pycollo solves the generalized multi-phase OCP described in \cite{betts_2010_practical} by transcribing the OCP to a non-linear programming problem (NLP) using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_2016_using}. The NLP is then solved using Ipopt~\cite{biegler_2009_large}. Pycollo also uses ph-mesh refinement~\cite{patterson_2015_ph} to iteratively improve the transcription mesh, solving successive NLPs until a desired solution tolerance is met.
 
 \subsection{Phases and Objective} \label{s_phases}
-We define these three dynamically distinct phases base on the mechanics of the
-ollie:
+
+We use a multi-phase formulation for the ollie OCP to handle discontinuities in the state trajectories in a numerically-stable manner. The allows, for example, the impact of the tail with the ground during the pop to be treated as an impulse, which is not possible during a single continuous phase. A disadvantage of this approach however is that the transition between phases is prescribed, leaving no room for the optimizer to discover these transitions. The three dynamically-distinct phases are:
 \begin{enumerate} \label{n_phases}
   \item Preparation phase
   \item Upward motion
   \item Downward motion
 \end{enumerate}
-During the preparation phase the back wheels are in contact with the
-ground.
-The tail impact with the ground defines the transition from preparation to the
-upward motion.
-During upward and downward motion nothing is in contact with the ground and
-they both are governed by the same equations of motion.
-We split the upward motion and downward motion into two phases because PyCollo
-requires that the objective function be a function of initial or final state
-variables \cite{brockie_predictive_2021} of a phase. In case the transition
-from upward to downward motion defines the highest ollie.
 
-% TODO : If the parameters can't influence the objective, then how can you
-% possible find a maximum as a function of the parameters? I'm guessing you
-% aren't actually doing what you write here. -- JKM
-Because a parameter optimization will occur simultaneously with finding the
-optimal trajectory, the parameters should not be able to influence the
-objective.
-To make sure the objective function is independent of the parameter
-variables, the skateboard is constrained to be level at the highest point and
-the objective is the middle of a fictional tangent touching lowest point of
-both wheels.
-This result in the objective function:
+During the preparation phase the back wheels are in contact with the ground. The tail impact with the ground defines the transition from preparation to the upward motion. During upward and downward motion nothing is in contact with the ground and they both are governed by the same equations of motion. We split the upward motion and downward motion into two phases because Pycollo requires that the objective function be a function of initial or final state variables of a phase~\cite{brockie_2021_predictive}. The transition from upward to downward motion defines the highest ollie.
+
+To  define the maximum height achieved during the ollie, we constrain the board to be level at the highest point and
+take the height achieved to be the middle of a fictional tangent touching lowest point of both wheels. The objective function for maximization is:
 %
 \begin{equation}
   \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w
 \end{equation}
 
-\noindent Where $y_s^{(2)}(t_F)$ is the final state COM location of the
-skateboard, $d_{com}$ the skateboards' COM to the deck, $h_{tr}$ the truck
-height, and $r_w$ is the wheel radius.
+\noindent where $y_s^{(2)}(t_F)$ is the height achieved by the skateboard's COM at the end of the second phase, $d_{com}$ is the distance between the skateboard's COM and the deck, $h_{tr}$ is the truck height, and $r_w$ is the wheel radius.
 
 \subsection{System Dynamics}\label{s_systemdynamics}
 \begin{figure}
@@ -517,7 +409,7 @@ height, and $r_w$ is the wheel radius.
     \color{cyan}Cyan dot: & Front foot & \color{blue}Blue dot: & Back foot \\ \hline
     \color{yellow}Yellow: & Foot movement & \color{green}Green: & Frames \\ \hline
     \end{tabular}
-    \caption[Free body diagram phase 1]{Free body diagram phase 1. The back wheel is now modeled as sliding joint which reduces the degrees of freedom to 2. This is really  similar to the cart-pole problem. The equations are correct as long as the normal force at the wheel is not negative.}
+    \caption[Free body diagram phase 1]{Free body diagram phase 1. The back wheel is now modeled as sliding joint which reduces the degrees of freedom to 2. The equations are correct as long as the normal force at the wheel is not negative.}
     \label{f_FBDphas1}
 \end{figure}
 
