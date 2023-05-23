@@ -414,12 +414,10 @@ take the height achieved to be the middle of a fictional tangent touching lowest
 \end{figure}
 
 We derive the equations of motion using SymPy~\cite{meurer_sympy_2017} using
-the TMT method~\cite{vallery_heike_advanced_2018}.
+the TMT method~\cite{vallery_heike_advanced_2018} using the generalized coordinates and forces given in the following paragraphs.
 
-\subsubsection{Skateboard Equations of Motion - phase 1}
-During phase 1 we use a sliding joint for the rear wheel to ground constraint.
-This is done to eliminate the ground reaction forces from the equations of
-motion.
+\subsubsection{Skateboard Equations of Motion}
+In phase 1 we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the equations of motion. During phase 2 and 3 the skateboard is an unconstrained rigid body in 2D. 
 The skateboard center of mass coordinates are
 %
 \begin{equation}
@@ -429,8 +427,7 @@ The skateboard center of mass coordinates are
 With the sliding joint, we use two generalized coordinates $x_w$ (x-location
 back wheels) and $\theta_s$ (angle w.r.t. ground) as shown in figure
 \ref{f_FBDphas1}.
-The skateboard then has 2 degrees of freedom (DOF) with the the generalized
-coordinates:
+The skateboard then has 2 degrees of freedom (DOF) with the the generalized coordinates:
 %
 \begin{equation}
     \mathbf{q} = [x_w, \theta_s]^T
@@ -446,28 +443,7 @@ The center of mass in terms of the generalized coordinates is:
 \end{array}\right]
 \end{equation}
 
-Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the
-velocities gives transformation matrix $\mathbf{T}$:
-%
-\begin{equation}
-    J_{\dot{\mathbf{x}}}(\mathbf{q}) = \textbf{T} = \left[\begin{array}{c c}
-1 & -\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right) \\
-0 & \frac{l_{w b} \cos \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right) \\
-0 & 1
-\end{array}\right]
-\end{equation}
-
-Convective terms $\mathbf{g_k}$ are found by taking the Jacobian of $\mathbf{\dot  x}$ with respect to $\mathbf{q}$ and multiplying it by $\mathbf{\dot  q}$ (e.g. $J_{\mathbf{\dot  x}}(\mathbf{q})\cdot \mathbf{\dot  q}$):
-
-\begin{equation}
-\mathbf{g_k} = 
-\left[\begin{array}{c}
-\dot \theta_s^2\left(-\frac{l_{w b} \cos \left(\theta_s\right)}{2}-\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right)\right) \\
-\dot \theta_s^2\left(-\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right)\right) \\
-0
-\end{array}\right]
-\end{equation}
-Two sets of bound vectors are equivalent when they equal resultants and equal moments about any point \cite{moore_force_2022}. This means that all the forces acting on the skateboard can be described by resultant forces on and moments to the COM. The forces acting on the skateboard are the frictional ($F_{f1,2}$) and normal forces $F_{p1,2}$ from the front and the back foot. The back and front feet are indicated with a blue and cyan dot and are defined on the skateboard with variables $s_1$ and $s_2$ respectively. The perpendicular forces are bound positively such that the feet can never pull on the board. The moments caused by the back and front foot about the COM are $Mc_{bf}, Mc_{ff}$ respectively. Thus the CoM-applied forces and torques $\mathbf{F_{a}}$ are:
+The forces acting on the skateboard are the frictional ($F_{f1,2}$), normal forces $F_{p1,2}$ from the front and the back foot, and during the preparation phase the ground normal force $F_n$. We defined the back and front feet along the deck of the skateboard with a blue and cyan dot indicated with variables $s_1$ and $s_2$ respectively (see Fig. \ref{f_FBDphas1}). The perpendicular forces are bound positively such that the feet can never pull on the board. The moments caused by the back and front foot about the COM are $Mc_{bf}, Mc_{ff}$ respectively. Thus the CoM-applied forces and torques $\mathbf{F_{a}}$ are:
  
 \begin{equation}\label{e_Fi}
 \begin{array}{c}
@@ -483,17 +459,16 @@ Mc_{ff} = -F_{p 2}\left(-\frac{l_d}{2}+\mathrm{s}_2(t)\right)+F_{w 2} \ d_{c o m
 \end{array}
 \end{equation}  
 
-The skateboards' mass matrix $\mathbf{M_s} = diag(m_s,m_s,I_s)$ together with the transformed CoM applied coordinates form the EOM of phase 1:
-\begin{equation} \label{e_eoma}
-    \mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot \left[\begin{array}{c}
-         \ddot x_w  \\
-         \ddot \theta_s 
-    \end{array}\right] = \mathbf{T}^T (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
-\end{equation}
-Rewriting the EoM gives two dynamical constraints valid for phase 1:
+The skateboards' mass matrix $\mathbf{M_s} = diag(m_s,m_s,I_s)$ together with the transformed CoM applied coordinates form the EoM of phase 1:
 
-\begin{equation}
-    \alpha_{1,2}^{(1)} =   \left(\mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot  \mathbf{T}^T\right)^{-1} (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
+\begin{equation} \label{e_eoma}
+    \mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot \mathbf{q} = \mathbf{T}^T (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
+\end{equation}
+
+The TMT method provides the transformation matrix $\mathbf{T}$, and convective terms $\mathbf{g_k}$.
+The skateboards` EoMs for phase 2, and 3 are:
+\begin{equation}\label{e_eomb}
+\mathbf{M_s} \cdot \mathbf{x} =  \mathbf{F_a}
 \end{equation}
 
 \begin{figure}
@@ -508,10 +483,9 @@ Rewriting the EoM gives two dynamical constraints valid for phase 1:
     \label{f_FBD}
 \end{figure}
 
-\textbf{Human Equations of Motion} \\
-\noindent The skateboard is controlled by a mass point on top of the skateboard representing the human. The interaction between the mass point and the skateboard are simulated with equal and opposite forces acting between the massless feet and the CoM of the human (see fig. \ref{f_FBD}). The simplification ignores many body segments. Which means this model is not representable in terms of metabolic leg power. Only the mechanical power output can be estimated with this model \cite{van_der_kruk_power_2018,morin_biomechanics_2018}. With this approximation, inertia of the humans' body and segments is neglected. This is reasonable because during the ollie, the human rotates minimally on top of the skateboard (see figure \ref{f_olliesteps}). 
-
-The human has two degrees of freedom; $x_h$, and $y_h$. The EOMs of the human are found with the Newtons equations of motion:
+\subsubsection{Human Equations of Motion} \\
+\noindent The skateboard is controlled by a mass point on top of the skateboard representing the human. The interaction between the mass point and the skateboard are simulated with equal and opposite forces acting between the massless feet and the CoM of the human (see fig. \ref{f_FBD}). Due to the simplification, this model is not representable in terms of metabolic leg power. Only the mechanical power output can be estimated with this model \cite{van_der_kruk_power_2018,morin_biomechanics_2018}. Inertia of the humans' body segments is neglected. 
+The human has two degrees of freedom; $x_h$, and $y_h$. The EoMs of the human are found with the Newtons equations of motion:
 
 \begin{equation}\label{e_newton}
 \begin{array}{c}
@@ -532,7 +506,7 @@ The human has two degrees of freedom; $x_h$, and $y_h$. The EOMs of the human ar
 
 \noindent Where $\mathbf{F_{bf}}$, and  $\mathbf{F_{ff}}$ are the back foot forces, and front foot forces respectively. Combining equation \ref{e_newton} and \ref{e_humanforce} expressed in the inertial frame N gives the EoM for the human for all three phases:
 
-\begin{equation}
+\begin{equation} \label{e_humaneom}
     \left[\begin{array}{cc}
         m_h & 0 \\
         0 & m_h \\
@@ -545,32 +519,7 @@ The human has two degrees of freedom; $x_h$, and $y_h$. The EOMs of the human ar
     \end{array}\right]
 \end{equation}
 
-Which lead to two dynamic constraints for all three phases:
-
-\begin{equation}
-\begin{split}
-        \alpha_{3}^{(1,2,3)} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_x}}{m_h}\\
-        \alpha_{4}^{(1,2,3)} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_y}}{m_h}
-\end{split}
-\end{equation}
-
-\textbf{Flight Equations of Motion - phases 2 and 3} \\
-\noindent The EoM for phases 2 and 3 for the skateboard are without ground contact. The skateboard is now a free-floating body in space with 3 DOF resulting in:
-
-\begin{equation}\label{e_eomb}
-\mathbf{M_s} \cdot \left[\begin{array}{c}
-         \ddot x_s  \\
-         \ddot y_s \\
-         \ddot \theta_s 
-    \end{array}\right] =  \mathbf{F_a}
-\end{equation}
-
-This leads to the last two dynamic constraints valid for phase 2, and 3:
-
-\begin{equation}
-    \alpha_{5,6}^{(2,3)} = (\mathbf{M_s})^{-1}\mathbf{F_a}
-\end{equation}
-
+Dynamical constraints for the optimization are equations \ref{e_eoma}, \ref{e_eomb}, and \ref{e_humaneom}
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
     \centering
@@ -584,11 +533,11 @@ This leads to the last two dynamic constraints valid for phase 2, and 3:
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
 \subsection{Constraints}
-\quad \textbf{Human}\\
-The human is simplified as a point mass which reduces complexity for the optimization but sacrifices the reality. To make sure the human as a point mass still gives the output of a more complex model, the kinetics and kinematics will be constrained. 
+
+We constrained kinetics and kinematics of the human to compensate for the human simplifications.
 
 \textit{Kinematics} \\
-The kinematics of the human controller are bound by the musculoskeletal restrictions of the human body. The musculoskeletal restricions are difficult to comprise in a point mass model. The first restriction is that the feet can only be within a certain distance of the human COM. This is not simply the leg length, because the COM location of the human will change when the legs are moved. The maximum and minimum feet location with respect to the COM of the human are found with Yeadon, a package for Python to configure a humanoid to a position and find distances between points \cite{yeadon_simulation_1990}. The model is set to a 1.80[m] tall human and is matched to a picture of the world record ollie of Jake Hayes. The reconstruction is seen in fig.\ref{fig:f_record}. This leads to the first two constraint:
+The kinematics of the human controller are bound by musculoskeletal restrictions. Firstly, the feet can only operate within a range of the human CoM. We found the maximum and minimum feet location with respect to the CoM of the human with Yeadon \cite{yeadon_simulation_1990}. The model is set to a 1.80[m] tall human and is matched to a picture of the world record ollie of Jake Hayes. The reconstruction is seen in Fig.\ref{fig:f_record}. This leads to the first two constraint:
 
 
 \begin{equation}\label{e_yeadon}
@@ -598,13 +547,13 @@ The kinematics of the human controller are bound by the musculoskeletal restrict
 \end{array}
 \end{equation}
 
-These constraints describe that the vertical ($\mathbf{ \hat n_y}$) distance between the feet and the COM can never be outside of the given bounds. This constraint will not exceed musculoskeletal limits if the feet do not separate an an extreme distance (split). To make sure this behaviour does not happen, another constraint is implemented that the feet should never be separated more from each other than within a reasonable operating distance.
+To constrain the horizontal musculoskeletal restrictions we implemented a minimum and maximum feet seperation:
 
 \begin{equation}
         \gamma_{3}^{(1,2,3)}:\quad   0.1 < \vert \mathbf{r_{bf/ff}} \vert < 1
 \end{equation}
 
-The skater should not leave the board in horizontal direction either. This gives the next constraint:
+Furthermore, the skater should always stay on top of the skateboard to eliminate relative errors.
 \begin{equation}
     \gamma_4^{(1,2,3)}:\quad  -0.3 < x_h - \mathbf{r_{comS\mathbin{/}comH}}\cdot \mathbf{\hat n_x} < 0.3
 \end{equation}
@@ -619,13 +568,31 @@ To make sure the feet never leave the skateboard, $s_1$ and $s_2$ are positively
 The feet can still be in a no contact scenario as seen in section \ref{ss_mechanics}. This is simulated by when zero force is exerted. 
 
 \textit{Kinetics} \\
-The kinetics of the human are bound to the characteristics of the countermovement jump (CMJ) during the first phase of the ollie. The CMJ motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the CMJ (CMJ) \cite{candotti_lower_2012}. The CMJ is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the ground reaction force (GRF). Bounding the GRF is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the GRF of the CMJ is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a CMJ is shown. By constraining the vertical rate of force development (RFD) ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the RFD, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained due to $P = F v_{rel}$.
-Due to a constrained maximum distance($ \Delta s $) the force can work over, the work done is also constrained due to $ W = F ds $, given a constrained force. The data for the RFD, $ F_{max} $, $ \Delta s $, $ P $ is taken from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. $ \Delta s $ and $ P $ are calculated in the paper with a point mass approximation which is important to map to the optimization properly. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. The maximum distance is constraint implemented similar to equation \ref{e_yeadon} with the same upper bound:
+The human kinetics are bound to the characteristics of the countermovement jump (CMJ) during the first phase of the ollie. The CMJ motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the CMJ (CMJ) \cite{candotti_lower_2012}. The CMJ is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the ground reaction force (GRF). Bounding the GRF is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the GRF of the CMJ is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a CMJ is shown. By constraining the vertical rate of force development (RFD) ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the RFD, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained, since $P = F v_{rel}$. We used the CMJ data from a pointmass based paper for the RFD, $ F_{max} $, $ \Delta s $, $ P $ from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. To prevent this phenomena the force, and power are bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be implemented as such:
+\begin{equation}
+\begin{array}{c}
+    \gamma_{7}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_h}\cdot \mathbf{\hat n_y} < 32.61 m_h   \\
+    \gamma_{8}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{bf}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
+    \gamma_{9}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{ff}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
+\end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{c}
+         \gamma_{10}^{(1)}:\quad  -54.62 m_h < P_{bf} + P_{ff} < 54.62 m_h  \\
+         \gamma_{11}^{(1)}:\quad  -54.62 m_h < P_{bf} - P_{ff} < 54.62 m_h  \\
+         \gamma_{12}^{(1)}:\quad  -54.62 m_h < P_{ff} - P_{bf} < 54.62 m_h  \\
+    \end{array}
+\end{equation}
+
+The foot power $P_{bf,ff}$ is found per leg by calculating the dot product between relative velocity between the foot and the human COM and the resultant force acting on the foot. 
+
+The maximum distance the legs can produce force over is constraint implemented similar to equation \ref{e_yeadon} with the same upper bound:
 
 \begin{equation}
 \begin{split}
-        \gamma_{7}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} bf}} \cdot \mathbf{\hat n_y} < 1.13 \\ 
-      \gamma_{8}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} ff}} \cdot \mathbf{\hat n_y} < 1.13 
+        \gamma_{13}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} bf}} \cdot \mathbf{\hat n_y} < 1.13 \\ 
+      \gamma_{14}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} ff}} \cdot \mathbf{\hat n_y} < 1.13 
       \end{split}
 \end{equation}
 
@@ -637,42 +604,20 @@ Due to a constrained maximum distance($ \Delta s $) the force can work over, the
     \label{f_cmj}
 \end{figure}
 
-\noindent The maximum force constraints are set at the sum of all vertical forces $\mathbf{F_h}\cdot \mathbf{\hat n_y}$, and to the vertical components of the back and front feet ($\mathbf{F_{bf}}\cdot \mathbf{\hat n_y}, \mathbf{F_{ff}}\cdot \mathbf{\hat n_y}$)
-
-\begin{equation}
-\begin{array}{c}
-    \gamma_{9}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_h}\cdot \mathbf{\hat n_y} < 32.61 m_h   \\
-    \gamma_{10}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{bf}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
-    \gamma_{11}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{ff}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
-\end{array}
-\end{equation}
-
 The unloading RFD ($-41.8 m_h$) and eccentric RFD ($196.41 m_h$) are implemented in constraint:
 
 \begin{equation}
-    \gamma_{12}^{(1)}: \quad  -41.8 m_h < \dot{\mathbf{F_h}} \cdot \mathbf{\hat n_y} < 196.41 m_h  
+    \gamma_{15}^{(1)}: \quad  -41.8 m_h < \dot{\mathbf{F_h}} \cdot \mathbf{\hat n_y} < 196.41 m_h 
 \end{equation}
 
-The power is found per leg by calculating the dot product between relative velocity between the foot and the human COM and the resultant force acting on the foot. 
+% \begin{equation}\label{e_power}
+%     \begin{array}{c}
+%          P_{bf} = \mathbf{\dot r}_{comH/bf} \cdot \mathbf{F_bf}  \\
+%          P_{ff} = \mathbf{\dot r}_{comH/ff} \cdot \mathbf{F_bf}  \\
+%     \end{array}
+% \end{equation}
 
-\begin{equation}\label{e_power}
-    \begin{array}{c}
-         P_{bf} = \mathbf{\dot r}_{comH/bf} \cdot \mathbf{F_bf}  \\
-         P_{ff} = \mathbf{\dot r}_{comH/ff} \cdot \mathbf{F_bf}  \\
-    \end{array}
-\end{equation}
-
-Just like the maximum force constraints, the legs can work out of phase (one leg negative work, one leg positive). To avoid that the limits are exceeded the power needs to be bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be made with three bounds instead:
-
-\begin{equation}
-    \begin{array}{c}
-         \gamma_{13}^{(1)}:\quad  -54.62 m_h < P_{bf} + P_{ff} < 54.62 m_h  \\
-         \gamma_{14}^{(1)}:\quad  -54.62 m_h < P_{bf} - P_{ff} < 54.62 m_h  \\
-         \gamma_{15}^{(1)}:\quad  -54.62 m_h < P_{ff} - P_{bf} < 54.62 m_h  \\
-    \end{array}
-\end{equation}
-
-The horizontal ($\mathbf{\hat n_x}$) direction forces are now unconstrained. The data in from the CMJ paper does not include any horizontal forces. Since the body of the human does not rotate during the jump, the horizontal forces are approximated with maximum abduction force. The maximum abduction force is obtained by pushing sideways against a scale whilst standing up-straight. This maximum force bound is not very accurate, but the power of abduction force is captured in the power calculation in equation \ref{e_power}. This leads to a reliable abduction force approximation. With the constraints:
+We approximated the horizontal forces with a maximum abduction bound, since the body of the human does not rotate during the jump. The maximum abduction force is obtained by pushing sideways against a scale whilst standing up-straight. This is not an accurate method, but since the power is constrained in equation \ref{e_power}, it still produces a reliable abduction force approximation given by the constraints:
 
 \begin{equation}
     \begin{array}{c}
@@ -681,9 +626,7 @@ The horizontal ($\mathbf{\hat n_x}$) direction forces are now unconstrained. The
     \end{array}
 \end{equation}
 
-Only the maximum force constraints $\gamma_{11-13}$ and $\gamma_{18-19}$ apply to all phases. The CMJ constraints are only applied to the first phase, since phase 1 concerns the CMJ movement. 
-
-\subsection{Friction}
+\subsubsection{Friction}
 In section \ref{ss_mechanics}, we show that the feet slide along the deck's
 griptape to level the skateboard out during the preparation phase 1 and drag
 the skateboard up during the upward motion phase 2.
@@ -710,7 +653,7 @@ model 43 minutes to solve \cite{shield_contact-implicit_2022}. Our model solves
 optimally under two minutes with an initial guess of zero.
 
 We start by setting the normal forces of the feet $F_{p1},F_{p2}$ and the feet
-accerelations as control variables.
+accelerations as control variables.
 The acceleration is controlled instead of the foot location itself to ensure
 have smooth realistic foot trajectories.
 Our control variables are:
@@ -790,37 +733,33 @@ results in $F_{f1}^+ = \mu F_{p1}$. This is exactly what it should be given a
 negative relative sliding velocity. The friction for the front foot adds
 another six constraints: $\gamma_{24-30}^{(1,2,3)}$
 
-\subsection{Endpoint constraints} \label{p_endpoints}
-To fully describe the ollie optimization problem, all phases need to be glued together. In the multi-phase optimization scheme all initial and final time variables are treated as separate variables. By constraining the corresponding variables between the phases, the variables can be treated as one variable over all three phases.
+\subsubsection{Endpoint constraints} \label{p_endpoints}
+To fully describe the ollie optimization problem, all phases need to be glued together. In the multi-phase optimization scheme all initial and final time variables are treated as separate variables. By constraining the corresponding variables between the phases, the variables can be treated as one variable over all three phases: 
 
-\textbf{Impact}\\
-Just before the skateboard is airborne, the tail hits the ground. During this collision the ground exerts a normal linear impulse normal. The method used\cite{vallery_heike_advanced_2018} is based on the Newton impact law. The Newton impact law rewritten in terms of the optimization states is:
-
-\begin{equation}\label{e_newtonimpact}
-    \mathbf{\dot q_{rel}}^{(2)}(t_0) = -e\ \mathbf{\dot q_{rel}}^{(1)}(t_F)
-\end{equation}
-
-Where $\dot q_{rel}^{(2)}(t_0)$, and $\dot q_{rel}^{(1)}(t_F)$ are the relative speeds just after impact at the first collocation point of phase 2, and just before impact at the last collocation point of phase 1 respectively.  $e$, the empirical constant related to the amount of dissipated energy during impact, is called the coefficient of restitution (COR). When $e=1$ we have mechanical energy preservation, and for $e=0$ all impact energy is dissipated. To write the equation in matrix form, let $C_c(\mathbf{q})$ be the relative distance normal to the contact surface. By taking the Jacobian with respect to the generalized coordinates and multiplying it with the generalized velocities we find the relative generalized velocity:
-
-\begin{equation}\label{e_relativevelocity}
-    \frac{d}{dt}\left(C_c(\mathbf{q})\right) = J_{\mathbf{q}}(C_c(\mathbf{q}))\ \mathbf{\dot q} = \mathbf{C_{c,i}}\  \mathbf{\dot q}
-\end{equation}
-Combine equations \ref{e_newtonimpact}, and \ref{e_relativevelocity} to get:
 \begin{equation}
-    \mathbf{C_{c,i}}\  \mathbf{\dot q}^{(2)}(t_0) = -e\ \mathbf{C_{c,i}}\ \mathbf{\dot q}^{(1)}(t_F)
+    \begin{array}{c}
+         \beta_1: \quad t_F^{(1)} = t_0^{(2)}  \\
+         \beta_2: \quad t_F^{(2)} = t_0^{(3)}  \\
+    \end{array}
 \end{equation}
 
-By introducing a Lagrange multiplier $\rho_c$ to solve the reaction impulse calculated with $\mathbf{C_{c,i}}\ \rho_c$ the linear impulse and momentum equation becomes:
+To know the phase switching instance, the optimization should switch phase when hitting the tail to the ground. This is implemented by calculating the impact angle of the skateboard as a function of the parameter values:
 
-\begin{equation}\label{e_linearimpulse}
-    \mathbf{M_s}\ \mathbf{\dot q}^{(2)}(t_0) + \mathbf{C_{c,i}}\ \rho_c = \mathbf{M_s}\ \mathbf{\dot q}^{(1)}(t_F)
+\begin{equation}
+    \theta_{impact} = -\operatorname{atan}\left(\frac{h_{t r}+l_t \sin (\phi)+r_w}{-\frac{l_d}{2}-l_t \cos (\phi)+\frac{l_{w b}}{2}}\right)
 \end{equation}
 
-Where $\mathbf{M_s}$ is the mass matrix of the system. Now writing equation \ref{e_linearimpulse} with equation \ref{e_relativevelocity} as a constraint to the system, the velocities after impact are solved. This gives the first four endpoint constraints that define the impact of the tail:
+Which is implemented as an endpoint constraint as:
+
+\begin{equation}
+    \beta_3: \quad \theta_s^{1}(t_F) = \theta_{impact}
+\end{equation}
+
+During this collision the ground exerts a normal linear impulse normal. To calculated speeds after impact, we used a matrix representation method of the Newton impact law\cite{vallery_heike_advanced_2018}:
 
 \begin{equation}
 \begin{array}{l c}
-    \beta_{1,2,3,4}: & \left[\begin{array}{cc}
+    \beta_{4,5,6,7}: & \left[\begin{array}{cc}
         \mathbf{M_s} & \mathbf{C_{c,i}} \\
         \mathbf{C_{c,i}}^T & 0
     \end{array} \right]\
@@ -836,58 +775,36 @@ Where $\mathbf{M_s}$ is the mass matrix of the system. Now writing equation \ref
     \end{array}
 \end{equation}
 
-Because the states in phase 1 are expressed in different variables than phase 2 as shown in section \ref{s_systemdynamics}, variables $\dot q^{(1)}(t_F)$ need to be rewritten to the CoM coordinates $x_s,y_s$, and $\theta_s$. Also the initial values of variables $x_s^{(2)}(t_0), y_s^{(2)}(t_0)$ are dependant on the final time variables $x_w^{(1)}(t_F), \theta_s^{(1)}(t_F)$ and are set as an endpoint constraint
+Where $\dot q_{rel}^{(2)}(t_0)$, and $\dot q_{rel}^{(1)}(t_F)$ are the relative speeds just after impact at the first collocation point of phase 2, and just before impact at the last collocation point of phase 1 respectively.  $e$, the empirical constant related to the amount of dissipated energy during impact, is the coefficient of restitution (COR) with $e=1$ resulting in mechanical energy preservation, and for $e=0$ all energy is dissipated. $C_{c,i}$ is the constraint equation describing contact. Lastly, $\rho_c$ is a Langrange multiplier to solve the reaction impulse.
+
+Because the states in phase 1 are expressed in different variables than phase 2 as shown in section \ref{s_systemdynamics}, variables $\dot q^{(1)}(t_F)$ are rewritten to the CoM coordinates $x_s,y_s$, and $\theta_s$. Also the initial values of variables $x_s^{(2)}(t_0), y_s^{(2)}(t_0)$ are dependant on the final time variables $x_w^{(1)}(t_F), \theta_s^{(1)}(t_F)$ and are set as an endpoint constraint
 
 \begin{equation}
 \begin{array}{l c c}
-\beta_5: \ x_s^{(2)}(t_0) & = & \frac{l_{w b} \cos \left(\theta_s\right)}{2}+x_w^{(1)}(t_F)- \\ 
+\beta_8: \ x_s^{(2)}(t_0) & = & \frac{l_{w b} \cos \left(\theta_s\right)}{2}+x_w^{(1)}(t_F)- \\ 
 & & \left(-d_{c o m}+h_{t r}\right) \sin \left(\theta_s^{(1)}(t_F)\right) \\
 
-\beta_6: y_s^{(2)}(t_0) & = & \frac{l_{w b} \sin \left(\theta_s\right)}{2}+r_w+ \\ 
+\beta_9: y_s^{(2)}(t_0) & = & \frac{l_{w b} \sin \left(\theta_s\right)}{2}+r_w+ \\ 
 & & \left(-d_{c o m}+h_{t r}\right) \cos \left(\theta_s^{(1)}(t_F)\right)
 \end{array}
-\end{equation}
-
-This method is a discontinuous method where velocity states will have jumps. This method opposed to other methods is more accurate, stable, and independent of time step size, but can not account for unplanned contacts\cite{ackermann_optimality_2010}. 
-
-\textbf{Time}\\
-The result of the optimization should be continuous in time over all three phases. This is obtained by endpoint constraints: 
-
-\begin{equation}
-    \begin{array}{c}
-         \beta_7: \quad t_F^{(1)} = t_0^{(2)}  \\
-         \beta_8: \quad t_F^{(2)} = t_0^{(3)}  \\
-    \end{array}
-\end{equation}
-
-The time variables are set as optimization variables, meaning that the optimization should know when to switch phase. This is done by the impact angle of the skateboard. This is a function of the parameter values:
-
-\begin{equation}
-    \theta_{impact} = -\operatorname{atan}\left(\frac{h_{t r}+l_t \sin (\phi)+r_w}{-\frac{l_d}{2}-l_t \cos (\phi)+\frac{l_{w b}}{2}}\right)
-\end{equation}
-
-The end of phase 1 should equal this angle. This is obtained with endpoint constraints:
-
-\begin{equation}
-    \beta_7: \quad \theta_s^{1}(t_F) = \theta_{impact}
 \end{equation}
 
 To make sure the human starts the ollie from a standing position, the vertical forces at the beginning of phase 1 are equal to the body-weight:
 
 \begin{equation}
-    \beta_8: \quad \mathbf{F_h} \cdot \mathbf{\hat n_y} = m_h g
+    \beta_10: \quad \mathbf{F_h} \cdot \mathbf{\hat n_y} = m_h g
 \end{equation}
 
 The definition of landing the ollie has been set to the back wheel touching the ground at a minimum of 0 [rad] (level) and a maximum of $\frac{1}{6} \pi$[rad] (rotated counter clockwise). The optimization stops when the back wheel touches the ground.
 
 \begin{equation}
 \begin{array}{l c}
-\beta_9 : & \frac{-l_{wb}}{2} \sin(\theta_s(t_F^{(2)})) - r_w + y_s(t_F^{(2)}) + \\ 
+\beta_11 : & \frac{-l_{wb}}{2} \sin(\theta_s(t_F^{(2)})) - r_w + y_s(t_F^{(2)}) + \\ 
 & (d_{com} - {d_tr}) \cos(\theta_s(t_F^{(2)}))
 \end{array}
 \end{equation}
 
-Variables $\theta_s, s_1, s_2, \dot s_1, \dot s_2, x_h, y_h, \dot x_h, \dot y_h$ have equal endpoints between phase 1 and 2 ($b_{9-18})$. All state variables have equal endpoints between phase 2 and 3 ($b_{18-32}$). Initial and final endpoint constraints are set to a wide range and are found in Appendix B.
+Variables $\theta_s, s_1, s_2, \dot s_1, \dot s_2, x_h, y_h, \dot x_h, \dot y_h$ have equal endpoints between phase 1 and 2 ($b_{12-21})$. All state variables have equal endpoints between phase 2 and 3 ($b_{21-35}$). Initial and final endpoint constraints are set to a wide range and are found in Appendix B.
 
 \subsection{Settings}\label{s_settings}
 The NLP tolerance is set to $1e^{-8}$, and the mesh tolerance is set to $1e^{-3}$. The amount of mesh sections for the first two phases are set to 30, phase 3 is set to 10 mesh sections. The landing phase is not as important as the preparation and upward motion phase as those define the final height and thus the objective.
@@ -1103,7 +1020,27 @@ has not been answered fully but a closer approximation is given towards the opti
 \bibliography{references}
 
 \section{Appendix: Equation of Motion Derivation}
+% Differentiating $\mathbf{x}$ once and taking the Jacobian with respect to the
+% velocities gives transformation matrix $\mathbf{T}$:
+% %
+% \begin{equation}
+%     J_{\dot{\mathbf{x}}}(\mathbf{q}) = \textbf{T} = \left[\begin{array}{c c}
+% 1 & -\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right) \\
+% 0 & \frac{l_{w b} \cos \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right) \\
+% 0 & 1
+% \end{array}\right]
+% \end{equation}
 
+% Convective terms $\mathbf{g_k}$ are found by taking the Jacobian of $\mathbf{\dot  x}$ with respect to $\mathbf{q}$ and multiplying it by $\mathbf{\dot  q}$ (e.g. $J_{\mathbf{\dot  x}}(\mathbf{q})\cdot \mathbf{\dot  q}$):
+
+% \begin{equation}
+% \mathbf{g_k} = 
+% \left[\begin{array}{c}
+% \dot \theta_s^2\left(-\frac{l_{w b} \cos \left(\theta_s\right)}{2}-\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right)\right) \\
+% \dot \theta_s^2\left(-\frac{l_{w b} \sin \left(\theta_s\right)}{2}+\left(d_{c o m}-h_{t r}\right) \cos \left(\theta_s\right)\right) \\
+% 0
+% \end{array}\right]
+% \end{equation}
 \pagestyle{plain}
 %\include{Sections/Appendix_A}
 %\include{Sections/Appendix_B}
