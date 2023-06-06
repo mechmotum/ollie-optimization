@@ -2,6 +2,7 @@
 
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage[acronym]{glossaries}
 \usepackage{epsfig} %% for loading postscript figures
 \usepackage{float}
 \usepackage[utf8]{inputenc}
@@ -42,6 +43,17 @@
 }
 \definecolor{ao}{rgb}{0.0, 0.5, 0.0}
 \definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
+
+\glsdisablehyper
+\newacronym[longplural={centers of mass}]{com}{CoM}{center of mass}
+\newacronym[longplural={equations of motion}]{eom}{EoM}{equation of motion}
+\newacronym{ocp}{OCP}{optimal control problem}
+\newacronym{grf}{GRF}{ground reaction force}
+\newacronym{vgrf}{VGRF}{vertical ground reaction force}
+\newacronym{nlp}{NLP}{non-linear programming problem}
+\newacronym[longplural={degrees of freedom}]{dof}{DoF}{degree of freedom}
+\newacronym{rfd}{RFD}{rate of force development}
+\newacronym{cmj}{CMJ}{countermovement jump}
 
 % \usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
 
@@ -199,8 +211,7 @@ distinct phases which are shown in figure \ref{fig:ollie_steps}.
       \item[$^2$] \url{https://www.youtube.com/watch?v=339k4XEvbxY}
     \end{itemize}
   }
-  The ollie phases are (A)`Preparation': athlete lowers their centre of
-  mass(COM) prepares muscles for upward acceleration. (B) `Pre-pop': skateboard
+  The ollie phases are (A)`Preparation': athlete lowers their \gls{com} prepares muscles for upward acceleration. (B) `Pre-pop': skateboard
   rotates about it's wheels due to force of back foot. (C) `Pop': tail of the
   skateboard hits the ground. Skater takes advantage of the collision between
   the skateboard and ground to bring the skateboard up. (D) `Upward motion':
@@ -236,8 +247,7 @@ optimal for specific tricks.
 
 Some researches have tackled this problem by analyzing the skateboard in a
 planar riding model
-\cite{hubbard_lateral_1979,hubbard_human_1980,kremnev_nonlinear_2010,ispolov_skateboard_1996,rosatello_skateboard_2015,varszegi_stability_2017,varszegi_stabilizing_2016,varszegi_downhill_2016,varszegi_balancing_2014,kuleshov_mathematical_2007,kuleshov_various_2010}.
-Which shows the relation between the dimensions and the stability while rolling
+\cite{hubbard_lateral_1979,hubbard_human_1980,kremnev_nonlinear_2010,ispolov_skateboard_1996,rosatello_skateboard_2015,varszegi_stability_2017,varszegi_stabilizing_2016,varszegi_downhill_2016,varszegi_balancing_2014,kuleshov_mathematical_2007,kuleshov_various_2010}, which shows the relation between the dimensions and the stability while rolling
 and turning. These dimensional analyses don't apply to aerial movements such as
 the ollie. Others researched the ollie by investigating the contact forces
 \cite{anderson_ollie_2020,shield_contact-implicit_2022} and biomechanics
@@ -285,10 +295,10 @@ The mechanics is analyzed with a slow motion video to note the motion cues
 during the ollie. These motion cues ($t_1-t_{11}$) are given in figure
 \ref{f_olliesteps}. Motion cue $t_3$ and $t_4$ show that there is barely
 contact between the skaters back foot and the tail during impact. Literature
-supports this phenomenon. In the vertical ground reaction force (VGRF) graph
-(fig. \ref{f_GRF}(a)) you can see a VGRF that is similar to jumping without a
+supports this phenomenon. In the \gls{vgrf} graph
+(fig. \ref{f_GRF}(a)) you can see a \gls{vgrf} that is similar to jumping without a
 skateboard. The big difference is the final small lump (blue arrow). When the
-graph is at the green arrow the athletes centre of mass (COM) is at its lowest
+graph is at the green arrow the athletes \gls{com} is at its lowest
 point and the concentric jumping phase starts. Then when the graph has fallen
 to almost 0, the skater is weightless and thus airborne. Then due to the
 rotation of the skateboard the tail hits the ground and causes the lump at the
@@ -323,7 +333,7 @@ model of the skateboard to reduce mathematical complexity.
 To find the optimal skateboard geometry, we take a modeling and optimization approach involving the following four fundamental steps: 
 \begin{enumerate}
     \item understand the mechanics of the ollie through literature and a video analysis,
-    \item define the parameter optimization and optimal control problem (OCP),
+    \item define the parameter optimization and \gls{ocp},
     \item implement the mechanics into the optimization problem, and
     \item solve the optimization problem.
 \end{enumerate}
@@ -378,18 +388,18 @@ We developed a mass and inertial model, which is a function of the skateboard's 
 \end{figure}
 
 \subsection{Optimal Control Problem}
-We formulate an OCP with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_2021_predictive} to numerically solve the OCP. Pycollo solves the generalized multi-phase OCP described in \cite{betts_2010_practical} by transcribing the OCP to a non-linear programming problem (NLP) using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_2016_using}. The NLP is then solved using Ipopt~\cite{biegler_2009_large}. Pycollo also uses ph-mesh refinement~\cite{patterson_2015_ph} to iteratively improve the transcription mesh, solving successive NLPs until a desired solution tolerance is met.
+We formulate an \gls{ocp} with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_2021_predictive} to numerically solve the \gls{ocp}. Pycollo solves the generalized multi-phase \gls{ocp} described in \cite{betts_2010_practical} by transcribing the \gls{ocp} to a \gls{nlp} using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_2016_using}. The \gls{nlp} is then solved using Ipopt~\cite{biegler_2009_large}. Pycollo also uses ph-mesh refinement~\cite{patterson_2015_ph} to iteratively improve the transcription mesh, solving successive \glspl{nlp} until a desired solution tolerance is met.
 
 \subsection{Phases and Objective} \label{s_phases}
 
-We use a multi-phase formulation for the ollie OCP to handle discontinuities in the state trajectories in a numerically-stable manner. The allows, for example, the impact of the tail with the ground during the pop to be treated as an impulse, which is not possible during a single continuous phase. A disadvantage of this approach however is that the transition between phases is prescribed, leaving no room for the optimizer to discover these transitions. The three dynamically-distinct phases are:
+We use a multi-phase formulation for the ollie \gls{ocp} to handle discontinuities in the state trajectories in a numerically-stable manner. The allows, for example, the impact of the tail with the ground during the pop to be treated as an impulse, which is not possible during a single continuous phase. A disadvantage of this approach however is that the transition between phases is prescribed, leaving no room for the optimizer to discover these transitions. The three dynamically-distinct phases are:
 \begin{enumerate} \label{n_phases}
   \item Preparation phase
   \item Upward motion
   \item Downward motion
 \end{enumerate}
 
-During the preparation phase the back wheels are in contact with the ground. The tail impact with the ground defines the transition from preparation to the upward motion. During upward and downward motion nothing is in contact with the ground and they both are governed by the same equations of motion. We split the upward motion and downward motion into two phases because Pycollo requires that the objective function be a function of initial or final state variables of a phase~\cite{brockie_2021_predictive}. The transition from upward to downward motion defines the highest ollie.
+During the preparation phase the back wheels are in contact with the ground. The tail impact with the ground defines the transition from preparation to the upward motion. During upward and downward motion nothing is in contact with the ground and they both are governed by the same \glspl{eom}. We split the upward motion and downward motion into two phases because Pycollo requires that the objective function be a function of initial or final state variables of a phase~\cite{brockie_2021_predictive}. The transition from upward to downward motion defines the highest ollie.
 
 To  define the maximum height achieved during the ollie, we constrain the board to be level at the highest point and
 take the height achieved to be the middle of a fictional tangent touching lowest point of both wheels. The objective function for maximization is:
@@ -398,7 +408,7 @@ take the height achieved to be the middle of a fictional tangent touching lowest
   \mathcal{J} = y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w
 \end{equation}
 
-\noindent where $y_s^{(2)}(t_F)$ is the height achieved by the skateboard's COM at the end of the second phase, $d_{com}$ is the distance between the skateboard's COM and the deck, $h_{tr}$ is the truck height, and $r_w$ is the wheel radius.
+\noindent where $y_s^{(2)}(t_F)$ is the height achieved by the skateboard's \gls{com} at the end of the second phase, $d_{com}$ is the distance between the skateboard's \gls{com} and the deck, $h_{tr}$ is the truck height, and $r_w$ is the wheel radius.
 
 \subsection{System Dynamics}\label{s_systemdynamics}
 \begin{figure}
@@ -413,12 +423,12 @@ take the height achieved to be the middle of a fictional tangent touching lowest
     \label{f_FBDphas1}
 \end{figure}
 
-We derive the equations of motion using SymPy~\cite{meurer_sympy_2017} using
-the TMT method~\cite{vallery_heike_advanced_2018} using the generalized coordinates and forces given in the following paragraphs.
+We derive the \glspl{eom} using
+the TMT method~\cite{vallery_heike_advanced_2018}, facilitated by SymPy~\cite{meurer_sympy_2017}.
 
 \subsubsection{Skateboard Equations of Motion}
-In phase 1 we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the equations of motion. During phase 2 and 3 the skateboard is an unconstrained rigid body in 2D. 
-The skateboard center of mass coordinates are
+In phase 1 we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the \glspl{eom}. During phase 2 and 3 the skateboard is an unconstrained rigid body in 2D. 
+The skateboard's \gls{com} coordinates are
 %
 \begin{equation}
     \mathbf{x} = [x_s, y_s, \theta_s]^T
@@ -427,13 +437,13 @@ The skateboard center of mass coordinates are
 With the sliding joint, we use two generalized coordinates $x_w$ (x-location
 back wheels) and $\theta_s$ (angle w.r.t. ground) as shown in figure
 \ref{f_FBDphas1}.
-The skateboard then has 2 degrees of freedom (DOF) with the the generalized coordinates:
+The skateboard then has two \glspl{dof} with the the generalized coordinates:
 %
 \begin{equation}
     \mathbf{q} = [x_w, \theta_s]^T
 \end{equation}
 
-The center of mass in terms of the generalized coordinates is:
+The \gls{com} in terms of the generalized coordinates is:
 %
 \begin{equation}
 \mathbf{x}=\left[\begin{array}{c}
@@ -443,7 +453,7 @@ The center of mass in terms of the generalized coordinates is:
 \end{array}\right]
 \end{equation}
 
-The forces acting on the skateboard are the frictional ($F_{f1,2}$), normal forces $F_{p1,2}$ from the front and the back foot, and during the preparation phase the ground normal force $F_n$. We defined the back and front feet along the deck of the skateboard with a blue and cyan dot indicated with variables $s_1$ and $s_2$ respectively (see Fig. \ref{f_FBDphas1}). The perpendicular forces are bound positively such that the feet can never pull on the board. The moments caused by the back and front foot about the COM are $Mc_{bf}, Mc_{ff}$ respectively. Thus the CoM-applied forces and torques $\mathbf{F_{a}}$ are:
+Frictional ($F_{f1,2}$) and normal forces ($F_{p1,2}$) from the front and back foot act on the skateboard, along with the ground normal force ($F_n$) during the preparation phase. We defined the back and front feet along the deck of the skateboard with a blue and cyan dot indicated with variables $s_1$ and $s_2$ respectively (see Fig. \ref{f_FBDphas1}). The perpendicular forces are bound positively such that the feet can never pull on the board. The moments caused by the back and front foot about the \gls{com} are $Mc_{bf}, Mc_{ff}$ respectively. Thus the \gls{com}-applied forces and torques $\mathbf{F_{a}}$ are:
  
 \begin{equation}\label{e_Fi}
 \begin{array}{c}
@@ -459,7 +469,7 @@ Mc_{ff} = -F_{p 2}\left(-\frac{l_d}{2}+\mathrm{s}_2(t)\right)+F_{w 2} \ d_{c o m
 \end{array}
 \end{equation}  
 
-The skateboards' mass matrix $\mathbf{M_s} = diag(m_s,m_s,I_s)$ together with the transformed CoM applied coordinates form the EoM of phase 1:
+The skateboards' mass matrix $\mathbf{M_s} = diag(m_s,m_s,I_s)$ together with the transformed \gls{com} applied coordinates form the \glspl{eom} of phase 1:
 
 \begin{equation} \label{e_eoma}
     \mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot \mathbf{q} = \mathbf{T}^T (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
@@ -479,13 +489,13 @@ The skateboards` EoMs for phase 2, and 3 are:
     \color{cyan}Cyan dot: & Front foot & \color{blue}Blue dot: & Back foot \\ \hline
     \color{yellow}Yellow: & Foot movement & \color{green}Green: & Frames \\ \hline
     \end{tabular}
-    \caption[Free Body Diagrams phase 2 and 3]{Free body diagrams of human and skateboard for phase 1. N Frame is the inertial frame, A and B are body fixed frames. Forces are equal and opposite acting between the feet and human COM.}
+    \caption[Free Body Diagrams phase 2 and 3]{Free body diagrams of human and skateboard for phase 1. N Frame is the inertial frame, A and B are body fixed frames. Forces are equal and opposite acting between the feet and human's \gls{com}.}
     \label{f_FBD}
 \end{figure}
 
 \subsubsection{Human Equations of Motion} \\
-\noindent The skateboard is controlled by a mass point on top of the skateboard representing the human. The interaction between the mass point and the skateboard are simulated with equal and opposite forces acting between the massless feet and the CoM of the human (see fig. \ref{f_FBD}). Due to the simplification, this model is not representable in terms of metabolic leg power. Only the mechanical power output can be estimated with this model \cite{van_der_kruk_power_2018,morin_biomechanics_2018}. Inertia of the humans' body segments is neglected. 
-The human has two degrees of freedom; $x_h$, and $y_h$. The EoMs of the human are found with the Newtons equations of motion:
+\noindent The skateboard is controlled by a mass point on top of the skateboard representing the human. The interaction between the mass point and the skateboard are simulated with equal and opposite forces acting between the massless feet and the \gls{com} of the human (see fig. \ref{f_FBD}). Due to the simplification, this model is not representable in terms of metabolic leg power. Only the mechanical power output can be estimated with this model \cite{van_der_kruk_power_2018,morin_biomechanics_2018}. Inertia of the humans' body segments is neglected. 
+The human has two \glspl{dof}; $x_h$, and $y_h$. The \glspl{eom} of the human are found with the Newtons equations of motion:
 
 \begin{equation}\label{e_newton}
 \begin{array}{c}
@@ -537,7 +547,7 @@ Dynamical constraints for the optimization are equations \ref{e_eoma}, \ref{e_eo
 We constrained kinetics and kinematics of the human to compensate for the human simplifications.
 
 \textit{Kinematics} \\
-The kinematics of the human controller are bound by musculoskeletal restrictions. Firstly, the feet can only operate within a range of the human CoM. We found the maximum and minimum feet location with respect to the CoM of the human with Yeadon \cite{yeadon_simulation_1990}. The model is set to a 1.80[m] tall human and is matched to a picture of the world record ollie of Jake Hayes. The reconstruction is seen in Fig.\ref{fig:f_record}. This leads to the first two constraint:
+The kinematics of the human controller are bound by musculoskeletal restrictions. Firstly, the feet can only operate within a range of the human's \gls{com}. We found the maximum and minimum feet location with respect to the human's \gls{com} with Yeadon \cite{yeadon_simulation_1990}. The model is set to a 1.80[m] tall human and is matched to a picture of the world record ollie of Jake Hayes. The reconstruction is seen in Fig.\ref{fig:f_record}. This leads to the first two constraint:
 
 
 \begin{equation}\label{e_yeadon}
@@ -568,7 +578,7 @@ To make sure the feet never leave the skateboard, $s_1$ and $s_2$ are positively
 The feet can still be in a no contact scenario as seen in section \ref{ss_mechanics}. This is simulated by when zero force is exerted. 
 
 \textit{Kinetics} \\
-The human kinetics are bound to the characteristics of the countermovement jump (CMJ) during the first phase of the ollie. The CMJ motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the CMJ (CMJ) \cite{candotti_lower_2012}. The CMJ is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the ground reaction force (GRF). Bounding the GRF is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the GRF of the CMJ is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a CMJ is shown. By constraining the vertical rate of force development (RFD) ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the RFD, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained, since $P = F v_{rel}$. We used the CMJ data from a pointmass based paper for the RFD, $ F_{max} $, $ \Delta s $, $ P $ from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. To prevent this phenomena the force, and power are bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be implemented as such:
+The human kinetics are bound to the characteristics of the \gls{cmj} during the first phase of the ollie. The \gls{cmj} motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the \gls{cmj}~\cite{candotti_lower_2012}. The \gls{cmj} is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the \gls{grf. Bounding the \gls{grf} is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the \gls{grf} of the \gls{cmj} is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a \gls{cmj} is shown. By constraining the vertical \gls{rfd} ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the \gls{rfd}, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained, since $P = F v_{rel}$. We used the CMJ data from a pointmass based paper for the \gls{rfd}, $ F_{max} $, $ \Delta s $, $ P $ from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. To prevent this phenomena the force, and power are bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be implemented as such:
 \begin{equation}
 \begin{array}{c}
     \gamma_{7}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_h}\cdot \mathbf{\hat n_y} < 32.61 m_h   \\
@@ -585,7 +595,7 @@ The human kinetics are bound to the characteristics of the countermovement jump 
     \end{array}
 \end{equation}
 
-The foot power $P_{bf,ff}$ is found per leg by calculating the dot product between relative velocity between the foot and the human COM and the resultant force acting on the foot. 
+The foot power $P_{bf,ff}$ is found per leg by calculating the dot product between relative velocity between the foot and the human \gls{com} and the resultant force acting on the foot. 
 
 The maximum distance the legs can produce force over is constraint implemented similar to equation \ref{e_yeadon} with the same upper bound:
 
@@ -599,12 +609,12 @@ The maximum distance the legs can produce force over is constraint implemented s
 \begin{figure}
     \centering
     \includegraphics[width=0.4\textwidth]{figure/countermovementjumpRFD.jpg}
-    \caption[Ground reaction force of CMJ]{Phases during CMJ. During unloading, the human lowers their COM quickly. During the eccentric phase, the gained downward velocity during the unloading phase is braked until the lowest point is reached which is at the amortization. During the concentric phase the legs are stretched out and upward speed is gained until the take-off. At take-off the vertical speed is maximal.}
+    \caption[Ground reaction force of CMJ]{Phases during \gls{cmj}. During unloading, the human lowers their \gls{com} quickly. During the eccentric phase, the gained downward velocity during the unloading phase is braked until the lowest point is reached which is at the amortization. During the concentric phase the legs are stretched out and upward speed is gained until the take-off. At take-off the vertical speed is maximal.}
     \centering \footnotesize Source: \cite{barker_relationships_2018}%
     \label{f_cmj}
 \end{figure}
 
-The unloading RFD ($-41.8 m_h$) and eccentric RFD ($196.41 m_h$) are implemented in constraint:
+The unloading \gls{rfd} ($-41.8 m_h$) and eccentric \gls{rfd} ($196.41 m_h$) are implemented in constraint:
 
 \begin{equation}
     \gamma_{15}^{(1)}: \quad  -41.8 m_h < \dot{\mathbf{F_h}} \cdot \mathbf{\hat n_y} < 196.41 m_h 
