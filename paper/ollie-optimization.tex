@@ -364,43 +364,15 @@ The code used for the derivation is provided in the supplementary information, a
     \label{fig:FBD}
 \end{figure}
 
-\subsubsection{Human Equations of Motion} \\
-\noindent The skateboard is controlled by a mass point on top of the skateboard representing the human. The interaction between the mass point and the skateboard are simulated with equal and opposite forces acting between the massless feet and the \gls{com} of the human (see fig. \ref{f_FBD}). Due to the simplification, this model is not representable in terms of metabolic leg power. Only the mechanical power output can be estimated with this model \cite{van_der_kruk_power_2018,morin_biomechanics_2018}. Inertia of the humans' body segments is neglected. 
-The human has two \glspl{dof}; $x_h$, and $y_h$. The \glspl{eom} of the human are found with the Newtons equations of motion:
+\subsubsection{Human Equations of Motion}
+The human is represented by a point mass on top of the skateboard, again detailed in figure~\ref{fig:FBD}.
+The interactions between the point mass and the skateboard are modeled as a pair of equal and opposite forces acting between the massless feet and the human's \gls{com}.
+Due to this simplification, this model is not represent metabolic leg power, only the mechanical power output~\cite{van_der_kruk_power_2018,morin_biomechanics_2018}. Inertia of the human's body segments is neglected.
 
-\begin{equation}\label{e_newton}
-\begin{array}{c}
-        m_s \cdot \ddot x_s = \sum F_x  \\
-        m_s \cdot \ddot y_s = \sum F_y  \\
-    \end{array}
-\end{equation}
+The code used to derive to \glspl{eom} of the human, along with a mathematical description, can again be found in the supplementary information.
 
-\noindent Forces acting on the human are:
+\subsection{Constraints}
 
-\begin{equation} \label{e_humanforce}
-\begin{array}{cc}
-      \mathbf{F_{bf}} = F_{p1} \cdot \mathbf{\hat b_y} + F_{f1} \cdot \mathbf{\hat b_x}\\
-      \mathbf{F_{ff}} = F_{p2} \cdot \mathbf{\hat a_y} + F_{f2} \cdot \mathbf{\hat a_x}\\
-      \mathbf{F_h}    = \mathbf{F_{bf}} + \mathbf{F_{ff}}
-\end{array}
-\end{equation}
-
-\noindent Where $\mathbf{F_{bf}}$, and  $\mathbf{F_{ff}}$ are the back foot forces, and front foot forces respectively. Combining equation \ref{e_newton} and \ref{e_humanforce} expressed in the inertial frame N gives the EoM for the human for all three phases:
-
-\begin{equation} \label{e_humaneom}
-    \left[\begin{array}{cc}
-        m_h & 0 \\
-        0 & m_h \\
-    \end{array}\right] \cdot \left[\begin{array}{c}
-         \ddot x_h  \\
-         \ddot y_h \\
-    \end{array}\right]=\left[\begin{array}{c}
-        \mathbf{F_h}\cdot \mathbf{\hat n_x}  \\
-        \mathbf{F_h}\cdot \mathbf{\hat n_y}\\
-    \end{array}\right]
-\end{equation}
-
-Dynamical constraints for the optimization are equations \ref{e_eoma}, \ref{e_eomb}, and \ref{e_humaneom}
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
     \centering
@@ -412,8 +384,6 @@ Dynamical constraints for the optimization are equations \ref{e_eoma}, \ref{e_eo
     \centering \footnotesize \url{https://theberrics.com/world-record-ollie-footage}$^{1}$%
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
-
-\subsection{Constraints}
 
 We constrained kinetics and kinematics of the human to compensate for the human simplifications.
 
