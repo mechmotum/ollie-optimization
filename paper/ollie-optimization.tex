@@ -6,6 +6,7 @@
 \usepackage{epsfig} %% for loading postscript figures
 \usepackage{float}
 \usepackage[utf8]{inputenc}
+\usepackage{siunitx}
 \usepackage{stfloats}
 \usepackage{subfig}
 \usepackage{titlesec}
@@ -373,7 +374,12 @@ The code used to derive to \glspl{eom} of the human, along with a mathematical d
 
 \subsection{Constraints}
 
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
+We constrain the kinetics and kinematics of the human to compensate for the simplifications used.
+
+Musculoskeletal restrictions bound the kinematics of the human controller.
+Firstly, the feet can only operate within a fixed region relative to the human's \gls{com}.
+We found this region's bounds using Yeadon \cite{yeadon_simulation_1990} by scaling the model to a \SI{1.80}{\meter} tall human and posing it to match a picture of Jake Hayes' world record ollie (figure~\ref{fig:f_record}). 
+
 \begin{figure}
     \centering
     \subfloat[\centering 45.5" world record ollie. $^{1}$  ]{{\includegraphics[width=0.2\textwidth]{figure/JakeHayes.png} }}%
@@ -383,40 +389,10 @@ The code used to derive to \glspl{eom} of the human, along with a mathematical d
     \label{fig:f_record}
     \centering \footnotesize \url{https://theberrics.com/world-record-ollie-footage}$^{1}$%
 \end{figure}
-%%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-We constrained kinetics and kinematics of the human to compensate for the human simplifications.
-
-\textit{Kinematics} \\
-The kinematics of the human controller are bound by musculoskeletal restrictions. Firstly, the feet can only operate within a range of the human's \gls{com}. We found the maximum and minimum feet location with respect to the human's \gls{com} with Yeadon \cite{yeadon_simulation_1990}. The model is set to a 1.80[m] tall human and is matched to a picture of the world record ollie of Jake Hayes. The reconstruction is seen in Fig.\ref{fig:f_record}. This leads to the first two constraint:
-
-
-\begin{equation}\label{e_yeadon}
-\begin{array}{c}
-    \gamma_{1}^{(2,3)}:\quad  0.466 < y_h - \mathbf{r_{comH \mathbin{/} bf}} \cdot \mathbf{\hat n_y} < 1.13 \\ 
-    \gamma_{2}^{(2,3)}:\quad  0.466 < y_h - \mathbf{r_{comH \mathbin{/} ff}} \cdot \mathbf{\hat n_y} < 1.13 
-\end{array}
-\end{equation}
-
-To constrain the horizontal musculoskeletal restrictions we implemented a minimum and maximum feet seperation:
-
-\begin{equation}
-        \gamma_{3}^{(1,2,3)}:\quad   0.1 < \vert \mathbf{r_{bf/ff}} \vert < 1
-\end{equation}
-
-Furthermore, the skater should always stay on top of the skateboard to eliminate relative errors.
-\begin{equation}
-    \gamma_4^{(1,2,3)}:\quad  -0.3 < x_h - \mathbf{r_{comS\mathbin{/}comH}}\cdot \mathbf{\hat n_x} < 0.3
-\end{equation}
-
-To make sure the feet never leave the skateboard, $s_1$ and $s_2$ are positively bound from the end of the tail and the left pocket of the deck respectively (see fig \ref{f_FBD}):
-\begin{equation}
-\begin{array}{c}
-    \gamma_{5}^{(1,2,3)}:\quad  0 < s_1-l_t < \infty  \\
-    \gamma_{6}^{(1,2,3)}:\quad  0 < s_2-l_d < \infty  \\
-\end{array}
-\end{equation}
-The feet can still be in a no contact scenario as seen in section \ref{ss_mechanics}. This is simulated by when zero force is exerted. 
+We also implement a minimum and maximum foot separation of \SI{0.1}{\meter} and \SI{1.0}{\meter} respectively, along with constraining the skater to always stay on top of the skateboard to eliminate relative errors.
+To make sure the feet never leave the skateboard, $s_1$ and $s_2$ are positively bound from the end of the tail and the left pocket of the deck respectively (see fig \ref{fig:FBD}).
+The feet can still be in a no contact scenario, as seen in section~\ref{ss_mechanics}, due to how the friction model is implemented (section~\ref{ss_friction}).
 
 \textit{Kinetics} \\
 The human kinetics are bound to the characteristics of the \gls{cmj} during the first phase of the ollie. The \gls{cmj} motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the \gls{cmj}~\cite{candotti_lower_2012}. The \gls{cmj} is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the \gls{grf. Bounding the \gls{grf} is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the \gls{grf} of the \gls{cmj} is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a \gls{cmj} is shown. By constraining the vertical \gls{rfd} ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the \gls{rfd}, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained, since $P = F v_{rel}$. We used the CMJ data from a pointmass based paper for the \gls{rfd}, $ F_{max} $, $ \Delta s $, $ P $ from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. To prevent this phenomena the force, and power are bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be implemented as such:
@@ -477,7 +453,7 @@ We approximated the horizontal forces with a maximum abduction bound, since the 
     \end{array}
 \end{equation}
 
-\subsubsection{Friction}
+\subsubsection{Friction} \label{ss_friction}
 In section \ref{ss_mechanics}, we show that the feet slide along the deck's
 griptape to level the skateboard out during the preparation phase 1 and drag
 the skateboard up during the upward motion phase 2.
