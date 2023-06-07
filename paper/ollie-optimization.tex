@@ -259,7 +259,7 @@ That is why grip-tape on the deck and rubber-soled shoes is the choice of prefer
 \section{Method}
 % I have parameterized the geometry and inertia characteristics of a skateboard modeled as a single rigid body with parameters: tail length, tail angle, deck length, truck height, and wheel radius. This is an appropriate parameterization for a skateboard designer because the width of the skateboard is usually chosen by preference. Also, the ollie is a movement that involves rotation in one plane, visible in fig. \ref{f_olliesteps}, which means only the inertia characteristics for this rotation are necessary. 
 
-To find the optimal skateboard geometry, we take a modeling and optimization approach involving the following four fundamental steps: 
+To find the optimal skateboard geometry, we take a modeling and optimization approach involving four fundamental steps: 
 \begin{enumerate}
     \item understand the mechanics of the ollie through literature and a video analysis,
     \item define the parameter optimization and \gls{ocp},
@@ -342,75 +342,15 @@ take the height achieved to be the middle of a fictional tangent touching lowest
 \noindent where $y_s^{(2)}(t_F)$ is the height achieved by the skateboard's \gls{com} at the end of the second phase, $d_{com}$ is the distance between the skateboard's \gls{com} and the deck, $h_{tr}$ is the truck height, and $r_w$ is the wheel radius.
 
 \subsection{System Dynamics}\label{s_systemdynamics}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width = 0.5\textwidth]{figure/FBD_phase1.png}
-%     \footnotesize\begin{tabular}{|l l|l l|} \hline
-%     \color{blue}Blue: & State variables &\color{red} Red: & Forces \\ \hline
-%     \color{cyan}Cyan dot: & Front foot & \color{blue}Blue dot: & Back foot \\ \hline
-%     \color{yellow}Yellow: & Foot movement & \color{green}Green: & Frames \\ \hline
-%     \end{tabular}
-%     \caption[Free body diagram phase 1]{Free body diagram phase 1. The back wheel is now modeled as sliding joint which reduces the degrees of freedom to 2. The equations are correct as long as the normal force at the wheel is not negative.}
-%     \label{f_FBDphas1}
-% \end{figure}
-
-While in reality a skateboard bends and flexes during the ollie, this study assumes a rigid body model of the skateboard to reduce mathematical complexity.
-We derive the \glspl{eom} using the TMT method~\cite{vallery_heike_advanced_2018}, facilitated by SymPy~\cite{meurer_sympy_2017}.
 
 \subsubsection{Skateboard Equations of Motion}
-In phase 1 we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the \glspl{eom}. During phase 2 and 3 the skateboard is an unconstrained rigid body in 2D. 
-The skateboard's \gls{com} coordinates are
-%
-\begin{equation}
-    \mathbf{x} = [x_s, y_s, \theta_s]^T
-\end{equation}
+While in reality a skateboard bends and flexes during the ollie, this study assumes a rigid body model of the skateboard to reduce mathematical complexity.
 
-With the sliding joint, we use two generalized coordinates $x_w$ (x-location
-back wheels) and $\theta_s$ (angle w.r.t. ground) as shown in figure
-\ref{f_FBDphas1}.
-The skateboard then has two \glspl{dof} with the the generalized coordinates:
-%
-\begin{equation}
-    \mathbf{q} = [x_w, \theta_s]^T
-\end{equation}
+The skateboard model is detailed in figure~\ref{fig:FBD}. In phase 1 we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the \glspl{eom}.
+During phase 2 and 3 the skateboard is an unconstrained rigid body in 2D. 
 
-The \gls{com} in terms of the generalized coordinates is:
-%
-\begin{equation}
-\mathbf{x}=\left[\begin{array}{c}
-\frac{l_{w b} \cos \left(\theta_s\right)}{2}+x_w+\left(d_{c o m}-h_{t r}\right) \sin \left(\theta_s\right) \\
-\frac{l_{w b} \sin \left(\theta_s\right)}{2}+r_w+\left(h_{t r}-d_{c o m}\right) \cos \left(\theta_s\right) \\
-\theta_s
-\end{array}\right]
-\end{equation}
-
-Frictional ($F_{f1,2}$) and normal forces ($F_{p1,2}$) from the front and back foot act on the skateboard, along with the ground normal force ($F_n$) during the preparation phase. We defined the back and front feet along the deck of the skateboard with a blue and cyan dot indicated with variables $s_1$ and $s_2$ respectively (see Fig. \ref{f_FBDphas1}). The perpendicular forces are bound positively such that the feet can never pull on the board. The moments caused by the back and front foot about the \gls{com} are $Mc_{bf}, Mc_{ff}$ respectively. Thus the \gls{com}-applied forces and torques $\mathbf{F_{a}}$ are:
- 
-\begin{equation}\label{e_Fi}
-\begin{array}{c}
-    \mathbf{F_{a}}= \left[\begin{array}{l}
--F_{p 1} \sin \left(\phi-\theta_s\right)+F_{p 2} \sin \left(\theta_s\right)- \\ \ F_{w 1} \cos \left(\phi-\theta_s\right)-F_{w 2} \cos \left(\theta_s\right) \\ \\
--F_{p 1} \cos \left(\phi-\theta_s\right)-F_{p 2} \cos \left(\theta_s\right)+ \\ \ F_{w 1} \sin \left(\phi-\theta_s\right)-F_{w 2} \sin \left(\theta_s\right)-g m_s \\ \\
-Mc_{bf} + Mc_{ff}
-\end{array}\right] 
-\\ \\
-Mc_{bf} = -F_{p 1} (-d_{\text {com }} \sin (\phi)-\frac{l_d \cos (\phi)}{2}-l_t+s_1)+ \\ \ F_{w 1}(d_{c o m} \cos (\phi)-\frac{l_d \sin (\phi)}{2})
-\\ \\
-Mc_{ff} = -F_{p 2}\left(-\frac{l_d}{2}+\mathrm{s}_2(t)\right)+F_{w 2} \ d_{c o m}
-\end{array}
-\end{equation}  
-
-The skateboards' mass matrix $\mathbf{M_s} = diag(m_s,m_s,I_s)$ together with the transformed \gls{com} applied coordinates form the \glspl{eom} of phase 1:
-
-\begin{equation} \label{e_eoma}
-    \mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot \mathbf{q} = \mathbf{T}^T (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
-\end{equation}
-
-The TMT method provides the transformation matrix $\mathbf{T}$, and convective terms $\mathbf{g_k}$.
-The skateboards` EoMs for phase 2, and 3 are:
-\begin{equation}\label{e_eomb}
-\mathbf{M_s} \cdot \mathbf{x} =  \mathbf{F_a}
-\end{equation}
+We derive the \glspl{eom} using the TMT method~\cite{vallery_heike_advanced_2018}, facilitated by SymPy~\cite{meurer_sympy_2017}.
+The code used for the derivation is provided in the supplementary information, along with a mathematical description of the \glspl{eom}.
 
 \begin{figure}
     \centering
@@ -421,7 +361,7 @@ The skateboards` EoMs for phase 2, and 3 are:
     \color{yellow}Yellow: & Foot movement & \color{green}Green: & Frames \\ \hline
     \end{tabular}
     \caption[Free Body Diagrams phase 2 and 3]{Free body diagrams of human and skateboard for phase 1. N Frame is the inertial frame, A and B are body fixed frames. Forces are equal and opposite acting between the feet and human's \gls{com}.}
-    \label{f_FBD}
+    \label{fig:FBD}
 \end{figure}
 
 \subsubsection{Human Equations of Motion} \\
