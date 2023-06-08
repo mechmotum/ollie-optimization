@@ -399,15 +399,7 @@ The feet can still be in a no contact scenario, as seen in section~\ref{ss_mecha
 The human kinetics are bounded to the characteristics of a \gls{cmj} during the first phase of the ollie.
 The \gls{cmj} motion is chosen because it accounts for 76.3\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}.
 During a vertical jump, joint torques, and knee extensor and hip abduction forces all map to one output variable: the \gls{grf}.
-As contributions of individual segments cannot be expressed with a point mass model, we bound the \gls{grf} of the \gls{cmj} to capture the realistic kinetics of the human. The \gls{grf} for a representative \gls{cmj} is shown in figure~\ref{fig:cmj}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.45\textwidth]{figure/countermovementjumpRFD.jpg}
-    \caption[Ground reaction force of \acrlong{cmj}]{Phases during \gls{cmj}. During unloading, the human lowers their \gls{com} quickly. During the eccentric phase, the gained downward velocity during the unloading phase is braked until the lowest point is reached which is at the amortization. During the concentric phase the legs are stretched out and upward speed is gained until the take-off. At take-off the vertical speed is maximal.}
-    \centering \footnotesize Source: \cite{barker_relationships_2018}%
-    \label{fig:cmj}
-\end{figure}
+As contributions of individual segments cannot be expressed with a point mass model, we bound the \gls{grf} of the \gls{cmj} to capture the realistic kinetics of the human.
 
 We constrain the \gls{rfd} to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains velocity. We derived numerical values from a study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. To account for the fact that \cite{barker_relationships_2018} measured two legs simultaneously, we also constrain the sum of the forces produced by both legs together, as well as the absolute force and power produced by each legs to within realistic physical limits.
 
