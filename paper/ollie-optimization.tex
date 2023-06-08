@@ -258,7 +258,7 @@ The higher the coefficient of friction between the foot and the deck, the more u
 That is why grip-tape on the deck and rubber-soled shoes is the choice of preference among skaters (coefficient of friction of 0.7 or higher~\cite{bron_nog_nodate}).
 
 \section{Method}
-% I have parameterized the geometry and inertia characteristics of a skateboard modeled as a single rigid body with parameters: tail length, tail angle, deck length, truck height, and wheel radius. This is an appropriate parameterization for a skateboard designer because the width of the skateboard is usually chosen by preference. Also, the ollie is a movement that involves rotation in one plane, visible in fig. \ref{f_olliesteps}, which means only the inertia characteristics for this rotation are necessary. 
+% I have parameterized the geometry and inertia characteristics of a skateboard modeled as a single rigid body with parameters: tail length, tail angle, deck length, truck height, and wheel radius. This is an appropriate parameterization for a skateboard designer because the width of the skateboard is usually chosen by preference. Also, the ollie is a movement that involves rotation in one plane, visible in fig. \ref{fig:ollie steps}, which means only the inertia characteristics for this rotation are necessary. 
 
 To find the optimal skateboard geometry, we take a modeling and optimization approach involving four fundamental steps: 
 \begin{enumerate}
@@ -361,7 +361,7 @@ The code used for the derivation is provided in the supplementary information, a
     \color{cyan}Cyan dot: & Front foot & \color{blue}Blue dot: & Back foot \\ \hline
     \color{yellow}Yellow: & Foot movement & \color{green}Green: & Frames \\ \hline
     \end{tabular}
-    \caption[Free Body Diagrams phase 2 and 3]{Free body diagrams of human and skateboard for phase 1. N Frame is the inertial frame, A and B are body fixed frames. Forces are equal and opposite acting between the feet and human's \gls{com}.}
+    \caption[Free Body Diagrams phase 2 and 3]{Free body diagrams of human and skateboard for phase 1. $N$ is the inertial frame, and $A$ and $B$ are body fixed frames. Forces acting between the feet and human's \gls{com} are equal and opposite.}
     \label{fig:FBD}
 \end{figure}
 
@@ -394,64 +394,20 @@ We also implement a minimum and maximum foot separation of \SI{0.1}{\meter} and 
 To make sure the feet never leave the skateboard, $s_1$ and $s_2$ are positively bound from the end of the tail and the left pocket of the deck respectively (see fig \ref{fig:FBD}).
 The feet can still be in a no contact scenario, as seen in section~\ref{ss_mechanics}, due to how the friction model is implemented (section~\ref{ss_friction}).
 
-\textit{Kinetics} \\
-The human kinetics are bound to the characteristics of the \gls{cmj} during the first phase of the ollie. The \gls{cmj} motion is chosen because, 76.3\% of the variance in the performance of the ollie maneuver can be explained by the \gls{cmj}~\cite{candotti_lower_2012}. The \gls{cmj} is reported to have good reliability and is a strong assessment of lower-body mechanical power \cite{barker_relationships_2018}. During a vertical jump, joint torques, knee extensor force, hip abduction forces all map to one output variable: the \gls{grf. Bounding the \gls{grf} is the only sensible way to capture the kinetics of a human jumper for a point mass model is the ground reaction force, because contributions of individual segments can only be bound with more complex models. Hence, the \gls{grf} of the \gls{cmj} is used to realize a realistic COM human jumper model. In figure \ref{f_cmj} a typical ground reaction force for a \gls{cmj} is shown. By constraining the vertical \gls{rfd} ($dF/dt$, slope in figure \ref{f_cmj}), the maximum force $F_{max}$, maximum displacement $\Delta s$, and maximum mechanical power $P$, the total mechanical output of the legs is constrained for a simple point mass model. By constraining the \gls{rfd}, the shortening or lengthening cycle is simulated. The maximum force will make sure the force does not exceed the maximum capabilities. By constraining the power, given a constrained force, the maximum velocity is also constrained, since $P = F v_{rel}$. We used the CMJ data from a pointmass based paper for the \gls{rfd}, $ F_{max} $, $ \Delta s $, $ P $ from a Division-I male, soccer players with a mean height of 179.5[cm], weight of 75.5[kg], and age of 19.65 years \cite{barker_relationships_2018}. The data was measured for two legs simultaneously, which is unfortunate for the optimization since the two legs can work separately, which might lead to different kinetic data. Though, the constraints are set on the sum of the forces and the forces separately due to the possibility of out of phase pushing and pulling which could result in a combined satisfaction of the constraint but individual legs could exceed the physical limitations. To prevent this phenomena the force, and power are bound absolutely. Absolute values are not feasible in higher order optimization problems \cite{kelly_introduction_2017}. Absolute bound can be implemented as such:
-\begin{equation}
-\begin{array}{c}
-    \gamma_{7}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_h}\cdot \mathbf{\hat n_y} < 32.61 m_h   \\
-    \gamma_{8}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{bf}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
-    \gamma_{9}^{(1,2,3)}:\quad  -32.61 m_h < \mathbf{F_{ff}}\cdot \mathbf{\hat n_y} < 32.61 m_h \\
-\end{array}
-\end{equation}
-
-\begin{equation}
-    \begin{array}{c}
-         \gamma_{10}^{(1)}:\quad  -54.62 m_h < P_{bf} + P_{ff} < 54.62 m_h  \\
-         \gamma_{11}^{(1)}:\quad  -54.62 m_h < P_{bf} - P_{ff} < 54.62 m_h  \\
-         \gamma_{12}^{(1)}:\quad  -54.62 m_h < P_{ff} - P_{bf} < 54.62 m_h  \\
-    \end{array}
-\end{equation}
-
-The foot power $P_{bf,ff}$ is found per leg by calculating the dot product between relative velocity between the foot and the human \gls{com} and the resultant force acting on the foot. 
-
-The maximum distance the legs can produce force over is constraint implemented similar to equation \ref{e_yeadon} with the same upper bound:
-
-\begin{equation}
-\begin{split}
-        \gamma_{13}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} bf}} \cdot \mathbf{\hat n_y} < 1.13 \\ 
-      \gamma_{14}^{(2,3)}:& \quad  1.13-\Delta s < y_h - \mathbf{r_{comH \mathbin{/} ff}} \cdot \mathbf{\hat n_y} < 1.13 
-      \end{split}
-\end{equation}
+The human kinetics are bounded to the characteristics of a \gls{cmj} during the first phase of the ollie.
+The \gls{cmj} motion is chosen because it accounts for 76.3\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}.
+During a vertical jump, joint torques, and knee extensor and hip abduction forces all map to one output variable: the \gls{grf}.
+As contributions of individual segments cannot be expressed with a point mass model, we bound the \gls{grf} of the \gls{cmj} to capture the realistic kinetics of the human. The \gls{grf} for a representative \gls{cmj} is shown in figure~\ref{fig:cmj}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.4\textwidth]{figure/countermovementjumpRFD.jpg}
-    \caption[Ground reaction force of CMJ]{Phases during \gls{cmj}. During unloading, the human lowers their \gls{com} quickly. During the eccentric phase, the gained downward velocity during the unloading phase is braked until the lowest point is reached which is at the amortization. During the concentric phase the legs are stretched out and upward speed is gained until the take-off. At take-off the vertical speed is maximal.}
+    \includegraphics[width=0.45\textwidth]{figure/countermovementjumpRFD.jpg}
+    \caption[Ground reaction force of \acrlong{cmj}]{Phases during \gls{cmj}. During unloading, the human lowers their \gls{com} quickly. During the eccentric phase, the gained downward velocity during the unloading phase is braked until the lowest point is reached which is at the amortization. During the concentric phase the legs are stretched out and upward speed is gained until the take-off. At take-off the vertical speed is maximal.}
     \centering \footnotesize Source: \cite{barker_relationships_2018}%
-    \label{f_cmj}
+    \label{fig:cmj}
 \end{figure}
 
-The unloading \gls{rfd} ($-41.8 m_h$) and eccentric \gls{rfd} ($196.41 m_h$) are implemented in constraint:
-
-\begin{equation}
-    \gamma_{15}^{(1)}: \quad  -41.8 m_h < \dot{\mathbf{F_h}} \cdot \mathbf{\hat n_y} < 196.41 m_h 
-\end{equation}
-
-% \begin{equation}\label{e_power}
-%     \begin{array}{c}
-%          P_{bf} = \mathbf{\dot r}_{comH/bf} \cdot \mathbf{F_bf}  \\
-%          P_{ff} = \mathbf{\dot r}_{comH/ff} \cdot \mathbf{F_bf}  \\
-%     \end{array}
-% \end{equation}
-
-We approximated the horizontal forces with a maximum abduction bound, since the body of the human does not rotate during the jump. The maximum abduction force is obtained by pushing sideways against a scale whilst standing up-straight. This is not an accurate method, but since the power is constrained in equation \ref{e_power}, it still produces a reliable abduction force approximation given by the constraints:
-
-\begin{equation}
-    \begin{array}{c}
-         \gamma_{16}^{(1,2,3)}:\quad  -200 < \mathbf{F_{ff}}\cdot \mathbf{\hat n_x} < 200  \\
-         \gamma_{17}^{(1,2,3)}: \quad -200 < \mathbf{F_{ff}}\cdot \mathbf{\hat n_x} < 200 \\ 
-    \end{array}
-\end{equation}
+We constrain the \gls{rfd} to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains velocity. We derived numerical values from a study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. To account for the fact that \cite{barker_relationships_2018} measured two legs simultaneously, we also constrain the sum of the forces produced by both legs together, as well as the absolute force and power produced by each legs to within realistic physical limits.
 
 \subsubsection{Friction} \label{ss_friction}
 In section \ref{ss_mechanics}, we show that the feet slide along the deck's
@@ -716,23 +672,28 @@ Figures \ref{f_singlepar}, and \ref{f_multipar} show 9 skateboard shapes that ha
 
 \subsection{Optimal Trajectories and \\Geometries}
 \subsubsection{No parameter optimization}
-
-\begin{figure*}[!t]
-\captionsetup[subfigure]{}
-    \subfloat[4 solutions without parameter optimization. The solutions are the result of different industry standard skateboards to verify that the optimization matches reality.]{
-    \includegraphics[trim={0 0 0 0},clip,width=\textwidth]{figure/Results/no_optimization_table_dpi600.png}
-    \label{f_nopar}}
-
-    \subfloat[6 solutions whilst optimizing a single parameter. 5 and 6 are local maxima since they perform worse then 1. Base in (a) (base solution is in solution space of 5 and 6). The best performing optimization is 2. Wheelbase]{
-        \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{figure/Results/single_optimization_table_dpi600.png}
-        \label{f_singlepar}
-       }
-       
-    \subfloat[5 solutions whilst optimizing multiple parameters. 3 and 5 are local maxima since they perform worse then solution 1. ]{\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{figure/Results/multi_optimize_table_dpi600.png}\label{f_multipar}}
-    \vspace{0.2cm}
-    \caption[Geometries of optimization solutions]{Results of 3 optimization types}
-    a): No parameter optimization, (b) Single parameter optimization, (c) Multiple parameter optimization. The columns show different solutions with a schematic geometry on top. The rows show corresponding optimal control benchmarks. The centre of mass is indicated with a cross. Jump height is calculated by minimum vertical position minus take-off vertical position of the person. The impact loss is calculated with kinetic energy of the skateboard after impact minus kinetic energy of the skateboard prior to impact. Other variables are direct output from optimization.
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{paper/figure/Results/ResultsTable.png}
+    \caption[Results benchmarks]{5 Different ollie optimization results showing important benchmarks. 1, and 2 are without parameter optimization. 2 is conducted to verify reality (long board should be harder to ollie). 3, and 4 are trajectory optimizations with single parameter optimization, the optimized parameter is indicated with the name. 4 is a local maximum since the base optimization can ollie higher and is in the solution space of 4. 5 is a trajectory optimization with multiple parameter optimization, where all parameters are optimized but the tail length (causes local maxima).}
+    \label{fig:enter-label}
 \end{figure*}
+% \begin{figure*}[!t]
+% \captionsetup[subfigure]{}
+%     \subfloat[4 solutions without parameter optimization. The solutions are the result of different industry standard skateboards to verify that the optimization matches reality.]{
+%     \includegraphics[trim={0 0 0 0},clip,width=\textwidth]{figure/Results/no_optimization_table_dpi600.png}
+%     \label{f_nopar}}
+
+%     \subfloat[6 solutions whilst optimizing a single parameter. 5 and 6 are local maxima since they perform worse then 1. Base in (a) (base solution is in solution space of 5 and 6). The best performing optimization is 2. Wheelbase]{
+%         \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{figure/Results/single_optimization_table_dpi600.png}
+%         \label{f_singlepar}
+%        }
+       
+%     \subfloat[5 solutions whilst optimizing multiple parameters. 3 and 5 are local maxima since they perform worse then solution 1. ]{\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{figure/Results/multi_optimize_table_dpi600.png}\label{f_multipar}}
+%     \vspace{0.2cm}
+%     \caption[Geometries of optimization solutions]{Results of 3 optimization types}
+%     a): No parameter optimization, (b) Single parameter optimization, (c) Multiple parameter optimization. The columns show different solutions with a schematic geometry on top. The rows show corresponding optimal control benchmarks. The centre of mass is indicated with a cross. Jump height is calculated by minimum vertical position minus take-off vertical position of the person. The impact loss is calculated with kinetic energy of the skateboard after impact minus kinetic energy of the skateboard prior to impact. Other variables are direct output from optimization.
+% \end{figure*}
 
 \noindent The results in figure \ref{f_nopar} are performed to test the scenario that a long board and a penny board are more difficult to ollie compared to the popsicle stick. These results are found without a parameter optimization. The longboards' dimension are set to an arbitrary OEM longboard.\footnote{\url{https://hlcskateboardfactory.com/ shape: MB701}} The penny boards' dimensions are set to an arbitrary penny board. A penny board is usually made from plastic.\footnote{\url{https://skateboardelite.com/what-is-penny-board/}} The coefficient of friction for the plastic penny is set to 0.2 \cite{bani-hani_data_2019}. For a comparison if the shape of a penny could actually ollie higher a version with grip-tape is also shown. The three boards are optimized to verify the optimization. Longboard complies with the real life scenario and the optimization shows a 31\% decrease in ollie height compared to the base . The penny board with a plastic top (lower coefficient of friction) is able to ollie 14.2\% lower than the base.
 
@@ -760,7 +721,7 @@ To see all detailed trajectories with forces as a video, visit: \url{https://www
 \subsubsection{Base skateboard optimization}
 
 %%% Maybe we should try to fit this subsubsection in the caption of figure 11 %%%
-\noindent The first figure concerns the optimal control problem without parameter optimization shown in figure \ref{f_noparameter}. The trajectory is very similar to the trajectory seen in figure \ref{fig:olliesteps}. Though you have to take into account that this ollie is a standing ollie without an initial horizontal velocity, whereas figure \ref{fig:olliesteps} shows a riding ollie. The skateboard relative to the human first moves forward, and just before the impact it rapidly moves backward followed by the tail hitting the ground. The backwards movement happens such that the human can effectively pull the skateboard up and forward with friction and perpendicular force which results in the skateboard being straight under the human at the highest point. The backwards velocity is clearly visible in fig. \ref{f_nopar} speeds, where the blue line before impact is at the largest negative velocity. After impact the velocity will gradually become positive and ending at an almost 0 x position of the skateboard (blue line in positions at second dotted line). If there would not have been a backwards movement, the skateboard would have been pushed out of reach of the human's feet when the board is leveling out. The skateboard is leveled out by a positive abduction force of the front foot (red line forces at $t=0.47-0.55$ and $t=0.62-0.65$). These forces result in a decrease in angular rotation (green line speeds, same time span), and a level skateboard at the highest point (green line positions at highest point = 0).
+\noindent The first figure concerns the optimal control problem without parameter optimization shown in figure \ref{f_noparameter}. The trajectory is very similar to the trajectory seen in figure \ref{fig:ollie steps}. Though you have to take into account that this ollie is a standing ollie without an initial horizontal velocity, whereas figure \ref{fig:ollie steps} shows a riding ollie. The skateboard relative to the human first moves forward, and just before the impact it rapidly moves backward followed by the tail hitting the ground. The backwards movement happens such that the human can effectively pull the skateboard up and forward with friction and perpendicular force which results in the skateboard being straight under the human at the highest point. The backwards velocity is clearly visible in fig. \ref{f_nopar} speeds, where the blue line before impact is at the largest negative velocity. After impact the velocity will gradually become positive and ending at an almost 0 x position of the skateboard (blue line in positions at second dotted line). If there would not have been a backwards movement, the skateboard would have been pushed out of reach of the human's feet when the board is leveling out. The skateboard is leveled out by a positive abduction force of the front foot (red line forces at $t=0.47-0.55$ and $t=0.62-0.65$). These forces result in a decrease in angular rotation (green line speeds, same time span), and a level skateboard at the highest point (green line positions at highest point = 0).
 You can see that the back foot is almost fully located at the pocket of the skateboard. This is the point with the lowest velocity of the tail, the tip of the tail has the highest velocity due to $v = \omega \times r$. When the board is rotating the power that can maximally be exerted by the human legs is limited by the force and the relative velocity: $P_{leg} = v_{rel} F$. This means that if the intention is to jump up as high as possible, the relative speed should be as low as possible, which is why the foot should be in the pocket. When the foot would be on the tip, more distance is lost which could have resulted in a higher jump. 
 The impact changes the momentum of the skateboard. In the speeds graph it is visible that the angular velocity at impact vastly reduces (green line, 1082 to 286 [deg/s]), whilst vertical velocity is gained (orange line, 3 to 5 m/s).
 The human starts with their knees slightly bent, and having full body weight on the skateboard. In the first phase the human lowers their COM in order to prepare the legs to jump. This is called the unloading phase (from $t=0 - 0.2$). After the unloading phase the force increases. Here the human is braking the downward velocity gained during the unloading phase up until the highest peak of the sum of the vertical forces (purple line). This is called eccentric braking. Then the human vertical velocity (pink line speeds) is at 0 and the human has reached its lowest point. From $t=0.35$ until impact the human is gaining upward speed  (pink line speeds) and reducing the force. The force needs to reduce to comply to the power bound ($P_{leg} = v_{rel} F$). This phase is called the concentric phase. Then the human has lost contact from the skateboard just after impact. Followed by an upward motion gradually decreasing due to gravity, reaching it's highest point just before the skateboard reaches it's highest point. The slopes and maximum of the vertical forces (purple line) are bound by the eccentric RFD(negative) and concentric RFD(positive) and the maximum force permitted. The optimizer is at the bounds and wants to maximize force and power output. The forces are not fully smooth due to the fact that the bounds are on both legs, thus simultaneous counteracting of forces between the front and back leg is permitted in the optimization. Having more kinetic data on single legs could improve this. Also the polynomial to estimate the solution used by the software is not plotted correctly here, so the line should be smoother when using the polynomials used per mesh section provided by the software. Due to practical implications this has not been done. The third reason why the control can be less? smooth is due to the friction constraints. These constraints are difficult to solve and are demanding for the optimizer, which sometimes results in non-smooth forces.
@@ -796,7 +757,7 @@ With this setup the skateboarder is able to jump almost solely from its back foo
 \noindent In this optimization the truck height and wheel radius are not optimized as shown in figure \ref{f_multipar}. The trajectory, positions and speeds of this skateboard are very similar to the prior optimization. The mass and inertia have increased due to the higher weight of the wheels compared to the previous optimization.
 
 \section{Discussion}
-\noindent The skateboard trajectories are all very similar to an actual ollie. Without any motion cues, the optimizer is able to replicate the ollie motion, with almost all phenomena seen in \ref{fig:olliesteps}. The optimizer shows that the human first jumps, then slams the skateboard to the ground, slides the front foot over the deck to drag it up and level it out and catches the skateboard with the back foot at the highest point. This is very close to reality. The human replicates the counter movement jump with a very similar force graph if figures \ref{f_notail} and \ref{f_GRF} are compared. Also the impact energy is similar to the impulse found in figure \ref{f_GRF}. The impulse from the GRF is roughly 5 [J], which is of the same order of magnitude as the found impact losses in figures \ref{f_nopar}, \ref{f_singlepar}, and \ref{f_multipar}.
+\noindent The skateboard trajectories are all very similar to an actual ollie. Without any motion cues, the optimizer is able to replicate the ollie motion, with almost all phenomena seen in \ref{fig:ollie steps}. The optimizer shows that the human first jumps, then slams the skateboard to the ground, slides the front foot over the deck to drag it up and level it out and catches the skateboard with the back foot at the highest point. This is very close to reality. The human replicates the counter movement jump with a very similar force graph if figures \ref{f_notail} and \ref{fig:GRF} are compared. Also the impact energy is similar to the impulse found in figure \ref{fig:GRF}. The impulse from the \gls{grf} is roughly \SI{5}{\joule}, which is of the same order of magnitude as the found impact losses in figures \ref{f_nopar}, \ref{f_singlepar}, and \ref{f_multipar}.
 A single mass point with two free floating feet controlled by forces and feet location with kinematic constraints are able to simulate the motion and output of a human jumper. 
 Nine out of eleven optimal skateboard geometries found higher ollies compared to the popsicle stick skateboard. None of these solutions is proven a global optimum, but the improvement to the base skateboard is something that performs better. Skateboard builders should try to implement found geometries and test empirically if they will improve ollie height. These geometries could be a tool to alter existing skateboards and let athletes jump higher. The kinetic and kinematic constraints are of a specific person. The geometries might be dependent on the human capabilities. Empirical testing is necessary to prove that this finding is true in a real life ollie. I successfully solved the ollie optimization problem with a geometry optimization. Compared to others Shield et al. \cite{shield_contact-implicit_2022} who solved an optimization problem for the ollie, my optimization was faster (3 min vs. 43 min), included an geometry optimization, and had a more difficult objective function. The Shield optimization was was set at a fixed ollie height and needed motion tracking to solve optimally. My optimization had a null seed initial guess, with an objective function that maximized ollie height. Such objective functions are generally hard to solve, for example in \cite{nitschke_efficient_2020} first tracking data needs to be implemented to solve a more difficult objective. Step by step less data can be used to solve for an more difficult objective. In the case of this paper, the solution is found without any tracking data and a difficult objective function. 
 \subsection{Findings}
