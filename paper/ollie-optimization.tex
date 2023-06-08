@@ -512,78 +512,7 @@ Variables $\theta_s, s_1, s_2, \dot s_1, \dot s_2, x_h, y_h, \dot x_h, \dot y_h$
 The NLP tolerance is set to $1e^{-8}$, and the mesh tolerance is set to $1e^{-3}$. The amount of mesh sections for the first two phases are set to 30, phase 3 is set to 10 mesh sections. The landing phase is not as important as the preparation and upward motion phase as those define the final height and thus the objective.
 
 \subsection{Summary}\label{s_summary}
-To summarize all the findings, the general formula for the multi-phase ollie OCP is implemented in one overview. The objective function for the ollie OCP is 
-
-\begin{equation}
-     maximize\ (y_s^{(2)}(t_F) + d_{com} - h_{tr} - r_w)
-\end{equation} 
-
-Subject to the dynamical constraints in phase 1:
-
-\begin{equation}
-\begin{array}{c}
-        \alpha_{1} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_x}}{m_h}\\
-        \alpha_{2} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_y}}{m_h}\\
-        \alpha_{3,4}^{(1)} =   \left(\mathbf{T}^T \mathbf{M_s} \mathbf{T} \cdot  \mathbf{T}^T\right)^{-1} (\mathbf{F_a} - \mathbf{M_s} \cdot \mathbf{g_k})
-\end{array}
-\end{equation}
-
-And for phase 2 and 3:
-
-\begin{equation}
-    \begin{array}{c}
-        \alpha_{1} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_x}}{m_h}\\
-        \alpha_{2} = \frac{\mathbf{F_h}\cdot \mathbf{\hat n_y}}{m_h}\\ 
-        \alpha_{5,6} = (\mathbf{M_s})^{-1}\mathbf{F_a}
-    \end{array}
-\end{equation}
-
-With path constraints during phase 1:
-
-\begin{equation}
-    \begin{array}{c}
-         \gamma_{3-6},  \\
-         \gamma_{9-30},
-    \end{array}
-\end{equation}
-
-And during phase 2 and 3:
-
-\begin{equation}
-    \begin{array}{c}
-         \gamma_{1-11}  \\
-         \gamma_{16-30}
-    \end{array}
-\end{equation}
-
-With endpoint constraints $\beta_{1-9}$.
-In the first phase the state variables $q^{(1)}$, control variables $u_c^{(1)}$, slack control variables $u_s^{(1)}$ are:
-
-\begin{equation}
-\begin{array}{rl}
-   \mathbf{q^{(1)}} =& [x_w , th_s, x_h, y_h, \dot x_w, \dot th_s,\dot x_h, \dot y_h]    \\
-   \mathbf{u_c^{(1)}} =& [fp1, fp2, dds_1, dds_2]  \\
-   \mathbf{u_s^{(1)}}=&  [F_{f1}^+, F_{f1}^-, \psi_1,F_{f2}^+, F_{f2}^-, \psi_2 
-\end{array}
-\end{equation}
-
-During the second and third phase the state variables $q^{(2,3)}$, control variables $u_c^{(2,3)}$, slack control variables $u_s^{(2,3)}$ are:
-
-\begin{equation}
-\begin{array}{rl}
-   \mathbf{q^{(2,3)}} =& [x_s, y_s, \theta_s, x_h, y_h, \dot x_s, \dot y_s, \dot \theta_s,\dot x_h, \dot y_h]    \\
-   \mathbf{u_c^{(2,3)}} =& [F_{p1}, F_{p2}, \ddot s_1, \ddot s_2]  \\
-   \mathbf{u_s^{(2,3)}}=&  [F_{f1}^+, F_{f1}^-, \psi_1,F_{f2}^+, F_{f2}^-, \psi_2] 
-\end{array}
-\end{equation}
-
-With the global parameters variables $\sigma$ as any combination of the optimized geometric parameters: 
-
-\begin{equation}
-    \sigma_i \in [l_{wb}, l_d, l_t, \phi, h_{tr}, r_w]
-\end{equation}
-
-The results will show several optimizations with different combinations of parameter optimizations to search the solution space for optimal shapes. The first set of optimizations will be without optimized parameter variables to show proper functioning of the model. The second set of optimizations will be single variable optimizations where only one variable from the optimized parameter variables is chosen to be optimized. The third set of optimization will be variations to multiple optimized parameter variables. 
+A full mathematical description of the \gls{ocp} definition including all variables, constraints and bounds can be found in the supporting information, along with the code used to formulate and solve the \gls{ocp}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -600,7 +529,7 @@ All optimizations are with a null seed initial guess and solved with an optimal 
 
 %The longboards' maximum angular velocity is 40.0\% lower compared to the base skateboard. This is probably due to the fact that the inertia and mass of the long board are higher which will make it harder for the human with limited power to rotate it and get it up. The jump height of the human on the long board is 66.5\% lower compared to the base, meaning that a lot of power is going into the long board instead of jumping up. Resulting in the human mainly to tuck in without jumping). The impact loss is lower for the long board. This could be correlated to the fact that it reaches lower speeds. 
 
-All possible single parameter optimizations are performed, the best and worst performing optimizations are shown in Fig.~\ref{fig:resultstable} 4, and 5. are found with a single parameter optimization. Compared to the base skateboard, all single parameter optimization skateboards were able to ollie higher except for the tail length optimization (4). The difference in ollie height between the base and the single parameter optimizations is minimal (0.023 [m]) which suggests that the base skateboard is very close to it's optimum when only one variable can be changed. With a smaller wheelbase the human was able to jump higher. The main differences are found in the weight and inertia reduction which could be the main `drive' of the single parameter optimization. Which indicates that inertia and weight reduction is a positive influence for ollie height. Dynamically this makes sense because with lower mass and inertia values it easier to lift and rotate the skateboard. The tail length optimization did not find a higher maxima than the base optimization which makes it a local maximum per definition, because the base solution is in the solution space of the tail optimization. The cause of hitting a local optimum because of the tail length needs further investigation. We will exclude this optimization for detailed analysis in the next subsection.
+All possible single parameter optimizations are performed, the best and worst performing optimizations are shown in Fig.~\ref{fig:resultstable} 4, and 5. are found with a single parameter optimization. Compared to the base skateboard, all single parameter optimization skateboards were able to ollie higher except for the tail length optimization (4). The optimization was able to ollie 0.023[m] higher with a 0.09[m] smaller wheelbase. The difference in ollie height is minimal (0.023 [m]) which suggests that the base skateboard is very close to it's optimum when only one variable can be changed. With a smaller wheelbase the human was able to jump higher. The main differences are found in the weight and inertia reduction which could be the main `drive' of the single parameter optimization. Which indicates that inertia and weight reduction is a positive influence for ollie height. Dynamically this makes sense because with lower mass and inertia values it easier to lift and rotate the skateboard. The tail length optimization did not find a higher maxima than the base optimization which makes it a local maximum per definition, because the base solution is in the solution space of the tail optimization. The cause of hitting a local optimum because of the tail length needs further investigation. We will exclude this optimization for detailed analysis in the next subsection.
 
 The fifth optimization is found with multiple parameter optimization. When multiple parameters are optimized ollie height is improved by 0.106 [m] compared to the base skateboard. 
 
@@ -632,7 +561,7 @@ The human starts with their knees slightly bent, and having full body weight on 
     Corresponds to result 3. Wheelbase in Fig.~\ref{fig:resultstable}. 0.09[m] smaller wheelbase compared to base, 0.023[m] higher ollie. Three striking differences, the first is that the jumping force is now equally dependant on the back and front extension force (blue,orange,4), the second is that there is only one force peak between impact and highest point. The third striking part is that the skateboard rotates before landing (t=0.8).
 \end{figure*}
 
-The wheel base of the skateboard is optimized along with optimal control. Most of the phenomena seen in the base optimization are also visible for this optimization. The human lowers their weight, pushes the skateboard forward then pulls it backward. Angular velocity is lost during impact (-1193 [deg/s] and vertical speed is gained (green and orange lines speeds). After impact abduction force with the front leg is used to pull the skateboard up and level it out. The first difference is visible in the force plot. The sum of the vertical forces (purple line) does not stagger when unloading. A straight line up, down, and then up is achieved. Secondly, a higher angular velocity is achieved compared to the base. The back foot is once again in the pocket of the board, but now the front foot is at equal distance from the wheel having perfect balance. At this position both legs can exert equal force without rotating the board during eccentric braking ($t=0.15 - 0.3$). Then suddenly shortly before the impact, the front foot (orange line forces) pulls up and the back foot pushes down to create a maximal momentum about the back axis creating a steep sudden increase in angular velocity. The decreased wheelbase causes the impact angle to be lower and the angular velocity near zero just after impact (green lines positions and speeds). This leaves a period of rest such that the skateboard can gain height. While the front foot is in a sliding motion, the foot starts pushing down on the board at t=0.53.  This is almost enough to level the board out at the highest point. But the negative angular rotation caused by this push is caught with the back foot at the highest point making sure the board is leveled. 
+Most of the phenomena seen in the base optimization are also visible for this optimization. The human lowers their weight, pushes the skateboard forward then pulls it backward. Angular velocity is lost during impact (-1193 [deg/s] and vertical speed is gained (green and orange lines speeds). After impact abduction force with the front leg is used to pull the skateboard up and level it out. The first difference is visible in the force plot. The sum of the vertical forces (purple line) does not stagger when unloading. A straight line up, down, and then up is achieved. Secondly, a higher angular velocity is achieved. The back foot is once again in the pocket of the board, but now the front foot is at equal distance from the wheel having perfect balance. At this position both legs can exert equal force without rotating the board during eccentric braking ($t=0.15 - 0.3$). Shortly before the impact, the front foot (orange line forces) releases pressure and the back foot pushes down to create a maximal momentum about the back axis creating a steep increase in angular velocity. The decreased wheelbase causes the impact angle to be lower and the angular velocity near zero just after impact (green lines positions and speeds). No control is needed while gaining height. While the front foot is in a sliding motion, the foot starts pushing down on the board at t=0.53.  This is almost enough to level the board out at the highest point. But the negative angular rotation caused by this push is caught with the back foot at the highest point making sure the board is leveled. 
 The reason why this board can ollie higher is because it needs less force input during the upward motion to level the board out and is able to reach higher angular velocities due to reduced inertia. By decreasing the wheelbase, the inertia of the skateboard is decreased. With a decreased inertia, the dynamic response is faster resulting in higher angular velocity with the same amount of torque produced. Also less force is needed to level the skateboard during the upward motion because the same amount of force input will result in a larger angular deflection compared to the base skateboard. 
 
 \begin{figure*}[t]
