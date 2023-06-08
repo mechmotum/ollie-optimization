@@ -269,10 +269,15 @@ To find the optimal skateboard geometry, we take a modeling and optimization app
 \end{enumerate}
 
 \subsection{Geometry and Parameterization}\label{s_paropt}
-The most widely used modern skateboard is the popsicle stick skateboard. We simplify the popsicle stick skateboard design for our 2D model with an assumption about nose-tail symmetry and by ignoring the deck concavity, and describe it with ten variables, see Table~\ref{t_variables}. The variables colored blue in Figure~\ref{f_11segments} are optimized and the green variables are set to an industrial standard because they influence the mass and inertia properties but play little role in the ollie dynamics.
-%
-\begin{table}
-  \centering
+The most widely used modern skateboard is the popsicle stick skateboard. We simplify the popsicle stick skateboard design for our 2D model with an assumption about nose-tail symmetry and by ignoring the deck concavity, and describe it with ten variables. The variables colored blue in figure~\ref{fig:parameterized skateboard} are optimized and the green variables are set to an industrial standard because they influence the mass and inertia properties but play little role in the ollie dynamics.
+
+%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
+\begin{figure}
+  \centerline{
+    \includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}
+  }
+  \footnotesize
+  \begin{center}
   \begin{tabular}{=l +l +c}
     \toprule
     \rowstyle{\textbf}& Variable & Description \\
@@ -290,34 +295,13 @@ The most widely used modern skateboard is the popsicle stick skateboard. We simp
     \rowstyle{\color{orange}} & $d_{com}$ & COM distance from deck \\
     \bottomrule
   \end{tabular}
-  \caption{Variables used to describe skateboard shape (see fig.
-    \ref{f_11segments}). Blue parameters are optimized, green parameters are
-    set to industrial standard. Orange is a dependent on other variables.}
-  \label{t_variables}
-\end{table}
-
-%%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
-\begin{figure}
-  \centerline{
-    \includegraphics[width=0.5\textwidth,trim={0.1cm 0.1cm 0.1cm 0.05cm},clip]{figure/parameterized.png}
-  }
-  \caption[11-Segment skateboard model]{Parameterized skateboard. Red lines
-    split the skateboard into 11 basic shaped segments for inertia calculation
-    (see figure \ref{f_basicshapes})}
-\label{f_11segments}
+  \end{center}
+  \caption{Parameterized skateboard. Blue parameters are optimized, green parameters are set to industrial standard. Orange is a dependent on other variables. Red lines split the skateboard into 11 basic shaped segments for inertia calculation.}
+\label{fig:parameterized skateboard}
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-We developed a mass and inertial model, which is a function of the skateboard's essential geometry, see Figure~\ref{f_11segments}), and material densities (wood, steel, urethane). The model is made up of eleven basic constant density shapes shown in Figure~\ref{f_basicshapes}: semi-cylinders, cuboids, cylinders and triangular prisms.
-%
-\begin{figure}
-  \centering
-  \includegraphics[width = 0.5 \textwidth]{figure/Basicshapes.png}
-  \caption[Exploded 11 segment model]{Clarification on the 11 segment model.
-    13 shapes are visible, but the wheels are taken as one wider cylinder in
-    2D. Sections 1-5 are wood, 6, 7, 8, 10 are steel, and 9, 11 are urethane.}
-  \label{f_basicshapes}
-\end{figure}
+We developed a mass and inertial model, which is a function of the skateboard's essential geometry, and material densities (wood, steel, urethane). The model is made up of eleven basic constant density shapes shown in figure~\ref{fig:parameterized skateboard}.
 
 \subsection{Optimal Control Problem}
 We formulate an \gls{ocp} with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_2021_predictive} to numerically solve the \gls{ocp}. Pycollo solves the generalized multi-phase \gls{ocp} described in \cite{betts_2010_practical} by transcribing the \gls{ocp} to a \gls{nlp} using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_2016_using}. The \gls{nlp} is then solved using Ipopt~\cite{biegler_2009_large}. Pycollo also uses ph-mesh refinement~\cite{patterson_2015_ph} to iteratively improve the transcription mesh, solving successive \glspl{nlp} until a desired solution tolerance is met.
@@ -509,7 +493,7 @@ A full mathematical description of the \gls{ocp} definition including all variab
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
-All optimizations are with a null seed initial guess and solved with an optimal IPOPT exit status with the desired NLP tolerance and mesh tolerance found in \ref{s_settings}. All optimizations were solved within 3 minutes. Figure~\ref{fig:resultstable} show 5 skateboard shapes, and important benchmarks for the trajectory. The first two optimizations are without parameter optimization. The base optimization is used to find relative differences. It uses a commercially available popsicle stick shape. The second optimization is performed to test the scenario that a long board is more difficult to ollie compared to the popsicle stick. The longboards' dimension are set to an arbitrary OEM longboard.\footnote{\url{https://hlcskateboardfactory.com/shape:MB701}} Longboard complies with the real life scenario and the optimization shows a 31\% decrease in ollie height compared to the base. The inertia and mass increase as expected. 
+All optimizations are with a null seed initial guess and solved with an optimal IPOPT exit status with the desired NLP tolerance and mesh tolerance found in \ref{s_settings}. All optimizations were solved within 3 minutes. Figure~\ref{fig:resultstable} show 5 skateboard shapes, and important benchmarks for the trajectory. It uses a commercially available popsicle stick shape. The longboards' dimension are set to an arbitrary OEM longboard.\footnote{\url{https://hlcskateboardfactory.com/shape:MB701}}
 
 \subsection{Optimal Trajectories and \\Geometries}
 \begin{figure*}
@@ -565,7 +549,8 @@ Most of the phenomena seen in the base optimization are also visible for this op
 In this optimization all variables but the tail are optimized shown in Fig.~\ref{fig:resultstable}.5. Compared to the base skateboard, this skateboard is able to ollie higher (0.106 [m]). The horizontal velocity is negative prior to impact, after impact the board is dragged upward and forward. This skateboard is significantly easier to rotate due to the lower inertia and mass ($I_s = 0.02 [kg m^2]$ compared to $0.122 [kg m^2]$ and $m_s = 1.459 [kg]$ compared to $2.377 [kg]$). With the same amount of force over time the angular velocity is twice as high (green line speeds). The human jumps highest with this skateboard setup. With this setup the skateboarder is able to jump almost solely from its back foot (blue line forces) due to the fact that the foot is located almost exactly above the back wheel such that there is no or little momentum created about the back axis. 
 
 
-% \section{Discussion}
+\section{Discussion}
+Longboard complies with the real life scenario and the optimization shows a 31\% decrease in ollie height compared to the base. The inertia and mass increase as expected. 
 % Patel et al. requires the initial guess to be similar to the solution, and the
 % model 43 minutes to solve \cite{shield_contact-implicit_2022}. Our model solves
 % optimally under two minutes with an initial guess of zero.
