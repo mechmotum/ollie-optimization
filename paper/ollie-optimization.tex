@@ -374,6 +374,8 @@ The code used to derive to \glspl{eom} of the human, along with a mathematical d
 
 \subsection{Constraints}
 
+\subsubsection{Human Model}
+
 We constrain the kinetics and kinematics of the human to compensate for the simplifications used.
 
 Musculoskeletal restrictions bound the kinematics of the human controller.
@@ -409,7 +411,7 @@ As contributions of individual segments cannot be expressed with a point mass mo
 
 We constrain the \gls{rfd} to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains velocity. We derived numerical values from a study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. To account for the fact that \cite{barker_relationships_2018} measured two legs simultaneously, we also constrain the sum of the forces produced by both legs together, as well as the absolute force and power produced by each legs to within realistic physical limits.
 
-\subsubsection{Friction} \label{ss_friction}
+\subsubsection{Friction Model} \label{ss_friction}
 In section \ref{ss_mechanics}, we show that the feet slide along the deck's
 griptape to level the skateboard out during the preparation phase 1 and drag
 the skateboard up during the upward motion phase 2.
