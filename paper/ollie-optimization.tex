@@ -110,19 +110,14 @@
 %%=============================================================%%
 
 \author*[1]{\fnm{Jan T.} \sur{Heinen}}\email{janheinen97@gmail.com}
-\equalcont{These authors contributed equally to this work.}
 
 \author[1]{\fnm{Samuel G.} \sur{Brockie}}\email{s.g.brockie@tudelft.nl}
-\equalcont{These authors contributed equally to this work.}
 
 \author[1]{\fnm{Raymund} \sur{ten Broek}}\email{raymund@uspc.nl}
-\equalcont{These authors contributed equally to this work.}
 
 \author[1]{\fnm{Eline} \sur{van der Kruk}}\email{e.vanderkruk@tudelft.nl}
-\equalcont{These authors contributed equally to this work.}
 
 \author[1]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.nl}
-\equalcont{These authors contributed equally to this work.}
 
 \affil*[1]{\orgdiv{Department of Biomechanical Engineering}, \orgname{TU Delft}, \orgaddress{\street{Leeghwaterstraat}, \postcode{2628 CN}, \city{Delft}, \country{Netherlands}}}
 
@@ -240,10 +235,13 @@ This benefits ollie height because the resultant force (Fig.~\ref{fig:ollie step
 The higher the coefficient of friction between the foot and the deck, the more upward the resultant force will be.
 That is why griptape on the deck and rubber-soled shoes is the choice of preference among skaters.
 
+Impact is also important in the mechanics of an ollie.
+An impulsive impact between the tail and the ground causes the `pop', which changes the translational and angular velocities of the board, causing it lose contact with the ground and move upwards.
+
 \section{Method}
 
 \subsection{Geometry and Parameterization}\label{s_paropt}
-The most widely used modern skateboard is the popsicle stick skateboard. We simplify the popsicle stick skateboard design for our 2D model with an assumption about nose-tail symmetry and by ignoring the deck concavity, and describe it with ten variables. The variables colored blue in figure~\ref{fig:parameterized skateboard} are optimized and the green variables are set to an industrial standard because they influence the mass and inertia properties but play little role in the ollie dynamics.
+The most widely used modern skateboard is the popsicle stick skateboard. We simplify the popsicle stick skateboard design for our 2D model with an assumption about nose-tail symmetry and by ignoring the deck concavity, and describe it with ten variables. The variables colored blue in figure~\ref{fig:parameterized skateboard} while the variables colored green are set to an industrial standard. $d_{tr}$, $d_d$ and $d_w$, do not change the geometry of the skateboard model in the 2D plane of interest. $h_d$ does influence the skateboard mass and inertia properties. However, the same effect of changing deck height can also be achieved by keeping $h_d$ constant and varying $r_w$ or $h_{tr}$, which is desirable as this model does not take into account board stiffness.
 
 %%%%%%%%%%%%%%%% begin figure %%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -278,7 +276,7 @@ The most widely used modern skateboard is the popsicle stick skateboard. We simp
 We developed a mass and inertial model, which is a function of the skateboard's essential geometry, and material densities (wood, steel, urethane). The model is made up of eleven basic constant density shapes shown in Fig.~\ref{fig:parameterized skateboard}.
 
 \subsection{Optimal Control Problem}
-We formulate an \gls{ocp} with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_predictive_2021} to numerically solve the \gls{ocp}. Pycollo solves the generalized multi-phase \gls{ocp} described in \cite{betts_practical_2010} by transcribing the \gls{ocp} to a \gls{nlp} using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_using_2016}. The \gls{nlp} is then solved using Ipopt~\cite{biegler_large-scale_2009}. Pycollo also ph-mesh refinement~\cite{patterson_ph_2015} to iteratively improve the transcription mesh, solving successive \glspl{nlp} until a desired solution tolerance is met.
+We formulate an \gls{ocp} with the objective of maximising the peak board height during the ollie. This is a simultaneous trajectory optimization of the board's dynamics and control, and parameter optimization of its geometric parameters. We use a direct method as they are well-suited for when dynamics and control must be computed to a similar accuracy and the structure of the control trajectory is not known a priori~\cite{kelly_introduction_2017}. We make use of Pycollo~\cite{brockie_predictive_2021} to numerically solve the \gls{ocp}. Pycollo solves the generalized multi-phase \gls{ocp} described in \citet{betts_practical_2010} by transcribing the \gls{ocp} to a \gls{nlp} using an LGL (Legendre-Gauss-Lobatto) collocation method~\cite{betts_using_2016}. The \gls{nlp} is then solved using Ipopt~\cite{biegler_large-scale_2009}. Pycollo also ph-mesh refinement~\cite{patterson_ph_2015} to iteratively improve the transcription mesh, solving successive \glspl{nlp} until a desired solution tolerance is met.
 
 \subsection{Phases and Objective} \label{s_phases}
 
@@ -357,12 +355,11 @@ The \gls{cmj} motion is chosen because it accounts for 76.3\% of the variance in
 During a vertical jump, joint torques, and knee extensor and hip abduction forces all map to one output variable: the \gls{grf}.
 As contributions of individual segments cannot be expressed with a point mass model, we bound the \gls{grf} of the \gls{cmj} to capture the realistic kinetics of the human.
 
-We constrain the \gls{rfd} to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We obtained numerical values from a study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. To account for the fact that \citet{barker_relationships_2018}~\cite{barker_relationships_2018} measured two legs simultaneously, we also constrain the sum of the forces produced by both legs together, as well as the absolute force and power produced by each legs to within realistic physical limits.
+We constrain the \gls{rfd} to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We obtained numerical values from a study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. To account for the fact that \citet{barker_relationships_2018} measured two legs simultaneously, we also constrain the sum of the forces produced by both legs together, as well as the absolute force and power produced by each legs to within realistic physical limits.
 
 \subsubsection{Friction Model} \label{ss_friction}
 The feet slide along the deck's griptape to drag vertically and level the skateboard. We model both the static and dynamic friction during the foot's sliding on the deck using an approach based on \cite{patel_contact-implicit_2019}.
-The relaxed friction formulation in \cite{patel_contact-implicit_2019} is incompatible with a direct collocation optimization approach as it allows for unplanned discontinuous frictional contact.
-Direct collocation enforces the dynamics and constraints over a continuous domain, in which discontinuities are infeasible~\cite{kelly_transcription_2017}.
+The relaxed friction formulation in \citet{patel_contact-implicit_2019} is incompatible with the generalized direct collocation formulation in \citet{betts_practical_2010}; it instead uses a special set of complementary constraints formulated using state values at adjacent mesh points to approximate impact as being spread throughout a single mesh section with contact changes only occurring at collocation points.
 Application of \cite{patel_contact-implicit_2019} can also result in slow convergence and long compute times, and require a close initial guess~\cite{shield_contact-implicit_2022}.
 
 We modify the method from \cite{patel_contact-implicit_2019} by removing the impact condition between the human and the board, instead assuming that the feet never impact the skateboard and simply exert zero normal force when out of contact.
@@ -372,14 +369,14 @@ We divide each normal force into a pair of non-negative slack variable represent
 
 Friction is then enforced using a set of six path constraints for each foot (shown below for the back foot):
 \begin{align} \label{e_frictioncontrol}
-    \psi_1 + \dot s_1  &\geq 0 \\
-    \psi_1 - \dot s_1  &\geq 0 \\
+    \psi_1 + \dot s_1  &\geq 0 \label{eq:first slack equation} \\
+    \psi_1 - \dot s_1  &\geq 0 \label{eq:second slack equation} \\
     \mu F_{p1} - F_{f1}^+ - F_{f1}^- &\geq 0 \\
     (\mu F_{p1} - F_{f1}^+ - F_{f1}^-)\ \psi_1  &= 0 \\
     F_{f1}^+ (\psi_1 + \dot s_1)  &= 0 \\
     F_{f1}^- (\psi_1 - \dot s_1)  &= 0
 \end{align}
-The first two introduce $\psi_1$, a slack variable representing the magnitude of the relative velocity between the foot and the skateboard $\dot{s}_1$. The third ensures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$, while the fourth ensures that when the foot slides the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in the positive direction, the negative friction component $F_{f1}^- = \mu F_{p1}$ and $F_{f1}^+=0$, and vice versa. This is enforced by the final two path constraints.
+The first two equations above introduce $\psi_1$, a slack variable representing the magnitude of the relative velocity between the foot and the skateboard $\dot{s}_1$. The third ensures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$, while the fourth ensures that when the foot slides the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in the positive direction, the negative friction component $F_{f1}^- = \mu F_{p1}$ and $F_{f1}^+=0$, and vice versa. This is enforced by the final two path constraints.
 
 \subsubsection{Endpoint constraints} \label{p_endpoints}
 Each phase is described with pair of variables describing its initial and final time. Phases are constrained such that phase final times are after phase initial times, phase duration is flexible, and the three phases are sequential.
@@ -394,7 +391,7 @@ Continuity of all state variables is enforced between phases 1 and 2 and phases 
 
 
 \subsection{Solver Configuration}\label{s_settings}
-We used an initial transcription mesh involving 30 mesh sections for phases 1 and 2, and 10 mesh sections for phase 3. The optimal trajectory in the final phase is smooth so a less dense mesh could be used.
+We used an initial transcription mesh involving 30 mesh sections for phases 1 and 2, and 10 mesh sections for phase 3. The optimal trajectory in the first two phases is more nonlinear than the third phase requiring a more dense mesh to be used.
 Additionally, settings for the \gls{nlp} and mesh tolerances in Pycollo were set to $1e^{-8}$ and $1e^{-3}$ respectively.
 
 \subsection{Summary}\label{s_summary}
