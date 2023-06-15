@@ -369,8 +369,8 @@ We divide each normal force into a pair of non-negative slack variable represent
 
 Friction is then enforced using a set of six path constraints for each foot (shown below for the back foot):
 \begin{align} \label{e_frictioncontrol}
-    \psi_1 + \dot s_1  &\geq 0 \label{eq:first slack equation} \\
-    \psi_1 - \dot s_1  &\geq 0 \label{eq:second slack equation} \\
+    \psi_1 + \dot s_1  &\geq 0 \\
+    \psi_1 - \dot s_1  &\geq 0 \\
     \mu F_{p1} - F_{f1}^+ - F_{f1}^- &\geq 0 \\
     (\mu F_{p1} - F_{f1}^+ - F_{f1}^-)\ \psi_1  &= 0 \\
     F_{f1}^+ (\psi_1 + \dot s_1)  &= 0 \\
@@ -401,22 +401,26 @@ A full mathematical description of the \gls{ocp} definition including all variab
 
 \section{Results}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=\textwidth]{paper/figure/Results/ResultsTable.png}
-    \caption[Results benchmarks]{Five different ollie optimization results showing important benchmarks. 1, and 2 are without parameter optimization. 2 is conducted to verify reality (long board should be harder to ollie). 3, and 4 are trajectory optimizations with single parameter optimization, the optimized parameter is indicated with the name. 4 is a local maximum since the base optimization can ollie higher and is in the solution space of 4. 5 is a trajectory optimization with multiple parameter optimization, where all parameters are optimized but the tail length (causes local maxima). The columns show different solutions with a schematic geometry on top. The rows show corresponding optimal control benchmarks. The centre of mass is indicated with a cross. Jump height is calculated by minimum vertical position minus take-off vertical position of the person. The impact loss is calculated with kinetic energy before impact minus kinetic energy after impact of the skateboard}
-    \label{fig:resultstable}
-\end{figure*}
-
-All optimizations are with a null seed initial guess and solved with an optimal Ipopt exit status with the desired \gls{nlp} tolerance and mesh tolerance found in section \ref{s_settings}. All optimizations solved within 3 minutes, including derivation of the \gls{eom}. Fig.~\ref{fig:resultstable} show 5 skateboard shapes, and important benchmarks for the trajectory. It uses a commercially available popsicle stick shape. The longboards' dimensions are set to an arbitrary OEM longboard.\footnote{\url{https://hlcskateboardfactory.com/shape:MB701}}
+We produced our results using Python 3.X.X, Pycollo 0.X.X and Ipopt 3.13.X, on a MacBook Pro with Apple M1 Pro CPU, \SI{16}{\giga\byte} RAM and running macOS Ventura 13.2.1.
+All \glspl{ocp} were solved in less than 3 minutes.
+We consistently used a null seed initial guess and ensured successful Ipopt and Pycollo exit statuses meeting the desired \gls{nlp} and mesh tolerances specified in section~\ref{s_settings}.
 
 \subsection{Optimal Trajectories and \\Geometries}
 
-%The longboards' maximum angular velocity is 40.0\% lower compared to the base skateboard. This is probably due to the fact that the inertia and mass of the long board are higher which will make it harder for the human with limited power to rotate it and get it up. The jump height of the human on the long board is 66.5\% lower compared to the base, meaning that a lot of power is going into the long board instead of jumping up. Resulting in the human mainly to tuck in without jumping). The impact loss is lower for the long board. This could be correlated to the fact that it reaches lower speeds. 
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{paper/figure/Results/ResultsTable.png}
+    \caption[Results benchmarks]{Key values from the results of five different ollie optimizations: skateboards~1 and 2 are a fixed geometry popsicle skateboard and longboard respectively; skateboard~3 has an optimizable wheelbase; skateboard~4 has an optimizable tail/nose length; and skateboard~5 has an optimizable wheelbase, deck length, tail/nose inclination, truck height, and wheel radius. Mass centers are shown with a cross. Jump height is calculated by subtracting the take-off vertical position of the person from the minimum vertical position. The impact loss is calculated as the difference in skateboard kinetic energy before and after impact}
+    \label{fig:resultstable}
+\end{figure*}
 
-All possible single parameter optimizations are performed, the best and worst performing optimizations are presented in Fig.~\ref{fig:resultstable}.4 and \ref{fig:resultstable}.5. are found with a single parameter optimization. Compared to the base skateboard, all single parameter optimization skateboards were able to ollie higher except for the tail length optimization (4). The optimization was able to ollie 0.023[m] higher with a 0.09[m] smaller wheelbase. The tail length optimization did not find a higher maxima which makes it a local maximum per definition, because the base solution is in the solution space of the tail optimization. The cause of hitting a local optimum because of the tail length needs further investigation. We will exclude this optimization for detailed analysis in the next subsection.
+We present the results of five separate \glspl{ocp}. Schematics of each skateboard and key metrics for each optimized trajectory are shown in figure~\ref{fig:resultstable}. Skateboards~1 and 2 are a popsicle stick (base) skateboard and longboard respectively. The longboards' dimensions are selected to match an arbitrary OEM longboard.\footnote{\url{https://hlcskateboardfactory.com/shape:MB701}} While we performed all possible single parameter optimizations, we only present two here for discussion; skateboards~3 and 4 had their wheelbase and tail length optimized respectively. Finally, skateboard~5 was multi-parameter optimization involving the simultaneous optimization of wheelbase, deck length, tail/nose inclination, truck height, and wheel radius.
 
-The fifth optimization is found with multiple parameter optimization. The ollie height improved improved by 0.106 [m] compared to the base skateboard. 
+You can find animations of the five optimal trajectories in the supplementary material or at \url{youtu.be/jw5DmNnvD7c}.
+
+% All possible single parameter optimizations are performed, the best and worst performing optimizations are presented in Fig.~\ref{fig:resultstable}.4 and \ref{fig:resultstable}.5. are found with a single parameter optimization. Compared to the base skateboard, all single parameter optimization skateboards were able to ollie higher except for the tail length optimization (4). The optimization was able to ollie \SI{0.023}{\meter} higher with a \SI{0.09}{\meter} smaller wheelbase. The tail length optimization did not find a higher maxima which makes it a local maximum per definition, because the base solution is in the solution space of the tail optimization. The cause of hitting a local optimum because of the tail length needs further investigation. We will exclude this optimization for detailed analysis in the next subsection.
+
+% The fifth optimization is found with multiple parameter optimization. The ollie height improved improved by 0.106 [m] compared to the base skateboard. 
 
 %The cause of hitting a local optimum because of the tail length needs further investigation. When the tail length increases the impact loss increases as well. This is logical when thinking of the tail speed $v = \omega \times r$, which means, the larger the distance between the tip of the tail and COM of the skateboard, the larger the local speed at the tail. The larger the speed at the tail, the more momentum is lost during impact, which is the reason for the higher impact losses. The impact loss is dependant on the mass and speed, the higher the mass or the speed, the higher the impact loss will be. For example in the `no $l_t$' (figure \ref{f_multipar}) optimization the angular velocity before impact is more than twice as high compared to the base optimization. But the mass is also 0,878[kg] less. Thus, the large angular velocity causes the impact loss to be higher, but the mass reduction reduces it, only causing a slight gain in impact loss. 
 
@@ -428,14 +432,24 @@ The fifth optimization is found with multiple parameter optimization. The ollie 
     Graph (1) shows the trajectory of the skateboard, the COM of the human corresponds to the time. (2) are the coordinates of the skateboard and the human over time. (3) are the speeds of skateboard and human over time. (4) are the extension (N-frame y direction - see first plot for frame convention), abduction (N-frame x direction) and sum of extension forces. The blue dotted lines are the phase switches. Time corresponds vertically between graphs. First the human lowers their COM (pink,2) by decreasing vertical force (purple, 4), at minimal human COM height there is maximal force and zero speed (pink,3). Maximal force is almost fully caused by the extension force of the back foot (blue,4). Speed is increased until impact and it reaches maximum speed (pink,3 at impact). Just before impact the skateboard rotates its angle (green,2) from 0 to impact angle. Mid air the speeds are constant except ones effected by gravity (orange,pink,3). The moments forces are exerted the velocities change (t=0.5, t=0.63). The human reaches its highest point before the skateboard. At the highest point force is exerted to `catch' the skateboard. Landing is achieved by stretching and landing on the back wheel
 \end{figure*}
 
-\subsection{Detailed trajectories}
-To see all detailed trajectories with forces as a video, visit: \url{https://www.youtube.com/watch?v=jw5DmNnvD7c}. 
-
 \subsubsection{Base skateboard optimization}
-%%% Maybe we should try to fit this subsubsection in the caption of figure 11 %%%
-The trajectory of the base optimization is shown in Fig.~\ref{f_noparameter} and is very similar to the trajectory seen in figure \ref{fig:ollie steps}. The skateboard relative to the human first moves forward, and just before the impact it rapidly moves backward followed by the tail hitting the ground. 
-The back foot is almost fully located at the pocket of the skateboard. This is the point with the lowest velocity of the tail during rotation ($v = \omega \times r$). Impact changes the momentum of the skateboard. In the speeds graph it is visible that the angular velocity at impact reduces (green line, 1082 to 286 [deg/s]), whilst vertical velocity is gained (orange line, 3 to 5 m/s).
-The human controller follows a CMJ force graph where unloading is from $t=0 - 0.2$, eccentric braking at $t=0.2-0.35$, and the concentric phase from $t=0.35$ until impact. During the concentric phase the vertical velocity (pink line speeds) increases. The force reduces to comply to the power bound ($P_{leg} = v_{rel} F$). Then the human lost contact with the skateboard just before impact. Followed by an upward motion gradually decreasing due to gravity, reaching it's highest point just before the skateboard reaches it's highest point. The slopes and maximum of the vertical forces (purple line) are bound by the eccentric RFD(negative) and concentric RFD(positive) and the maximum force permitted. The optimizer is operating at these bounds and wants to maximize force and power output. 
+We solved the base skateboard \gls{ocp} to demonstrate that the model and optimization methodology produce ollies with realistic kinematics and kinetics.
+The optimal trajectory is shown in figure~\ref{f_noparameter} and is very similar to the trajectory shown in figure \ref{fig:ollie steps}.
+Initially, the skateboard moves forward relative to the human. Immediately prior to the impact of the tail with the ground, the skateboard rapidly moves backward. 
+The back foot is located at the pocket of the skateboard, the point with the lowest velocity of the tail during rotation.
+Impact changes the momentum of the skateboard.
+In the speeds subplot of figure~\ref{f_noparameter} it is visible that the angular velocity reduces at impact (green line, \SIrange{1082}{286}{\degree\per\second}), while vertical velocity is gained (orange line, \SIrange{3}{5}{\meter\per\second}).
+
+The human controller follows a \gls{cmj} force graph where unloading is from $t=\SIrange{0.0}{0.2}{\second}$, eccentric braking is at $t=\SIrange{0.2}{0.35}{\second}$, and the concentric phase is from $t=\SI{0.35}{\second}$ until impact.
+During the concentric phase the vertical velocity (pink line) increases.
+The force reduces to comply to the power bound ($P_{leg} = v_{rel} F$) until the human loses contact with the skateboard just before impact.
+During upward motion, the vertical velocity of the human gradually decreases due to gravity, reaching it's highest point just before the ollie's peak.
+The slopes and maximum of the vertical forces (purple line) are bound by the eccentric (negative) and concentric (positive) \gls{rfd}, and the maximum force permitted.
+The optimizer operating at these bounds indicates that maximizing force and power output also maximizes ollie height.
+
+\subsubsection{Longboard optimization}
+
+
 
 \subsubsection{Wheelbase optimization}
 
@@ -448,7 +462,6 @@ The human controller follows a CMJ force graph where unloading is from $t=0 - 0.
     \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=0.85\textwidth]{paper/figure/Results/data_no_taildpi600 (1).png}
     \caption[Trajectory, positions, speeds, and forces for `all except tail length' optimization]{Detailed trajectory of optimization of all parameters except the tail}\label{f_notail}
     Optimization `no $l_t$'. Corresponds to result 5. No tail in Fig.~\ref{fig:resultstable}
-    
 \end{figure*}
 
 Most of the phenomena seen in the base optimization are also visible for this optimization. The first difference is visible in the force plot in Fig~\ref{f_wheelbase}. The sum of the vertical forces (purple line) does not stagger when unloading. Secondly, a higher angular velocity is achieved. The front foot is at equal distance from the wheel having perfect balance. At this position both legs can exert equal force without rotating the board during eccentric braking ($t=0.15 - 0.3$). Shortly before the impact, the front foot (orange line forces) releases pressure and the back foot pushes down to create a maximal momentum about the back axis creating a steep increase in angular velocity. The decreased wheelbase causes the impact angle to be lower and the angular velocity near zero just after impact (green lines positions and speeds). No control is needed while gaining height. While the front foot is in a sliding motion, the foot pushes down on the board at $t=0.53$. This is almost enough to level the board out at the highest point. But the negative angular rotation caused by this push is caught with the back foot making sure the board is leveled at the highest point.
