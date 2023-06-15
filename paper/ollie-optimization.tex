@@ -479,35 +479,81 @@ The human also jumps highest with this skateboard setup.
 With this setup the skateboarder is able to jump almost solely from its back foot (blue line) due to the fact that the foot is located almost exactly above the back wheel such that there is no or little momentum created about the back axis. 
 
 \section{Discussion}
-The simulated ollie resembles reality. Longboard complies with the real life scenario and the optimization shows a 31\% decrease in ollie height compared to the base. Without any motion cues, the optimizer is able to replicate the ollie motion, with almost all phenomena seen in figure~\ref{fig:ollie steps}. The optimizer shows that the human first jumps, then slams the skateboard to the ground, slides the front foot over the deck to drag it up and level it out and catches the skateboard with the back foot at the highest point. This is very close to reality. All results show high similarities to a \gls{cmj} \gls{grf}. The sum of the human kinetics are well bound and show constant results. The point mass model is able to show valid results and is insightful for the dynamics, kinetic output and human movement. In an ollie \gls{grf}, the impulse from the skateboard hitting the ground is roughly \SI{5}{\joule}~\cite{determan_kinetics_2006}, which is of the same order of magnitude as the found impact losses in figure~\ref{fig:resultstable}.
+The kinematics and kinetics of all ollies found as a result of the \glspl{ocp} resemble reality.
+Comparing the solutions for the base skateboard and longboard we see an expected trend that ollie height decreases by 31\% for the larger board.
+Without any motion cues, the optimization successfully replicates the ollie motion, with almost all phenomena seen in figure~\ref{fig:ollie steps}.
+The solutions show that it is optimal for the human to first jump, then slam the skateboard tail into the ground, then slide the front foot over the deck to drag it up and level it out, and finally catch the skateboard with the back foot at the skateboard's highest point.
+All results also show high similarities to a \gls{cmj} \gls{grf}.
+The sum of the human kinetics are well bound and show constant results.
+The point mass model is able to show valid results and is insightful for the dynamics, kinetic output and human movement.
+In an ollie \gls{grf}, the impulse from the skateboard hitting the ground is roughly \SI{5}{\joule}~\cite{determan_kinetics_2006}, which is of the same order of magnitude as the found impact losses in figure~\ref{fig:resultstable}.
 
-Lower inertia and skateboard mass is beneficial for ollie height. In all parameter optimizations that improved ollie height compared to the base, a reduction in mass and inertia is found. The main differences are found in the weight and inertia reduction which could be the main `drive' of the single parameter optimization. Which indicates that inertia and weight reduction is a positive influence for ollie height. Dynamically this makes sense because with lower mass and inertia values it easier to lift and rotate the skateboard.
+Lower inertia and skateboard mass are beneficial for ollie height.
+In all parameter optimizations that improved ollie height compared to the base, a reduction in mass and inertia is found.
+This makes sense dynamically because it is easier to lift and rotate the skateboard if it has less mass and inertia.
 
-Popsicle stick skateboard is close to optimum and slight changes due to preference will not influence the ollie height significantly. The best performing single parameter optimization was able to ollie only 0.023[m] higher. When multiple parameters are changed the ollie height increased significantly (0.106 [m]), but the shapes are completely different from a popsicle stick skateboard. If skateboarding will keep the popsicle stick skateboard as standard due to the fact that other tricks need to be performed other than the ollie, not much can be changed to the skateboard to optimize it. If the skateboard will change completely, the ollie height could be improved. The wheelbase effects the ollie height the most of all single parameter optimizations, which could be a promising outcome since it does not influence the board shape which is crucial for other tricks.
+A standard popsicle stick skateboard is close to optimum and slight changes in its geometry will not influence the ollie height significantly.
+This would enable skaters to make small modifications to skateboard geometry without penalising ollie height significantly.
+The best performing single parameter optimization was only able to ollie \SI{0.023}{\meter} higher than the base skateboard.
+When multiple parameters are changed the ollie height increased significantly by 12\%.
+However, the geometry and size of the resulting skateboard was significantly different from a popsicle stick skateboard.
+As in practice skaters will also need to consider tricks other than the ollie, and therefore keep the popsicle stick skateboard as standard, little can be changed to significantly improve ollie height.
+If ollie height were the only consideration, it could be significantly improved by drastically changing the skateboard.
+Out of the six parameters tested, ollie height can be most effected by wheelbase.
+Shortening wheelbase could be a promising area of further investigation since it does not influence the board shape, which is crucial for other tricks.
 
-A fundamentally different simplified contact implicit optimization is made. The relaxed formulation by \citet{patel_contact-implicit_2019} has been simplified by restating the contact definition. Static and dynamic friction is achieved with the ability to have contact implicit events. The simplification leads to quicker convergence and works with a null seed initial guess. The ollie optimization by \citet{shield_contact-implicit_2022} was without a parameter optimization of the skateboard. This optimization took 43 minutes to solve, and accurate initial guesses were needed for feasible results. Our code solved under 3 minutes including derivation of the Equations of Motion and all constraints, the time to transcribe the problem and to solve in Ipopt. This was all done without initial guesses and solved optimally.
+We have developed a fundamentally different simplified contact implicit friction formulation compatible with generalized \gls{ocp} formulations.
+The hybrid relaxed formulation of \citet{patel_contact-implicit_2019} has been simplified by restating the contact definition.
+Static and dynamic friction is achieved with the ability to have contact implicit events.
+The simplification leads to quicker convergence and works with a null seed initial guess.
+The ollie \gls{ocp} by \citet{shield_contact-implicit_2022} was without any parameter optimization.
+This took 43 minutes to solve and accurate initial guesses were required to achieve convergence.
+All \glspl{ocp} using our formulation solved in under 3 minutes, which includes the time taken to derive the \glspl{eom} and all constraints, and transcribe and solve the \gls{ocp}.
+Furthermore, this was all done without an accurate initial guess, which is known to be beneficial for not biasing the \gls{ocp} solution~\cite{betts_practical_2010}.
 
-Tail length optimization leads to local maxima. The optimization wants to maximize tail length dispite the lower ollie height. In real life a longer tail length would cause a higher energy dissipation due to more bending during impact. A plausible cause for these local maxima is that impact loss is of too little effect. When a human jumps, the order of magnitude of the amount of energy necessary to go up is in the order of $10^3$. The dissipation of energy during impact is in the order of $10^-1$. This means that the impact loss could be of so little effect to increasing ollie height that the solution space has become very flat. The model does capture the increase impact loss in figure \ref{fig:resultstable}, but it is not sufficient to influence the solution. All other solutions are not granted to be global optima either. Direct collocation does not guarantee global optima. Though, finding higher outcomes than the base optimization is still valuable for interpreting performance through geometrical dimensions.
+Parameter optimization of tail length leads to a local maximum.
+Tail length is maximized despite this resulting in a lower ollie height.
+In reality, a longer tail length would cause a higher energy dissipation due to more bending during impact.
+A plausible cause for this local maximum is that impact loss is of too little effect.
+When a human jumps, the order of magnitude of the amount of energy necessary to go up is in the order of $10^3$. The dissipation of energy during impact is in the order of $10^{-1}$.
+This means that the impact loss has such limited effect on increasing ollie height that the solution space has become very flat.
+The model does capture the increase in impact loss in figure~\ref{fig:resultstable}, but it is not sufficient to influence the solution.
+All other solutions are not granted to be global optima either as direct collocation does not guarantee finding a global optimum.
+Though, finding higher outcomes than the base optimization is still valuable for interpreting performance through geometrical dimensions.
 
-In future research it is advised to implement a normal force acting on the front wheel during the preparation phase. The front foot had to counteract the rotation created by the back foot. In real life the front foot could have been on any location without causing a counter clockwise rotation due to the compensation of the normal force. This could be a reason why the force graphs are spikey, since the optimization wit holds another difficulty; balancing the board while ollieing.
+In future research it is advised to implement a normal force acting on the front wheel during the preparation phase.
+The front foot had to counteract the rotation created by the back foot. 
+In reality, the front foot could be located anywhere forward of the rear truck without causing a counter clockwise rotation due to the compensation of the normal force.
+This could also be a reason why the force graphs are not completely smooth; the board must balance on the rear wheel prior to the pop.
  
 % Nine out of eleven optimal skateboard geometries found higher ollies compared to the popsicle stick skateboard. None of these solutions is proven a global optimum, but the improvement to the base skateboard is something that performs better. Skateboard builders should try to implement found geometries and test empirically if they will improve ollie height. These geometries could be a tool to alter existing skateboards and let athletes jump higher. The kinetic and kinematic constraints are of a specific person. The geometries might be dependent on the human capabilities. Empirical testing is necessary to prove that this finding is true in a real life ollie. I successfully solved the ollie optimization problem with a geometry optimization. Compared to others Shield et al. \cite{shield_contact-implicit_2022} who solved an optimization problem for the ollie, my optimization was faster (3 min vs. 43 min), included an geometry optimization, and had a more difficult objective function. The Shield optimization was was set at a fixed ollie height and needed motion tracking to solve optimally. My optimization had a null seed initial guess, with an objective function that maximized ollie height. Such objective functions are generally hard to solve, for example in \cite{nitschke_efficient_2020} first tracking data needs to be implemented to solve a more difficult objective. Step by step less data can be used to solve for an more difficult objective. In the case of this paper, the solution is found without any tracking data and a difficult objective function. 
 
 \section{Conclusions}
+In this paper we examined the effects of skateboard geometry on ollie height.
+Our modeling and optimization approach accurately predictively simulated an ollie with realistic kinematics and kinetics without the use of any motion cues.
+We demonstrated model accuracy by showing that the maximum-height ollie achievable with a longboard is less than with a popsicle stick skateboard.
+We also conducted multiple parameter optimizations.
+Our results evidence that skateboards with less mass and inertia can be used to achieve higher ollies.
+If ollie height were the only consideration, it could be significantly improved by drastically changing the skateboard.
+Maximum ollie height can be most greatly effected by wheelbase, which is promising as this may not have significant impact on the performance of other tricks.
+Small changes to skateboard geometry do not influence ollie height significantly, so skaters may be able to make small modifications to their skateboard's geometry without penalising their achievable ollie height.
+% Could 
 
-\small
+We also present a novel formulation of simplified contact implicit friction that is compatible with generalized \gls{ocp} formulations. This formulation improves the converge properties of the \glspl{ocp} its used in, enabling faster \gls{ocp} solve times and more robust convergence from less accurate initial guesses.
 
-\noindent\textbf{Supplementary Information} The online version contains supplementary material available at [insert DOI]\\
+\section{Acknowledgements}
+None
 
-\noindent\textbf{Acknowledgements} \\
+\section{Statements and Declarations}
 
-\noindent\textbf{Data availability} 
+\subsection{Supplementary Information} The online version contains supplementary material available at [insert DOI]
 
-\section{Declarations}
-\noindent\textbf{Conflicts of interest} There has been no conflict of interest with the
-authors involved in this work. \\
+\subsection{Data availability} 
 
-\noindent\textbf{Open Access} This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long
+\subsection{Conflicts of Interest} There has been no conflict of interest with the
+authors involved in this work.
+
+\subsection{Open Access} This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long
 as you give appropriate credit to the original author(s) and the source,
 provide a link to the Creative Commons licence, and indicate if changes
 were made. The images or other third party material in this article are
