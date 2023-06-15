@@ -122,15 +122,7 @@
 \affil*[1]{\orgdiv{Department of Biomechanical Engineering}, \orgname{TU Delft}, \orgaddress{\street{Leeghwaterstraat}, \postcode{2628 CN}, \city{Delft}, \country{Netherlands}}}
 
 \abstract{The most basic skateboarding trick is called
-the ollie. The athlete jumps up while pushing down on the back end of the
-skateboard’s tail, causing a rotation about the back axle. The upward
-acceleration due to the rotation together with the tail-ground impact cause
-the skateboard to go airborne while dragging the skateboard up with the feet.  To reach maximum height the dynamics such as impact, dynamic response, and torque production are dependent on shape, inertia and mass, which gives reason to assume an optimal shape exists. This leads to the research question: What are the
-optimal geometric and inertial parameters of a skateboard for an Olympic
-athlete to reach maximal ollie height. The skateboard geometry is optimized
-through multiphase direct collocation with the objective of maximal ollie
-height. Modelling the dynamics of the ollie including impact and friction are done with a point mass human controller that is kineticly and kinematicly mapped to a counter movement jump. A simplistic contact implicit impact scheme is made for a higher order optimization. The ollie height is improved by changing the mass and inertia properties of the skateboard.  Multiple optimal board shapes are generated for example a skateboard with a smaller wheelbase can reach higher ollie
-height compared to an industry standard skateboard.
+the ollie. The athlete jumps up while pushing down on the back end of the skateboard’s tail, causing a rotation about the back axle. The upward acceleration due to the rotation together with the tail-ground impact cause the skateboard to go airborne while dragging the skateboard up with the feet.  To reach maximum height the dynamics such as impact, dynamic response, and torque production are dependent on shape, inertia and mass, which gives reason to assume an optimal shape exists. This leads to the research question: What are the optimal geometric and inertial parameters of a skateboard for an Olympic athlete to reach maximal ollie height. The skateboard geometry is optimized through multiphase direct collocation with the objective of maximal ollie height. Modelling the dynamics of the ollie including impact and friction are done with a point mass human controller that is kineticly and kinematicly mapped to a counter movement jump. A contact implicit impact scheme is made for a higher order optimization. The ollie height is improved by changing the mass and inertia properties of the skateboard.  Multiple optimal board shapes are generated for example a skateboard with a smaller wheelbase can reach higher ollie height compared to an industry standard skateboard.
 }
 
 \keywords{Skateboarding, Optimal Control, Parameter Optimization, Direct Collocation}
@@ -401,7 +393,7 @@ A full mathematical description of the \gls{ocp} definition including all variab
 
 \section{Results}
 
-We produced our results using Python 3.X.X, Pycollo 0.X.X and Ipopt 3.13.X, on a MacBook Pro with Apple M1 Pro CPU, \SI{16}{\giga\byte} RAM and running macOS Ventura 13.2.1.
+We produced our results using Python 3.10.6, Pycollo 0.1.6 and Ipopt 3.14.9, on a MacBook Pro with Apple M1 Pro CPU, \SI{16}{\giga\byte} RAM and running macOS Ventura 13.2.1.
 All \glspl{ocp} were solved in less than 3 minutes.
 We consistently used a null seed initial guess and ensured successful Ipopt and Pycollo exit statuses meeting the desired \gls{nlp} and mesh tolerances specified in section~\ref{s_settings}.
 
@@ -465,6 +457,8 @@ Despite similar force application to the longboard that those applied in the bas
     \caption[Trajectory, positions, speeds, and forces for `all except tail length' optimization]{Detailed trajectory of optimization of all parameters except the tail}\label{f_notail}
     Optimization `no $l_t$'. Corresponds to result 5. No tail in Fig.~\ref{fig:resultstable}
 \end{figure*}
+
+In the wheelbase \gls{ocp}, the wheelbase was reduced from \SIrange{}
 
 Most of the phenomena seen in the base optimization are also visible for this optimization. The first difference is visible in the force plot in Fig~\ref{f_wheelbase}. The sum of the vertical forces (purple line) does not stagger when unloading. Secondly, a higher angular velocity is achieved. The front foot is at equal distance from the wheel having perfect balance. At this position both legs can exert equal force without rotating the board during eccentric braking ($t=0.15 - 0.3$). Shortly before the impact, the front foot (orange line forces) releases pressure and the back foot pushes down to create a maximal momentum about the back axis creating a steep increase in angular velocity. The decreased wheelbase causes the impact angle to be lower and the angular velocity near zero just after impact (green lines positions and speeds). No control is needed while gaining height. While the front foot is in a sliding motion, the foot pushes down on the board at $t=0.53$. This is almost enough to level the board out at the highest point. But the negative angular rotation caused by this push is caught with the back foot making sure the board is leveled at the highest point.
 
