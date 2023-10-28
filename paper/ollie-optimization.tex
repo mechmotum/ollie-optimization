@@ -93,7 +93,7 @@
 
 \author*[1]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.nl}
 
-\affil*[1]{\orgdiv{Department of Biomechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
+\affil*[1]{\orgdiv{Department of BioMechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
 \affil*[2]{\orgname{Urbansports Performance Centre}, \orgaddress{\street{Veemstraat}, \postcode{5617 AG}, \city{Eindhoven}, \country{The Netherlands}}}
 
 \abstract{The ollie is the base aerial human-board maneuver, foundational to most modern skateboarding tricks. We formulate and solve an optimal control problem of a two-dimensional simplified human model and a rigid body skateboard with the objective of maximizing the height of the ollie. Our solution simultaneously discovers realistic human-applied force trajectories and optimal board geometry. We accomplish this with a direct collocation formulation using a null seed initial guess by carefully modeling the discontinuous aspects of board-ground impact and foot-board friction. This leads to very efficient and robust solutions that are 10 times more computationally efficient than prior work on similar problems. The solutions show that ollie height can increase 3\% by decreasing the wheelbase and that a smaller board with a back-foot dominated force strategy can give 12\% higher ollies. Our model can be used to inform jump strategy and the effects of changes to the essential board geometry.}
@@ -128,22 +128,24 @@ distinct phases shown in Fig.~\ref{fig:ollie steps}.
    \caption[Ollie motion cues]{Phases of the ollie.
     Green arrow: resultant force without friction, red arrows: force components
     with friction, blue arrow: resultant force with friction. Blue-, green- and
-    red lines are trajectory of back wheel, middle and front wheel respectively. Images are retrieved from \url{youtu.be/339k4XEvbxY} with consent. The phases and associated motion cues are described by:\\
-    \begin{center}
-    \begin{tabular}{p{1.6cm} p{0.3cm} p{12.7cm}}
-        Preparation     & $t_1$ & The skater lowers their \gls{com} preparing to jump \\
-        Pre-pop         & $t_2$ & The skater pushes firmly from their back leg and is decreasing downward force on the front foot, which results in the front wheels leaving the ground, simultaneously sliding the front foot forward \\
-        Pop             & $t_3$ & Tail collides with the ground, the front foot is still sliding and the back foot is barely in contact with the skateboard~\cite{determan_kinetics_2006,nakashima_simulation_2021} \\
-        Upward motion   & $t_4$ & Back foot is no longer in contact with the skateboard, the back wheels are not in contact with the ground anymore~\cite{determan_kinetics_2006,nakashima_simulation_2021} \\
-                        & $t_5$ & The front foot reached the nose of the skateboard \\
-                        & $t_6$ & Back foot contacts the board again \\
-                        & $t_7$ & Board is leveled out by the front foot \\
-                        & $t_8$ & Highest point is reached. Knees are fully tucked in, touching the chest, restricting the board from gaining height. Feet are firmly placed on the deck \\
-        Downward motion & $t_9$ & Front foot loses contact \\
-                        & $t_{10}$& Board is horizontal, both feet are in contact \\
-        Landing         & $t_{11}$& The back wheels touch the ground and legs are almost fully stretched out \\
-    \end{tabular}
-    \end{center}
+     red lines are trajectory of back wheel, middle and front wheel respectively. Images are retrieved from \url{youtu.be/339k4XEvbxY} with consent. The phases and associated motion cues are described by:
+   \begin{center}
+   \begin{tabular}{p{0.3 cm} p{1.6cm} p{0.3cm} p{12.4cm}}
+       Phase & & $t_*$ & Description \\
+       \toprule
+       1 & Preparation     & $t_1$ & The skater lowers their \gls{com} preparing to jump \\
+       2 & Pre-pop         & $t_2$ & The skater pushes firmly from their back leg and is decreasing downward force on the front foot, which results in the front wheels leaving the ground, simultaneously sliding the front foot forward \\
+       3 & Pop             & $t_3$ & Tail collides with the ground, the front foot is still sliding and the back foot is barely in contact with the skateboard~\cite{determan_kinetics_2006,nakashima_simulation_2021} \\
+       4 & Upward motion   & $t_4$ & Back foot is no longer in contact with the skateboard, the back wheels are not in contact with the ground anymore~\cite{determan_kinetics_2006,nakashima_simulation_2021} \\
+                  &     & $t_5$ & The front foot reached the nose of the skateboard \\
+                   &   & $t_6$ & Back foot contacts the board again \\
+                    & & $t_7$ & Board is leveled out by the front foot \\
+                    & & $t_8$ & Highest point is reached. Knees are fully tucked in, touching the chest, restricting the board from gaining height. Feet are firmly placed on the deck \\
+     5 & Downward motion & $t_9$ & Front foot loses contact \\
+         &            & $t_{10}$& Board is horizontal, both feet are in contact \\
+     6 & Landing         & $t_{11}$& The back wheels touch the ground and legs are almost fully stretched out \\
+ \end{tabular}
+ \end{center}
 }
   \label{fig:ollie steps}
 \end{figure*}
@@ -196,10 +198,10 @@ We find answers to this question by formulating a simple human-skateboard dynami
 
 \subsection{Skateboard Equations of Motion}
 We start by developing a simple 2D rigid body model of the skateboard.
-The board was modelled as a simplified popsicle stick skateboard with an assumption about nose-tail symmetry and no deck concavity.
+The board was modeled as a simplified popsicle stick skateboard where we assume the board is geometrically symmetric, i.e. the front nose and truck is a mirror of the back tail and truck, and there is no deck concavity.
 While in reality a skateboard bends and flexes during the ollie, this study assumed a rigid body model of the skateboard to reduce mathematical complexity.
 
-The skateboard model is detailed in Fig.~\ref{fig:FBD}. During wheel-ground contact, we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the \glspl{eom}.
+The skateboard model is detailed in Fig.~\ref{fig:FBD}. During the wheel-ground contact phases, we use a sliding joint for the rear wheel ground contact to avoid having to expose the ground reaction forces in the \glspl{eom} derivation.
 When the board is airborne during the ollie, we treat the skateboard as an unconstrained rigid body in 2D. 
 
 \begin{figure}
@@ -348,9 +350,9 @@ The objective function for maximization is:
 %
 We solve \glspl{ocp} for five scenarios. Schematics of each skateboard for each scenario are shown in Table~\ref{fig:resultstable}. Skateboards~1 and 2 are a popsicle stick (base) skateboard and longboard, respectively. Both boards' dimensions are selected to match a typical consumer boards, see \cite{heinen_optimal_2022} for more on inertial parameter estimates. 
 The longboard is larger than the base skateboard with a longer wheelbase, deck, nose, and tail, as well as taller trucks and larger radius wheels. It is also flatter with a less inclined tail and nose. As such, it has 38\% more mass and 105\% more inertia.
-We solved the base skateboard \gls{ocp} to demonstrate that the model and optimization methodology produce ollies with realistic kinematics and kinetics.
+We solved the base skateboard \gls{ocp} to demonstrate that the model and optimization methodology produce ollies with qualitatively similar motion to Fig.~\ref{fig:ollie steps}.
 We use the longboard \gls{ocp} to further demonstrate the skateboard model and optimization methodology as well as to show sensible trends and results are produced when the geometry is changed.
-To demonstrate simultaneously solving for the control trajectories and optimizing the geometry parameters we present two single parameter optimizations: skateboards~3 and 4 which have their wheelbase and tail length optimized, respectively, and skateboard~5 which demonstrates a multiple parameter optimization involving the simultaneous optimization of wheelbase, deck length, tail/nose inclination, truck height, and wheel radius.
+To demonstrate simultaneously solving for the control trajectories and optimizing the geometry parameters we present two single parameter optimizations: rows 3 and 4 in Table~\ref{fig:resultstable} which have their wheelbase and tail length optimized, respectively, and row 5 which demonstrates a multiple parameter optimization involving the simultaneous optimization of wheelbase, deck length, tail/nose inclination, truck height, and wheel radius.
 
 \subsection{Computation}
 We produced our results using Python 3.10.6, SymPy 1.11, Pycollo 0.1.6, and Ipopt 3.14.9, on a MacBook Pro with Apple M1 Pro CPU, \SI{16}{\giga\byte} RAM and running macOS Ventura 13.2.1.
@@ -408,22 +410,21 @@ Table~\ref{fig:resultstable} summarizes the results for each scenario and the fo
 \begin{figure*}
     \centering
     \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{paper/figure/Fig6.png}
-    \caption[Trajectory, positions, speeds, and forces of base optimization]{Detailed trajectory of base skateboard. The top subplot shows the trajectory of the skateboard relative to the human's mass center at various time instances. The second subplot shows the coordinates of the skateboard and the human. The third subplot shows the speeds of skateboard and human. The bottom subplot shows the extension ($N$-frame $y$-direction), abduction ($N$-frame $x$-direction), and sum of extension forces. The phase endpoints are shown by the vertical dotted blue lines}\label{f_noparameter}
+    \caption[Trajectory, positions, speeds, and forces of base optimization]{Detailed trajectory of base skateboard. The top subplot shows the trajectory of the skateboard relative to the human's mass center at various time instances. The second subplot shows the coordinates of the skateboard and the human. The third subplot shows the speeds of skateboard and human. The bottom subplot shows the \textbf{B}ack and \textbf{F}ront extension ($N$-frame $y$-direction) forces, abduction ($N$-frame $x$-direction) forces, sum of extension forces, and the  foot-board friction forces. The phase endpoints are shown by the vertical dotted blue lines}\label{f_noparameter}
 \end{figure*}
 
 \subsection{Base Skateboard Optimization}
 
 The base skateboard optimal trajectory is shown in Fig.~\ref{f_noparameter} and is similar to the trajectory shown in Fig.~\ref{fig:ollie steps}.
-Initially, the skateboard moves forward relative to the human. Immediately prior to the impact of the tail with the ground, the skateboard rapidly moves backward. 
-The back foot initially moves to the pocket of the skateboard, the point with the lowest velocity of the tail during rotation.
+Initially, the skateboard moves forward relative to the human. Immediately prior to the impact of the tail with the ground, the skateboard rapidly moves backward with respect to the skater's \gls{com}. During this movement, the back foot slides with dynamic friction into the pocket of the skateboard, the point with the lowest velocity of the tail during rotation. 
 Impact instantaneously changes the momentum of the skateboard.
 In the speeds subplot of Fig.~\ref{f_noparameter} it is visible that the angular velocity reduces at impact (green line, \SIrange{1082}{286}{\degree\per\second}), while vertical velocity is gained (orange line, \SIrange{3}{5}{\meter\per\second}).
 
 The human controller follows a countermovement jump force graph where unloading is from $t=\SIrange{0.0}{0.2}{\second}$, eccentric braking is at $t=\SIrange{0.2}{0.35}{\second}$, and the concentric phase is from $t=\SI{0.35}{\second}$ until impact.
-During the concentric phase the vertical velocity (pink line) increases.
-The force reduces to comply with the power bound ($P_{leg} = v_{rel} F$) until the human loses contact with the skateboard just before impact.
+During the concentric phase the vertical velocity (pink line) increases. The front foot uses large static friction to pull the board upwards before impact.
+The extension force reduces to comply with the power bound ($P_{leg} = v_{rel} F$) until the human loses contact with the skateboard just before impact.
 During upward motion, the vertical velocity of the human gradually decreases due to gravity, reaching its highest point just before the ollie's peak.
-The slopes and maximum of the vertical forces (purple line) are bound by the eccentric (negative) and concentric (positive) rate of force development, and the maximum permitted force.
+The slopes and maximum of the vertical forces (purple line) are bound by the eccentric (negative) and concentric (positive) rate of force development, and the maximum permitted force. The front foot uses dynamic friction to level help level the board during flight.
 The optimizer operating at these bounds indicates that maximizing force and power output also maximizes ollie height.
 
 \subsection{Longboard Optimization}
@@ -528,17 +529,16 @@ None
 \section{Statements and Declarations}
 
 \subsection{Supplementary Information}
-%
+
 Animations of the solutions are included as supplementary material.
 
 \subsection{Data availability}
-%
+
 The software used to generate the optimal control solutions is available at \url{https://github.com/mechmotum/ollie-optimization}.
 
 \subsection{Conflicts of Interest}
-%
-There has been no conflict of interest with the
-authors involved in this work.
+
+There has been no conflict of interest with the authors involved in this work.
 
 \bibliographystyle{sn-basic}
 \bibliography{references}
