@@ -93,7 +93,7 @@
 
 \author*[1]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.nl}
 
-\affil*[1]{\orgdiv{Department of BioMechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
+\affil*[1]{\orgdiv{Department of BioMechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg 2}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
 \affil*[2]{\orgname{Urbansports Performance Centre}, \orgaddress{\street{Veemstraat}, \postcode{5617 AG}, \city{Eindhoven}, \country{The Netherlands}}}
 
 \abstract{The ollie is the base aerial human-board maneuver, foundational to most modern skateboarding tricks. We formulate and solve an optimal control problem of a two-dimensional simplified human model and a rigid body skateboard with the objective of maximizing the height of the ollie. Our solution simultaneously discovers realistic human-applied force trajectories and optimal board geometry. We accomplish this with a direct collocation formulation using a null seed initial guess by carefully modeling the discontinuous aspects of board-ground impact and foot-board friction. This leads to very efficient and robust solutions that are 10 times more computationally efficient than prior work on similar problems. The solutions show that ollie height can increase 3\% by decreasing the wheelbase and that a smaller board with a back-foot dominated force strategy can give 12\% higher ollies. Our model can be used to inform jump strategy and the effects of changes to the essential board geometry.}
@@ -190,7 +190,7 @@ We find answers to this question by formulating a simple human-skateboard dynami
 
 \begin{figure}[t]
     \includegraphics[width=0.5\textwidth]{figure/Fig2.png}
-    \caption[Skateboard terminology]{Skateboard terminology}
+    \caption[Skateboard terminology]{Popsicle stick skateboard terminology}
     \label{fig:skateboard terminology}
 \end{figure}
 
@@ -231,7 +231,7 @@ When the board is airborne during the ollie, we treat the skateboard as an uncon
 \end{figure}
 
 \subsection{Athlete Equations of Motion}
-The athlete was modeled as a point mass with a mass of \SI{80}{\kilo\gram} and no rotational inertia (Fig.~\ref{fig:FBD}).
+The athlete was modeled as a point mass of \SI{80}{\kilo\gram} and no rotational inertia (Fig.~\ref{fig:FBD}).
 The contact forces between the point mass and the skateboard were modeled as a pair of equal and opposite forces acting between the massless feet and the athlete's \acrfull{com}.
 Due to this simplification, this does not model metabolic leg power, only the mechanical power output~\cite{van_der_kruk_power_2018,morin_biomechanics_2018}.
 
@@ -253,9 +253,9 @@ These bounds were found by scaling a human inertia model to \SI{1.80}{\meter} ta
 
 We also implement a minimum and maximum foot-to-foot separation of \SI{0.1}{\meter} and \SI{1.0}{\meter}, respectively, along with constraining the skater to always stay on top of the skateboard to eliminate relative errors.
 To make sure the feet never leave the skateboard, the rear foot is bound to the tail section and the front foot to the flat section of the deck (see Fig.~\ref{fig:FBD}).
-The feet can disconnect from the board, as seen in Fig.~\ref{fig:ollie steps}, but due to how the friction model is implemented (section~\ref{ss_friction}).
+The feet can disconnect from the board, as seen in Fig.~\ref{fig:ollie steps}, but only due to how the friction model is implemented (section~\ref{ss_friction}).
 
-We constrain the rate of force development to simulate the leg shortening and lengthening cycle, the maximum force $F_{max}$ to keep this within realistic limits, and maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We obtained numerical values from a countermovement jump study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. The kinetics of the human controls are bound to the characteristics of a countermovement jump motion because it accounts for 76.3\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}. 
+We constrain the rate of force development to simulate the leg shortening and lengthening cycle with a maximum force $F_{max}$ to keep this within realistic limits and a maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We obtained numerical values from a countermovement jump study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, weight of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. The kinetics of the human controls are bound to the characteristics of a countermovement jump motion because it accounts for 76.3\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}. 
 
 To account for the fact that \citet{barker_relationships_2018} measured two legs simultaneously, we constrain the sum of the forces produced by both legs together. We also constrain the absolute force and power produced by each leg to within realistic physical limits to prevent in and out-of-phase pushing and pulling of the individual legs.
 
@@ -277,7 +277,7 @@ Friction is then enforced using a set of six path constraints for each foot (sho
     F_{f1}^+ (\psi_1 + \dot s_1)  &= 0 \\
     F_{f1}^- (\psi_1 - \dot s_1)  &= 0
 \end{align}
-The first two equations above introduce $\psi_1$, a slack variable representing the magnitude of the relative velocity between the foot and the skateboard $\dot{s}_1$. The third ensures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$, while the fourth ensures that when the foot slides the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in the positive direction, the negative friction component $F_{f1}^- = \mu F_{p1}$ and $F_{f1}^+=0$, and vice versa. This is enforced by the final two path constraints, (5) and (6).
+The first two equations above introduce $\psi_1$, a slack variable representing the magnitude of the relative velocity between the foot and the skateboard $\dot{s}_1$. The third ensures that the positive or negative component of the friction is always smaller than $\mu F_{p1}$, where $\mu$ is the Coulomb coefficient of friction, while the fourth ensures that when the foot slides the sum of the positive and negative friction components equal $\mu F_{p1}$. It is important that when sliding in the positive direction, the negative friction component $F_{f1}^- = \mu F_{p1}$ and $F_{f1}^+=0$, and vice versa. This is enforced by the final two path constraints, (5) and (6).
 
 The translational and angular velocities after tail-ground impact are calculated with the Newton impact law as presented in \citet{vallery_heike_advanced_2018} with a coefficient of restitution of $e=0.8$.
 
@@ -309,12 +309,12 @@ The skateboard model is described using ten variables. This includes six optimiz
     \bottomrule
   \end{tabular}
   \end{center}
-  \caption{Parameterized skateboard. Blue parameters are optimized, green parameters are set to industrial standards. Orange is dependent on other variables. Red lines split the skateboard into 11 basic shaped segments for inertia calculation}
+  \caption{Parameterized skateboard. Blue parameters are optimized, green parameters are set to industrial standards. Orange is dependent on other variables. Red lines split the skateboard into 11 basic shaped segments for the inertia calculation}
 \label{fig:parameterized skateboard}
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-The skateboard's mass and inertia were calculated as a composition of 11 simple constant-density 3D shapes (cuboidal, semicircular, and triangular prisms), shown in Fig.~\ref{fig:parameterized skateboard}, such that they were functions of the optimizable parameters. Material densities for wood, steel, and polyurethane of \SI{705}{\kilo\gram\per\meter\cubed}, \SI{7700}{\kilo\gram\per\meter\cubed}, and \SI{1130}{\kilo\gram\per\meter\cubed} respectively were used.
+The skateboard's mass and inertia were calculated as a composition of 11 simple constant-density 3D shapes (cuboidal, semicircular, and triangular prisms), shown in Fig.~\ref{fig:parameterized skateboard}, such that they were functions of the optimizable parameters. Material densities for wood, steel, and polyurethane of \SI{705}{\kilo\gram\per\meter\cubed}, \SI{7700}{\kilo\gram\per\meter\cubed}, and \SI{1130}{\kilo\gram\per\meter\cubed}, respectively, were used.
 
 \subsection{Optimal Control Problem} \label{sec:ocp}
 The \gls{ocp} was formulated with the objective of maximizing the peak board height during the ollie. The board dynamics, control, and geometric parameters are simultaneously optimized via trajectory optimization using a direct method.
@@ -348,7 +348,7 @@ The objective function for maximization is:
 
 \subsection{Optimal Control Scenarios}
 %
-We solve \glspl{ocp} for five scenarios. Schematics of each skateboard for each scenario are shown in Table~\ref{fig:resultstable}. Skateboards~1 and 2 are a popsicle stick (base) skateboard and longboard, respectively. Both boards' dimensions are selected to match a typical consumer boards, see \cite{heinen_optimal_2022} for more on inertial parameter estimates. 
+We solve \glspl{ocp} for five scenarios. Schematics of each skateboard for each scenario are shown in Table~\ref{fig:resultstable}. Skateboards~1 and 2 are a popsicle stick (base) skateboard and longboard, respectively. Both boards' dimensions are selected to match typical consumer boards, see \cite{heinen_optimal_2022} for more on inertial parameter estimates. 
 The longboard is larger than the base skateboard with a longer wheelbase, deck, nose, and tail, as well as taller trucks and larger radius wheels. It is also flatter with a less inclined tail and nose. As such, it has 38\% more mass and 105\% more inertia.
 We solved the base skateboard \gls{ocp} to demonstrate that the model and optimization methodology produce ollies with qualitatively similar motion to Fig.~\ref{fig:ollie steps}.
 We use the longboard \gls{ocp} to further demonstrate the skateboard model and optimization methodology as well as to show sensible trends and results are produced when the geometry is changed.
@@ -416,7 +416,7 @@ Table~\ref{fig:resultstable} summarizes the results for each scenario and the fo
 \subsection{Base Skateboard Optimization}
 
 The base skateboard optimal trajectory is shown in Fig.~\ref{f_noparameter} and is similar to the trajectory shown in Fig.~\ref{fig:ollie steps}.
-Initially, the skateboard moves forward relative to the human. Immediately prior to the impact of the tail with the ground, the skateboard rapidly moves backward with respect to the skater's \gls{com}. During this movement, the back foot slides with dynamic friction into the pocket of the skateboard, the point with the lowest velocity of the tail during rotation. 
+Initially, the skateboard moves forward relative to the human. Immediately prior to the impact of the tail with the ground, the skateboard rapidly moves backward with respect to the skater's \gls{com}. During this movement, the back foot slides with dynamic friction into the pocket of the skateboard, the point on the tail with the lowest velocity during rotation. 
 Impact instantaneously changes the momentum of the skateboard.
 In the speeds subplot of Fig.~\ref{f_noparameter} it is visible that the angular velocity reduces at impact (green line, \SIrange{1082}{286}{\degree\per\second}), while vertical velocity is gained (orange line, \SIrange{3}{5}{\meter\per\second}).
 
@@ -477,7 +477,7 @@ The solutions show that it is optimal for the human to first jump, then slam the
 All results also show high similarities to a countermovement jump ground reaction force.
 The sum of the human control forces naturally bound to realistically produced values and rates due to the model constraints.
 In an ollie ground reaction force, the impulse from the skateboard hitting the ground is roughly \SI{5}{\joule}~\cite{determan_kinetics_2006}, which is of the same order of magnitude as the found impact losses in Table~\ref{fig:resultstable}.
-Based this and our anecdotal motion comparisons, our simple ollie model may be useful for insights in the ollie dynamics, human kinetic output, and human movement.
+Based on this and our anecdotal motion comparisons, our simple ollie model may be useful for insights in the ollie dynamics, human kinetic output, and human movement.
 
 Lower inertia and skateboard mass are beneficial for ollie height.
 Comparing the solutions for the base skateboard and longboard we see an expected trend that ollie height decreases (by 31\%) for the larger board.
