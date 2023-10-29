@@ -67,7 +67,6 @@
 
 \begin{document}
 
-
 \title[Maximizing Ollie Height by Optimizing Control Strategy and Skateboard Geometry Using Direct Collocation]{
   Maximizing Ollie Height by Optimizing Control Strategy and Skateboard Geometry Using Direct Collocation}
 
@@ -93,7 +92,7 @@
 
 \author*[1]{\fnm{Jason K.} \sur{Moore}}\email{j.k.moore@tudelft.nl}
 
-\affil*[1]{\orgdiv{Department of BioMechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg 2}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
+\affil*[1]{\orgdiv{Department of BioMechanical Engineering}, \orgname{Delft University of Technology}, \orgaddress{\street{Mekelweg}, \postcode{2628 CN}, \city{Delft}, \country{The Netherlands}}}
 \affil*[2]{\orgname{Urbansports Performance Centre}, \orgaddress{\street{Veemstraat}, \postcode{5617 AG}, \city{Eindhoven}, \country{The Netherlands}}}
 
 \abstract{The ollie is the base aerial human-board maneuver, foundational to most modern skateboarding tricks. We formulate and solve an optimal control problem of a two-dimensional simplified human model and a rigid body skateboard with the objective of maximizing the height of the ollie. Our solution simultaneously discovers realistic human-applied force trajectories and optimal board geometry. We accomplish this with a direct collocation formulation using a null seed initial guess by carefully modeling the discontinuous aspects of board-ground impact and foot-board friction. This leads to very efficient and robust solutions that are 10 times more computationally efficient than prior work on similar problems. The solutions show that ollie height can increase 3\% by decreasing the wheelbase and that a smaller board with a back-foot dominated force strategy can give 12\% higher ollies. Our model can be used to inform jump strategy and the effects of changes to the essential board geometry.}
@@ -438,6 +437,7 @@ Despite similar force application to the longboard than those applied in the bas
     \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{paper/figure/Fig7.png}    
     \caption[Trajectory, positions, speeds, and forces for wheelbase optimization]{Detailed trajectory of optimized wheelbase}\label{f_wheelbase}
 \end{figure*}
+
 \begin{figure*}
     \centering
     \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{paper/figure/Fig8.png}
