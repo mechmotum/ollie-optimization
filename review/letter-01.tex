@@ -1,5 +1,5 @@
 \documentclass{letter}
-\usepackage{hyperref}
+
 \signature{The Authors}
 \address{}
 \begin{document}
@@ -9,11 +9,16 @@
 
 We are glad that you both liked the paper and appreciate the helpful comments. We believe we have addressed all of your feedback by making changes to the paper. Below we detail the changes we made.
 
-\section{Reviewer 1}
+\textbf{Reviewer 1}
 
-Your question about friction is important. An ollie can be performed without any foot-board friction at the front foot, but you will not be able to ollie very high. In the associated MSc thesis appendix Fig. 29(a), we show a simulation of an ollie with low foot-board friction that achieves a lower max height. After the ollie was invented, skaters began applying more grippy surfaces to the deck and today's decks are covered with a high grip sandpaper. The front edge of the skater's front shoe rapidly wears down from the friction. Two of the authors of this paper are skateboarders and can personally attest to the role front foot-to-board friction plays in performing quality ollies. Removing the grip tape or trying to do it barefoot are fraught, for example. To improve the paper, we have added the time histories of the front and rear foot friction magnitude to each of the three simulation figures. By examining \(\dot{s}_1,\dot{s}_2\) and the friction curves you can see when static and dynamic friction are occurring. We've added some commentary in the text describing the friction forces during the different phases of the first simulation.
+\begin{quote}
+\dots Do you think how much the effect of this dragging up motion is? I mean, the contribution of the friction force between the board and fore foot to the Ollie height at the timing of t5.
+Can you show the effect in your simulation? \dots
+\end{quote}
 
-\section{Reviewer 2}
+Your question about friction is important. An ollie can be performed without any foot-board friction at the front foot, but you will not be able to ollie very high. In the associated MSc thesis appendix Fig. 29(a), we show a simulation of an ollie with low foot-board friction that achieves a lower max height. After the ollie was invented, skaters began applying more grippy surfaces to the deck and today's decks are covered with a high grip sandpaper. The front edge of the skater's front shoe rapidly wears down from the friction. Two of the authors of this paper are skateboarders and can personally attest to the role front foot-to-board friction plays in performing quality ollies. Removing the grip tape or trying to do it barefoot are fraught, for example. To improve the paper, we have added the time histories of the front and rear foot friction magnitude to each of the three simulation figures. By examining \(\dot{s}_1,\dot{s}_2\) and the friction curves you can see when static and dynamic friction are occurring. We've expanded ``3.1 Base Skateboard Optimization'' with commentary in the text describing the friction forces during the different phases of the first simulation.
+
+\textbf{Reviewer 2}
 
 Point 1
 
@@ -37,7 +42,7 @@ Point 3
     “During wheel-ground contact, we use a sliding joint for the rear wheel contact to eliminate the ground reaction forces from the equations of motion (EoMs).” Probably, I misunderstood. Were the ground reaction forces in the vertical direction considered?
 \end{quote}
 
-We changed the sentence to ``During the wheel-ground contact phase, we use a sliding joint for the rear wheel ground contact to avoid having to expose the ground reaction forces in the \glspl{eom} derivation.'' The ground reaction forces are present, but they are non-contributing forces in that phase.
+We changed the sentence to ``During the wheel-ground contact phase, we use a sliding joint for the rear wheel ground contact to avoid having to expose the ground reaction forces in the eom derivation.'' The ground reaction forces are present, but they are non-contributing forces in that phase.
 
 Point 4
 
@@ -72,6 +77,5 @@ Point 6
 We have added ``with respect to the human''.
 
 \closing{Sincerely,}
-
 \end{letter}
 \end{document}
