@@ -6,5 +6,5 @@ the source of the MSc thesis that the paper is based on.
 - MSc Thesis: https://repository.tudelft.nl/islandora/object/uuid%3A61f4e969-8bd1-4687-9942-b70024b216dc
 - PrePrint: https://doi.org/10.31224/3171
 
-The source for generating the results is licensed under the MIT license. The
-paper text and figures are licensed under the CC-BY 4.0 license.
+The source code for generating the results is licensed under the MIT license.
+The paper text and figures are licensed under the CC-BY 4.0 license.
