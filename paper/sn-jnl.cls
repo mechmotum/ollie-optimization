@@ -130,6 +130,7 @@
 
 %% General Packages Used
 %
+\usepackage{manyfoot}
 \AtBeginDocument{%
 %%\newcommand*\ExtraParaSkip{12pt}%
 \SetFootnoteHook{\hspace*{-8pt}}%
