@@ -1,19 +1,16 @@
 \documentclass[default,iicol,pdflatex]{sn-jnl}
 
+\usepackage[acronym]{glossaries}
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{array}
-\usepackage[acronym]{glossaries}
-\usepackage{epsfig} %% for loading postscript figures
 \usepackage{float}
-\usepackage[utf8]{inputenc}
 \usepackage{siunitx}
 \usepackage{stfloats}
 \usepackage{subfig}
 \usepackage{titlesec}
 \usepackage{url}
 \usepackage{xcolor}
-
-
 % get rid of colon for tables and figures as requested per journal format
 \usepackage[labelsep=space]{caption}
 
@@ -434,7 +431,7 @@ Despite similar force application to the longboard than those applied in the bas
 %
 \begin{figure*}
     \centering
-    \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{paper/figure/Fig7.png}    
+    \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=\textwidth]{paper/figure/Fig7.png}
     \caption[Trajectory, positions, speeds, and forces for wheelbase optimization]{Detailed trajectory of optimized wheelbase}\label{f_wheelbase}
 \end{figure*}
 
@@ -452,7 +449,7 @@ The difference in ollie height can be attributed to the increased angular veloci
 The first difference is visible in the force subplot of Fig.~\ref{f_wheelbase}: the sum of the vertical forces (purple line) changes at its maximum rate during unloading and does not stagger like in Fig.~\ref{f_noparameter}.
 The front and rear feet are equidistant from the rear wheel, allowing perfect balance.
 In these positions, both legs can exert equal force without rotating the board during eccentric braking ($t=\SIrange{0.15}{0.30}{\second}$). 
-Shortly before the impact, the front foot (orange line) releases pressure as the back foot pushes down to create maximal momentum about the back axis and a steep increase in angular velocity. 
+Shortly before the impact, the front foot (orange line) releases pressure as the back foot pushes down to create maximal momentum about the back axis and a steep increase in angular velocity.
 
 The decreased wheelbase causes the impact angle to be lower and the angular velocity (green line) almost zero just after impact.
 Consequently, no control is exerted while the skateboard gains height.
@@ -512,7 +509,7 @@ All other solutions are not guaranteed to be global optima either as direct coll
 Though, finding higher outcomes than the base optimization is still valuable for interpreting performance through geometrical dimensions.
 
 In future research, we advise to implement a normal force acting on the front wheel during the preparation phase.
-The front foot also has to counteract the rotation created by the back foot. 
+The front foot also has to counteract the rotation created by the back foot.
 In reality, the front foot could be located anywhere forward of the rear truck without causing a counterclockwise rotation due to the compensation of the normal force.
 This could also be a reason why the force curves are not completely smooth; the board must balance on the rear wheel prior to the pop.
 
