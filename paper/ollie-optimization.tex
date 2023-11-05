@@ -1,48 +1,36 @@
 \documentclass[default,iicol,pdflatex]{sn-jnl}
 
-\usepackage[acronym]{glossaries}
-\usepackage[utf8]{inputenc}
+% Springer packages
 \usepackage{amsmath}
 \usepackage{array}
-\usepackage{float}
-\usepackage{siunitx}
-\usepackage{stfloats}
-\usepackage{subfig}
-\usepackage{titlesec}
-\usepackage{url}
+\usepackage{booktabs}
 \usepackage{xcolor}
+
+% Our packages
+\usepackage[acronym]{glossaries}
 % get rid of colon for tables and figures as requested per journal format
 \usepackage[labelsep=space]{caption}
+\usepackage{siunitx}
+\usepackage{subfig}
 
-\setcounter{secnumdepth}{4}
+% Springer settings
+\raggedbottom
 
-\titleformat{\paragraph}
-{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
-%\def\url#1{\expandafter\string\csname #1\endcsname}
-\newcounter{exno}
-\newenvironment{examples}
-{
-\begin{flushleft}
-\begin{tabular}{>{(\refstepcounter{exno}\theexno\label{row:\theexno}) }rl}
-}
-{
-\end{tabular}
-\end{flushleft}
-}
-%\newcommand*{\@rowstyle}{}
-\newcommand*{\rowstyle}[1]{% sets the style of the next row
+% Customizations and settings for our packages
+% sets the style of the next row
+\newcommand*{\rowstyle}[1]{
   \gdef\@rowstyle{#1}%
   \@rowstyle\ignorespaces%
 }
-\newcolumntype{=}{% resets the row style
-  >{\gdef\@rowstyle{}}%
+% resets the row style
+\newcolumntype{=}{
+  >{\gdef\@rowstyle{}}
 }
-\newcolumntype{+}{% adds the current row style to the next column
+% adds the current row style to the next column
+\newcolumntype{+}{
   >{\@rowstyle}%
 }
+
 \definecolor{ao}{rgb}{0.0, 0.5, 0.0}
 \definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
 
@@ -52,15 +40,6 @@
 \newacronym{ocp}{OCP}{optimal control problem}
 \newacronym{nlp}{NLP}{non-linear programming problem}
 \newacronym[longplural={degrees of freedom}]{dof}{DoF}{degree of freedom}
-
-\newcounter{magicrownumbers}
-\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
-\newcommand\figwidth{174mm}
-
-\jyear{2021}%
-
-\raggedbottom
-%%\unnumbered% uncomment this for unnumbered level heads
 
 \begin{document}
 
@@ -95,6 +74,7 @@
 \abstract{The ollie is the base aerial human-board maneuver, foundational to most modern skateboarding tricks. We formulate and solve an optimal control problem of a two-dimensional simplified human model and a rigid body skateboard with the objective of maximizing the height of the ollie. Our solution simultaneously discovers realistic human-applied force trajectories and optimal board geometry. We accomplish this with a direct collocation formulation using a null seed initial guess by carefully modeling the discontinuous aspects of board-ground impact and foot-board friction. This leads to very efficient and robust solutions that are 10 times more computationally efficient than prior work on similar problems. The solutions show that ollie height can increase 3\% by decreasing the wheelbase and that a smaller board with a back-foot dominated force strategy can give 12\% higher ollies. Our model can be used to inform jump strategy and the effects of changes to the essential board geometry.}
 
 \keywords{Skateboarding, Friction, Impact, Optimal Control, Trajectory Optimization, Parameter Optimization, Direct Collocation}
+
 \maketitle
 
 \section{Introduction}\label{s_intro}
@@ -106,7 +86,7 @@ The maneuver can be deconstructed into the six
 distinct phases shown in Fig.~\ref{fig:ollie steps}.
 
 \begin{figure*}[!t]
-\captionsetup[subfigure]{labelformat=empty}
+  \captionsetup[subfigure]{labelformat=empty}
   \subfloat[$t_1$=0.013]{{\includegraphics[width=0.13\textwidth]{figure/Fig1a.png} }}%
   \subfloat[$t_2$=0.129]{{\includegraphics[width=0.13\textwidth]{figure/Fig1b.png} }}%
   \subfloat[$t_3$=0.181]{{\includegraphics[width=0.13\textwidth]{figure/Fig1c.png} }}%
@@ -121,7 +101,7 @@ distinct phases shown in Fig.~\ref{fig:ollie steps}.
   \subfloat[$t_{10}$=0.904]{{\includegraphics[width=0.13\textwidth]{figure/Fig1j.png} }}%
   \subfloat[$t_{11}$=1.097]{{\includegraphics[width=0.13\textwidth]{figure/Fig1k.png} }}%
   \captionsetup{singlelinecheck=off}
-   \caption[Ollie motion cues]{Phases of the ollie.
+  \caption[Ollie motion cues]{Phases of the ollie.
     Green arrow: resultant force without friction, red arrows: force components
     with friction, blue arrow: resultant force with friction. Blue-, green- and
      red lines are trajectory of back wheel, middle and front wheel respectively. Images are retrieved from \url{youtu.be/339k4XEvbxY} with consent. The phases and associated motion cues are described by:
@@ -520,22 +500,42 @@ The resulting simulations show qualitatively and quantitatively similar motions 
 
 This model and the results provide a new stone in the foundation needed for utilizing optimization to improve skateboard trick strategy and performance. In its current form, it can be used to inform jump strategy and the effects of changes to the essential board geometry. Tying this tool to experimental studies of skateboard ollies is an obvious next research step.
 
-\section{Acknowledgments}
-None
+\backmatter
 
-\section{Statements and Declarations}
-
-\subsection{Supplementary Information}
+\bmhead{Supplementary information}
 
 Animations of the solutions are included as supplementary material.
 
-\subsection{Data availability}
+\bmhead{Acknowledgments}
 
-The software used to generate the optimal control solutions is available at \url{https://github.com/mechmotum/ollie-optimization}.
+None
 
-\subsection{Conflicts of Interest}
+\section*{Declarations}
+
+\subsection*{Conflicts of Interest}
 
 There has been no conflict of interest with the authors involved in this work.
+
+\subsection*{Funding}
+
+Not applicable
+
+\subsection*{Ethics approval}
+
+Not applicable
+
+\subsection*{Consent to participate}
+
+Not applicable
+
+\subsection*{Consent for publication}
+Not applicable
+\subsection*{Availability of data and materials}
+Not applicable
+\subsection*{Code availability}
+The software used to generate the optimal control solutions is available at \url{https://github.com/mechmotum/ollie-optimization}.
+\subsection*{Authors' contributions}
+Not applicable
 
 \bibliographystyle{sn-basic}
 \bibliography{references}
