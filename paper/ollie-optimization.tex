@@ -226,7 +226,7 @@ These bounds were found by scaling a human inertia model to \SI{1.80}{\meter} ta
     \label{fig:f_record}
 \end{figure}
 
-We also implement a minimum and maximum foot-to-foot separation of 0.1 and \SI{1.0}{\meter}, respectively, along with constraining the skater to always stay on top of the skateboard to eliminate relative errors.
+We also implement a minimum and maximum foot-to-foot separation of \SIrange{0.1}{1.0}{\meter}, respectively, along with constraining the skater to always stay on top of the skateboard to eliminate relative errors.
 To make sure the feet never leave the skateboard, the rear foot is bound to the tail section and the front foot to the flat section of the deck (see Fig.~\ref{fig:FBD}).
 The feet can disconnect from the board, as seen in Fig.~\ref{fig:ollie steps}, but only due to how the friction model is implemented (section~\ref{ss_friction}).
 
