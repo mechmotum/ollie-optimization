@@ -220,18 +220,9 @@ Several kinetic and kinematic constraints were introduced to create a realistic 
 
 These bounds were found by scaling a human inertia model to \SI{1.80}{\meter} tall and posing it to match a picture of Jake Hayes' world record ollie  (Fig.~\ref{fig:f_record}) using the software Yeadon~\cite{Dembia2015}. 
 
-% \begin{figure}
-%     \centering
-%     \subfloat[\centering \SI{115.6}{\centi\meter} world record ollie.]{{\includegraphics[width=0.2\textwidth]{figure/Fig4a.png} }}%
-%     \quad
-%     \subfloat[\centering Yeadon model in similar configuration]{{\includegraphics[width=0.2\textwidth]{figure/Fig4b.png} }}%
-%     \caption{Reconstruction of world record ollie} 
-%     \label{fig:f_record}
-% \end{figure}
-
 \begin{figure}
-    \centering{{\includegraphics[width=0.2\textwidth]{figure/Fig4b.png} }}%
-    \caption{Reconstruction of human configuration at highest point of world record ollie (\SI{115.6}{\centi\meter}) as seen in: \url{https://theberrics.com/ollie-world-record}} 
+    \centering{{\includegraphics[width=0.4\textwidth]{figure/Fig4b.png} }}%
+    \caption{Reconstruction of human configuration using the software Yeadon at the highest point of the world record ollie (\SI{115.6}{\centi\meter}) as seen in reference~\cite{berrics2018}} 
     \label{fig:f_record}
 \end{figure}
 
@@ -239,7 +230,7 @@ We also implement a minimum and maximum foot-to-foot separation of 0.1 and \SI{1
 To make sure the feet never leave the skateboard, the rear foot is bound to the tail section and the front foot to the flat section of the deck (see Fig.~\ref{fig:FBD}).
 The feet can disconnect from the board, as seen in Fig.~\ref{fig:ollie steps}, but only due to how the friction model is implemented (section~\ref{ss_friction}).
 
-We constrain the rate of force development to simulate the leg shortening and lengthening cycle with a maximum force $F_{max}$ to keep this within realistic limits and a maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We obtained numerical values from a countermovement jump study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, mass of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. The kinetics of the human controls are bound to the characteristics of a countermovement jump motion because it accounts for 76\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}. 
+We constrain the rate of force development to simulate the leg shortening and lengthening cycle with a maximum force $F_{max}$ to keep this within realistic limits and a maximum mechanical power $P = F v_{rel}$ as this also constrains knee extension rate. We used similar numerical values from a countermovement jump study that tested Division-I male soccer players with a mean height of \SI{179.5}{\centi\meter}, mass of \SI{75.5}{\kilo\gram}, and age of 19.65 years~\cite{barker_relationships_2018}. The kinetics of the human controls are bound to the characteristics of a countermovement jump motion because it accounts for 76\% of the variance in the performance of the ollie~\cite{candotti_lower_2012} and is a reliable assessor of lower-body mechanical power~\cite{barker_relationships_2018}. 
 
 To account for the fact that \citet{barker_relationships_2018} measured two legs simultaneously, we constrain the sum of the forces produced by both legs together. We also constrain the absolute force and power produced by each leg to within realistic physical limits to prevent in and out-of-phase pushing and pulling of the individual legs.
 
