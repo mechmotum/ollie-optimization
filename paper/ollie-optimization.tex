@@ -164,7 +164,7 @@ This leads to our research question:
 \begin{quote}
 \textit{What are the optimal geometric parameters of a skateboard for an athlete to reach maximal ollie height?}
 \end{quote}
-We find answers to this question by formulating a simple human-skateboard dynamics model and solving an \gls{ocp} utilizing direct collocation methods.
+We find answers to this question by formulating a simplified human-skateboard dynamics model and solving an \gls{ocp} utilizing direct collocation methods.
 
 \begin{figure}[t]
     \includegraphics[width=0.5\textwidth]{figure/Fig2.png}
@@ -175,7 +175,7 @@ We find answers to this question by formulating a simple human-skateboard dynami
 \section{Method}
 
 \subsection{Skateboard Equations of Motion}
-We start by developing a simple 2D rigid body model of the skateboard.
+We start by developing a simplified 2D rigid body model of the skateboard.
 The board was modeled as a simplified popsicle stick skateboard where we assume the board is geometrically symmetric, i.e. the front nose and truck is a mirror of the back tail and truck, and there is no deck concavity.
 While in reality a skateboard bends and flexes during the ollie, this study assumed a rigid body model of the skateboard to reduce mathematical complexity.
 
@@ -220,12 +220,18 @@ Several kinetic and kinematic constraints were introduced to create a realistic 
 
 These bounds were found by scaling a human inertia model to \SI{1.80}{\meter} tall and posing it to match a picture of Jake Hayes' world record ollie  (Fig.~\ref{fig:f_record}) using the software Yeadon~\cite{Dembia2015}. 
 
+% \begin{figure}
+%     \centering
+%     \subfloat[\centering \SI{115.6}{\centi\meter} world record ollie.]{{\includegraphics[width=0.2\textwidth]{figure/Fig4a.png} }}%
+%     \quad
+%     \subfloat[\centering Yeadon model in similar configuration]{{\includegraphics[width=0.2\textwidth]{figure/Fig4b.png} }}%
+%     \caption{Reconstruction of world record ollie} 
+%     \label{fig:f_record}
+% \end{figure}
+
 \begin{figure}
-    \centering
-    \subfloat[\centering \SI{115.6}{\centi\meter} world record ollie.]{{\includegraphics[width=0.2\textwidth]{figure/Fig4a.png} }}%
-    \quad
-    \subfloat[\centering Yeadon model in similar configuration]{{\includegraphics[width=0.2\textwidth]{figure/Fig4b.png} }}%
-    \caption{Reconstruction of world record ollie} 
+    \centering{{\includegraphics[width=0.2\textwidth]{figure/Fig4b.png} }}%
+    \caption{Reconstruction of human configuration at highest point of world record ollie (\SI{115.6}{\centi\meter}) as seen in: \url{https://theberrics.com/ollie-world-record}} 
     \label{fig:f_record}
 \end{figure}
 
@@ -292,7 +298,7 @@ The skateboard model is described using ten variables. This includes six optimiz
 \end{figure}
 %%%%%%%%%%%%%%%% end figure %%%%%%%%%%%%%%%%%%%
 
-The skateboard's mass and inertia were calculated as a composition of 11 simple constant-density 3D shapes (cuboidal, semicircular, and triangular prisms), shown in Fig.~\ref{fig:parameterized skateboard}, such that they were functions of the optimizable parameters. Material densities for wood, steel, and polyurethane of \SI{705}{\kilo\gram\per\meter\cubed}, \SI{7700}{\kilo\gram\per\meter\cubed}, and \SI{1130}{\kilo\gram\per\meter\cubed}, respectively, were used.
+The skateboard's mass and inertia were calculated as a composition of 11 basic constant-density 3D shapes (cuboidal, semicircular, and triangular prisms), shown in Fig.~\ref{fig:parameterized skateboard}, such that they were functions of the optimizable parameters. Material densities for wood, steel, and polyurethane of \SI{705}{\kilo\gram\per\meter\cubed}, \SI{7700}{\kilo\gram\per\meter\cubed}, and \SI{1130}{\kilo\gram\per\meter\cubed}, respectively, were used.
 
 \subsection{Optimal Control Problem} \label{sec:ocp}
 The \gls{ocp} was formulated with the objective of maximizing the peak board height during the ollie. The board dynamics, control, and geometric parameters were simultaneously optimized via trajectory optimization using a direct method.
@@ -436,7 +442,7 @@ Shortly before the impact, the front foot (orange line) releases pressure as the
 The decreased wheelbase causes the impact angle to be lower and the angular velocity (green line) almost zero just after impact.
 Consequently, no control is exerted while the skateboard gains height.
 This is in contrast to the base skateboard \gls{ocp} solution, in which the front foot supplies an abduction force immediately after the pop.
-Only a small downward force is applied to the skateboard at $t=\SI{0.53}{\second}$ to level it before the ollie's peak and fewer net vertical forces applied to the skateboard result in less vertical deceleration during its upward motion.
+Only a small downward force is applied to the skateboard at $t=\SI{0.53}{\second}$ to level it before the ollie's peak. 
 
 \subsection{Tail Length Optimization}
 In solving the tail length \gls{ocp}, a maximum ollie height of \SI{0.855}{\meter} was found, in comparison to \SI{0.876}{\meter} for the base skateboard. Tail length was increased from \SIrange{0.14}{0.30}{\meter} (Table~\ref{fig:resultstable}). As the maximum ollie height is lower, the optimal solution is by definition a local minimum, a possible outcome.
@@ -456,7 +462,7 @@ The solutions show that it is optimal for the human to first jump, then slam the
 All results also show high similarities to a countermovement jump ground reaction force.
 The sum of the human control forces naturally bound to realistically produced values and rates due to the model constraints.
 In an ollie ground reaction force, the impulse from the skateboard hitting the ground is roughly \SI{5}{\joule}~\cite{determan_kinetics_2006}, which is of the same order of magnitude as the found impact losses in Table~\ref{fig:resultstable}.
-Based on this and our anecdotal motion comparisons, our simple ollie model may be useful for insights in the ollie dynamics, human kinetic output, and human movement.
+Based on this and our anecdotal motion comparisons, our simplified ollie model may be useful for insights in the ollie dynamics, human kinetic output, and human movement.
 
 Lower inertia and skateboard mass are beneficial for ollie height.
 Comparing the solutions for the base skateboard and longboard we see an expected trend that ollie height decreases (by 31\%) for the larger board.
